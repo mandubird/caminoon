@@ -170,6 +170,10 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
 .arrive-km{font-family:var(--display);font-size:56px;line-height:1;color:var(--tile)}
 .link{border:0;background:none;color:var(--ink-soft);text-decoration:underline;font-size:13px;justify-self:start;padding:0}
 
+.clock{border:0;background:rgba(47,93,138,.1);color:var(--tile);border-radius:999px;padding:4px 8px;font-size:11.5px;font-family:var(--body);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.clock:hover{background:rgba(47,93,138,.18)}
+#reflect .go{margin-top:16px;font-size:17px;padding:11px 22px;text-shadow:none;color:var(--ink)}
+#reflect .restEnd{margin-top:14px;border:0;background:rgba(255,247,234,.92);color:var(--ink);font-family:var(--body);font-size:14px;padding:9px 16px;border-radius:999px;text-shadow:none}
 #tr .st3{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--ink-soft)}
 .drops{display:flex;gap:4px}
 .drops i{display:block;width:8px;height:11px;border-radius:50% 50% 50% 50%/62% 62% 38% 38%;background:#2f7fbf}
@@ -265,6 +269,7 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
     <div class="bar"><i id="pBar"></i></div>
     <div class="st2"><span><span data-i18n="alt">해발</span> <b id="pAlt">170</b>m</span><span><span data-i18n="left">남은</span> <b id="pLeft">7.8</b>km</span></div>
     <div class="st3"><span data-i18n="water">물병</span><span class="drops" id="pWater"></span></div>
+    <button class="clock" id="clock"><span id="clockTxt"></span></button>
   </div>
 
   <div class="hud pill" id="dinner" hidden>
@@ -347,6 +352,19 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
       <p class="sdetail" id="stampDetail"></p>
       <p class="fine" data-i18n="passNote">흐린 도장은 앞으로 이어질 프랑스 길의 마을들이에요.</p>
       <button class="link" id="resetBtn" data-i18n="reset">처음부터 다시 걷기</button>
+    </div>
+  </div>
+
+  <!-- End of day -->
+  <div class="modal" id="mDay" hidden>
+    <div class="card" role="dialog" aria-labelledby="dayT">
+      <button class="x" data-close data-i18n-aria="close" aria-label="닫기">×</button>
+      <h2 id="dayT" data-i18n="dayT">오늘도 수고했어요</h2>
+      <p id="dayStats"></p>
+      <label for="dayText" class="fine" data-i18n="dayQ">어떤 하루였나요?</label>
+      <textarea id="dayText" maxlength="200" data-i18n-ph="dayPh"></textarea>
+      <div class="acts"><button class="go" id="daySave" data-i18n="daySave">기록하고 잠들기</button><button id="daySkip" data-i18n="daySkip">그냥 잠들기</button></div>
+      <p class="fine" data-i18n="dayFine"></p>
     </div>
   </div>
 
@@ -460,6 +478,9 @@ ko:{
   meetFirst:'{c}에서 온 {n}와 첫 인사를 나눴어요. ‘첫 인사’ 도장을 받았어요.', meetAgain:'{c}에서 온 {n}와 인사했어요.',
   dinnerCap:'그날 저녁, 오리손 알베르게', dinnerSub:'창밖으로 피레네에 해가 넘어가요', ansPh:'직접 말하기', say:'말하기', sleep:'잠자리에 들기', next:'다음',
   supperStamp:'‘순례자의 저녁’ 도장을 받았어요. 오늘 나눈 이야기는 여권에 남겨 둘게요.', journalQ:'왜 이 길에 왔나요?',
+  ph_night:'밤', ph_dawn:'새벽', ph_morning:'아침', ph_day:'낮', ph_sunset:'노을', ph_dusk:'어스름', clockLive:'산티아고 {t} · {p}', clockPreview:'미리보기 · {p} (누르면 바뀌어요)',
+  promptCamp:'오늘은 여기까지 (모닥불 옆에 텐트 치기)', restEnd:'오늘은 여기까지', dayT:'오늘도 수고했어요', dayStats:'오늘 순례길 {km}km를 걸었고, {n}명의 순례자와 인사했어요.', dayQ:'어떤 하루였나요? 기록하지 않고 그냥 잠들어도 괜찮아요.', dayPh:'오늘의 마음을 한 줄 남겨 보세요.', daySave:'기록하고 잠들기', daySkip:'그냥 잠들기', dayFine:'텐트는 지금 서 있는 자리에 쳐져요. 쉼터 근처라면 모닥불 옆에 쳐져요. 다음에 접속하면 텐트에서 다시 시작해요.',
+  sleepT:'잘 자요. 내일도 이 길에서 만나요.', sleepSub:'텐트 안에서 쉬는 동안, 다른 순례자들에게는 당신의 텐트가 보여요.', wake:'다시 걷기', morning:'좋은 아침이에요. 배낭을 메고 오늘의 길을 시작해요.', resting:'쉬는 중',
   bWard:'꾸미기', wardT:'캐릭터 꾸미기', wardOpen:'캐릭터 꾸미기', wardDone:'완료', wardHint:'캐릭터를 드래그하면 돌려 볼 수 있어요. 액세서리는 여러 개를 함께 달 수 있어요.', wColor:'색상', rainTip:' 꾸미기에서 우비로 갈아입을 수도 있어요.', snowTip:' 꾸미기에서 패딩과 비니로 갈아입어도 좋아요.',
   bMap:'지도', mapT:'프랑스 길 전체 지도', mapTotal:'전체', mapWalked:'순례 거리', mapLeft:'남은 거리', mapPct:'진행률', mapTowns:'지나온 마을', mapStamps:'받은 도장', mapYou:'나',
   mapNote:'지금은 1구간(생장피에드포르 → 오리손)을 3D로 걸을 수 있어요. 다음 구간은 차례로 열려요. 거리는 실제 프랑스 길 기준 대략값이에요.', mapLocked:'아직 도착하지 않았어요 · 생장에서 약 {km}km', mapGot:'도장 받음 · {d}', mapPassed:'지나온 곳 · 생장에서 약 {km}km', mapTapHint:'마을을 누르면 정보를 볼 수 있어요.', mapStage:'걷는 중인 구간',
@@ -495,6 +516,9 @@ en:{
   meetFirst:'You said your first hello to {n} from {c}. You got the “First Hello” stamp.', meetAgain:'You said hello to {n} from {c}.',
   dinnerCap:'That evening, at the Orisson albergue', dinnerSub:'The sun sets over the Pyrenees outside the window', ansPh:'Say it in your own words', say:'Say', sleep:'Go to bed', next:'Next',
   supperStamp:'You got the “Pilgrim’s Supper” stamp. What you shared tonight is kept in your passport.', journalQ:'Why are you on the Camino?',
+  ph_night:'Night', ph_dawn:'Dawn', ph_morning:'Morning', ph_day:'Day', ph_sunset:'Sunset', ph_dusk:'Twilight', clockLive:'Santiago {t} · {p}', clockPreview:'Preview · {p} (tap to change)',
+  promptCamp:'Call it a day (pitch a tent by the fire)', restEnd:'Call it a day', dayT:'You did well today', dayStats:'Today you walked {km} km of the Camino and said hello to {n} pilgrims.', dayQ:'How was your day? It’s fine to just go to sleep without writing.', dayPh:'Leave a line about how you feel today.', daySave:'Save and sleep', daySkip:'Just sleep', dayFine:'Your tent goes up where you stand, or by the fire if you’re near the camp. Next time you come back, you’ll wake up in it.',
+  sleepT:'Sleep well. See you on the path tomorrow.', sleepSub:'While you rest, other pilgrims can see your tent.', wake:'Start walking again', morning:'Good morning. Shoulder your pack and begin today’s walk.', resting:'resting',
   bWard:'Style', wardT:'Customize', wardOpen:'Customize character', wardDone:'Done', wardHint:'Drag the character to turn it around. You can wear several extras at once.', wColor:'Color', rainTip:' You can switch to a raincoat in Style.', snowTip:' A puffer and beanie might help. Change in Style.',
   bMap:'Map', mapT:'The Camino Francés', mapTotal:'Total', mapWalked:'Walked', mapLeft:'To go', mapPct:'Progress', mapTowns:'Towns passed', mapStamps:'Stamps', mapYou:'You',
   mapNote:'For now you can walk Stage 1 (Saint-Jean → Orisson) in 3D. The next stages open one by one. Distances are approximate, based on the real Camino Francés.', mapLocked:'Not reached yet · about {km} km from Saint-Jean', mapGot:'Stamped · {d}', mapPassed:'Passed · about {km} km from Saint-Jean', mapTapHint:'Tap a town to see details.', mapStage:'Stage you’re walking',
@@ -1445,7 +1469,7 @@ function answer(text){
 }
 function startDawn(){
   fadeTo(()=>{
-    mode='dawn'; setTime('dawn');
+    mode='dawn'; setTime('dawn'); overrideUntil=performance.now()+150000;
     dinnerLights.forEach(l=>l.intensity=0.7);
     $('#dinner').hidden=true; $('#bottom').hidden=false; $('#tr').hidden=false; if(coarse) $('#joy').hidden=false;
     pp_set(TABLE.x+0.5, TABLE.z-2.6); player.sit=0; player.outer.rotation.y=Math.atan2(END_T.x,END_T.z); camYaw=player.outer.rotation.y+Math.PI;
@@ -1466,6 +1490,210 @@ function pp_set(x,z){ player.outer.position.set(x,groundAt(x,z),z); }
 const THANKS={Hans:['Danke! Du bist ein Engel.','고마워요! 천사가 따로 없네요.','Thank you! You’re an angel.'], Emma:['Oh, thank you so much!','정말 고마워요!',''], 'Siobhán':['Go raibh maith agat!','고마워요! (아일랜드어로)','Thank you! (in Irish)']};
 function renderWater(){ $('#pWater').innerHTML=[0,1,2].map(i=>`<i class="${i<S.water?'':'e'}"></i>`).join(''); }
 renderWater();
+
+
+/* ================= Santiago clock: live day & night ================= */
+const KEYS = [
+  {h:0,    sky:['#0a1230','#16214a','#28345e'], fog:0x1d2847, sun:0x9fb2e8, si:0.2,  sky2:0x6f82bd, gnd:0x1c2620, hi:0.26, ai:0.08, night:1},
+  {h:5.6,  sky:['#0c1534','#1a2550','#2e3a66'], fog:0x202c4c, sun:0x9fb2e8, si:0.2,  sky2:0x6f82bd, gnd:0x1c2620, hi:0.26, ai:0.08, night:1},
+  {h:7.0,  sky:['#1f2b55','#6f73a6','#f0b8a8'], fog:0x9d9bb8, sun:0xffc7a6, si:0.42, sky2:0xb9bde0, gnd:0x3c4a44, hi:0.48, ai:0.14, night:0.45},
+  {h:9.0,  sky:['#7fb2e0','#c4dcef','#f6e2c8'], fog:0xeedccc, sun:0xffe8c8, si:0.85, sky2:0xfff1dc, gnd:0x6b8f4a, hi:0.68, ai:0.16, night:0},
+  {h:13,   sky:['#6fa5d8','#b6d3ea','#f3dcc3'], fog:0xf0d9c0, sun:0xffe0b0, si:0.95, sky2:0xfff1dc, gnd:0x6b8f4a, hi:0.72, ai:0.16, night:0},
+  {h:17,   sky:['#6f9ccf','#c9cfe0','#f6cfa6'], fog:0xf0d0b0, sun:0xffd59a, si:0.88, sky2:0xffecd0, gnd:0x667f45, hi:0.68, ai:0.15, night:0},
+  {h:19.2, sky:['#2b3a66','#8e6a8e','#f3a46a'], fog:0xc98c78, sun:0xff9f62, si:0.6,  sky2:0xffc49a, gnd:0x3f4c3a, hi:0.5,  ai:0.12, night:0.2},
+  {h:20.8, sky:['#141c3c','#3a3e6e','#8a6a8a'], fog:0x4a4a6a, sun:0xb0a0d8, si:0.28, sky2:0x9a90c0, gnd:0x2a3230, hi:0.4,  ai:0.11, night:0.7},
+  {h:22.3, sky:['#0a1230','#16214a','#28345e'], fog:0x1d2847, sun:0x9fb2e8, si:0.2,  sky2:0x6f82bd, gnd:0x1c2620, hi:0.26, ai:0.08, night:1},
+  {h:24,   sky:['#0a1230','#16214a','#28345e'], fog:0x1d2847, sun:0x9fb2e8, si:0.2,  sky2:0x6f82bd, gnd:0x1c2620, hi:0.26, ai:0.08, night:1}
+];
+TOD.day.night=0; TOD.dusk.night=0.35; TOD.dawn.night=0.5;
+const LIVE = {bg:null, fog:0xf0d9c0, sun:0xffe0b0, si:0.95, sky:0xfff1dc, gnd:0x6b8f4a, hi:0.72, ai:0.16, dir:new THREE.Vector3(-70,34,-60).normalize(), glow:1, spr:0xffffff, night:0};
+const liveCv=document.createElement('canvas'); liveCv.width=4; liveCv.height=256; const liveCtx=liveCv.getContext('2d');
+LIVE.bg=new THREE.CanvasTexture(liveCv);
+let todOverride=null, clockPreview=null, clockT=99, overrideUntil=0;
+const PREVIEWS=[null,19.4,23,7];
+function madridHour(){
+  try{ const p=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Madrid',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+       return (+p.find(x=>x.type==='hour').value%24) + (+p.find(x=>x.type==='minute').value)/60; }
+  catch(e){ const d=new Date(); return (d.getUTCHours()+1+d.getUTCMinutes()/60)%24; }
+}
+const _c1=new THREE.Color(), _c2=new THREE.Color();
+const mixHex=(a,b,t)=>_c1.setHex(a).lerp(_c2.setHex(b),t).getHex();
+const hex2n=h=>parseInt(h.slice(1),16), n2hex=n=>'#'+n.toString(16).padStart(6,'0');
+function phaseKey(h){ return h<6?'night':h<8?'dawn':h<12?'morning':h<17?'day':h<20?'sunset':h<22?'dusk':'night'; }
+function computeLive(h){
+  let i=0; while(i<KEYS.length-2 && KEYS[i+1].h<=h) i++;
+  const A=KEYS[i], B=KEYS[i+1], t=clamp((h-A.h)/((B.h-A.h)||1),0,1), s=t*t*(3-2*t);
+  for(const k of ['fog','sun','sky2','gnd']) LIVE[k==='sky2'?'sky':k]=mixHex(A[k],B[k],s);
+  for(const k of ['si','hi','ai','night']) LIVE[k]=A[k]+(B[k]-A[k])*s;
+  const st=A.sky.map((c,j)=>n2hex(mixHex(hex2n(c),hex2n(B.sky[j]),s)));
+  const g=liveCtx.createLinearGradient(0,0,0,256); g.addColorStop(0,st[0]); g.addColorStop(0.5,st[1]); g.addColorStop(0.82,st[2]); g.addColorStop(1,st[2]);
+  liveCtx.fillStyle=g; liveCtx.fillRect(0,0,4,256); LIVE.bg.needsUpdate=true;
+  const az=Math.PI*clamp((h-7)/12,0,1), up=Math.sin(az);
+  if(LIVE.night<0.6) LIVE.dir.set(Math.cos(az)*80, Math.max(8, up*72), -55).normalize(); else LIVE.dir.set(40,55,-35).normalize();
+  LIVE.glow = 1-LIVE.night; LIVE.spr = LIVE.night>0.15 ? 0xffb08a : 0xffffff;
+}
+function applyTod(){ scene.background=tod.bg; sun.color.setHex(tod.sun); hemi.color.setHex(tod.sky); hemi.groundColor.setHex(tod.gnd); amb.intensity=tod.ai; SUN_DIR.copy(tod.dir); sunSprite.material.color.setHex(tod.spr); }
+setTime = function(k){ todOverride=k; tod=TOD[k]; applyTod(); };
+function releaseTime(){ todOverride=null; clockT=99; }
+function clockLabel(h){
+  const hh=Math.floor(h), mm=Math.floor((h-hh)*60), ph=tx('ph_'+phaseKey(h));
+  return clockPreview!==null ? tx('clockPreview',{p:ph}) : tx('clockLive',{t:String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0'), p:ph});
+}
+
+// stars, moon, village lamps
+const stars=(function(){ const n=700, pos=new Float32Array(n*3); for(let i=0;i<n;i++){ const u=rnd()*TAU, v=rr(0.08,1); const r=360; pos[i*3]=Math.cos(u)*Math.sqrt(1-v*v)*r; pos[i*3+1]=v*r*0.9; pos[i*3+2]=Math.sin(u)*Math.sqrt(1-v*v)*r; }
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  const p=new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:1.4,sizeAttenuation:false,transparent:true,opacity:0,fog:false,depthWrite:false})); p.frustumCulled=false; scene.add(p); return p; })();
+const moon=new THREE.Sprite(new THREE.SpriteMaterial({map:texFromCanvas(128,128,(x,w,h)=>{ const g=x.createRadialGradient(64,64,0,64,64,64); g.addColorStop(0,'rgba(255,252,235,1)'); g.addColorStop(0.22,'rgba(250,246,225,1)'); g.addColorStop(0.3,'rgba(220,225,255,.35)'); g.addColorStop(1,'rgba(200,210,255,0)'); x.fillStyle=g; x.fillRect(0,0,w,h); x.fillStyle='rgba(200,195,175,.5)'; x.beginPath(); x.arc(56,58,6,0,TAU); x.arc(72,70,4,0,TAU); x.fill(); }), fog:false, transparent:true, depthWrite:false, opacity:0}));
+moon.scale.set(55,55,1); scene.add(moon);
+const LAMPS=[];
+(function lamps(){
+  const post=new THREE.CylinderGeometry(0.06,0.08,2.6,6), head=new THREE.BoxGeometry(0.3,0.36,0.3), headM=new THREE.MeshLambertMaterial({color:0x3b3b3b, emissive:0x000000});
+  const spots=[[2.6,70],[-2.6,60],[2.6,52],[-2.6,40],[2.8,30],[END.x+4.2,END.z+2.2],[END.x+6,END.z-5.5]];
+  spots.forEach(([x,z])=>{ const y=groundAt(x,z), g=new THREE.Group(); const p=new THREE.Mesh(post,M.black); p.position.y=1.3; g.add(p); const hd=new THREE.Mesh(head,headM); hd.position.y=2.7; g.add(hd);
+    const gl=new THREE.Sprite(new THREE.SpriteMaterial({map:GLOW_MAT.map, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending, opacity:0})); gl.scale.set(2.4,2.4,1); gl.position.y=2.7; g.add(gl);
+    g.position.set(x,y,z); scene.add(g); LAMPS.push(gl); colliders.push({x,z,r:0.35}); });
+  LAMPS.headM=headM;
+})();
+const playerLight=new THREE.PointLight(0xffe6b0,0,9,1.6); scene.add(playerLight);
+
+function updateClock(dt,t){
+  clockT+=dt;
+  if(todOverride && overrideUntil && performance.now()>overrideUntil){ overrideUntil=0; releaseTime(); }
+  if(!todOverride && clockT>2){ clockT=0; const h = clockPreview!==null ? clockPreview : madridHour(); computeLive(h); tod=LIVE; applyTod(); $('#clockTxt').textContent=clockLabel(h); }
+  const n=tod.night||0;
+  stars.material.opacity=n*0.9; stars.position.copy(camera.position);
+  moon.material.opacity=Math.max(0,(n-0.3)/0.7); moon.position.set(camera.position.x+120, camera.position.y+250, camera.position.z-280);
+  M.glass.emissive.setHex(mixHex(0x000000,0xffb24a,clamp(n*1.15,0,1)));
+  LAMPS.forEach((g,i)=>g.material.opacity=n*(0.85+Math.sin(t*3+i)*0.05)); LAMPS.headM.emissive.setHex(mixHex(0x000000,0xffd28a,n));
+  clouds.children.forEach(c=>c.children.forEach(m=>{ m.material.emissive.setHex(mixHex(0x9a9a9a,0x1a2040,n)); }));
+  const lampOn = n>0.55 || tod===TOD.dawn;
+  if(player){ if(mode!=='dawn') player.lamp.visible=lampOn; playerLight.intensity = lampOn ? 0.7 : 0; playerLight.position.set(player.outer.position.x, player.outer.position.y+2, player.outer.position.z); }
+  npcs.forEach(nn=>{ if(!nn.fixed && mode!=='dawn') nn.P.lamp.visible=lampOn; });
+  if(CAMP.fire){ CAMP.light.intensity = (0.4+1.6*n)*(0.9+Math.sin(t*11)*0.06+Math.sin(t*23)*0.04); CAMP.flame.scale.set(0.9+Math.sin(t*9)*0.08, 1+Math.sin(t*13)*0.12, 1); CAMP.glow.material.opacity=0.4+0.5*n; }
+}
+
+/* ================= Mountain camp ================= */
+const CAMP={};
+(function camp(){
+  const u=0.6, p=curve.getPointAt(u), tg=curve.getTangentAt(u), sx_=-1, off=7.5;
+  const cx=p.x+(-tg.z)*off*sx_, cz=p.z+tg.x*off*sx_, cy=groundAt(cx,cz);
+  CAMP.x=cx; CAMP.z=cz;
+  const g=new THREE.Group(); g.position.set(cx,cy,cz); scene.add(g);
+  for(let k=0;k<9;k++){ const a=k/9*TAU; const s=new THREE.Mesh(new THREE.DodecahedronGeometry(0.17,0),M.grey); s.position.set(Math.cos(a)*0.55,0.08,Math.sin(a)*0.55); g.add(s); }
+  for(const r of [0.5,-0.5]){ const l=new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.06,0.8,6),M.wood); l.rotation.set(Math.PI/2,0,r); l.position.y=0.12; g.add(l); }
+  const flame=new THREE.Mesh(new THREE.ConeGeometry(0.22,0.6,7),new THREE.MeshBasicMaterial({color:0xffa13a})); flame.position.y=0.42; g.add(flame);
+  const core=new THREE.Mesh(new THREE.ConeGeometry(0.12,0.38,6),new THREE.MeshBasicMaterial({color:0xffe08a})); core.position.y=0.34; g.add(core);
+  const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:GLOW_MAT.map, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending, opacity:0.5, color:0xffb060})); glow.scale.set(2.6,2.6,1); glow.position.y=0.5; g.add(glow);
+  const light=new THREE.PointLight(0xff9a40,0.6,14,1.6); light.position.y=1.0; g.add(light);
+  CAMP.fire=true; CAMP.flame=flame; CAMP.glow=glow; CAMP.light=light;
+  for(const [a,ry] of [[0.6,0],[2.4,1.2],[4.2,2.2]]){ const b=new THREE.Mesh(new THREE.CylinderGeometry(0.16,0.16,1.4,8),M.woodL); b.rotation.set(0,ry,Math.PI/2); b.position.set(Math.cos(a)*1.7,0.17,Math.sin(a)*1.7); b.rotation.y=-a; b.castShadow=true; g.add(b); }
+  [[3.4,-1.2,0x3e6a4a,0.7],[ -1.4,3.3,0xd96c4f,2.2]].forEach(([x,z,c,ry])=>{ const tnt=makeTent(c); tnt.position.set(x,0,z); tnt.rotation.y=ry; g.add(tnt); });
+  colliders.push({x:cx,z:cz,r:0.9});
+  const signT=texFromCanvas(256,96,(c,w,h)=>{ c.fillStyle='#6b4630'; roundRect(c,0,0,w,h,14); c.fill(); c.fillStyle='#fff7ea'; c.font='bold 34px "Apple SD Gothic Neo","Malgun Gothic",sans-serif'; c.textAlign='center'; c.fillText('⛺ Camp · 쉼터',w/2,60); });
+  const sg=new THREE.Group(); const sp=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,1.3,5),M.wood); sp.position.y=0.65; sg.add(sp); const sb=new THREE.Mesh(new THREE.PlaneGeometry(1.2,0.45),new THREE.MeshLambertMaterial({map:signT,side:THREE.DoubleSide})); sb.position.y=1.3; sg.add(sb);
+  const sx2=p.x+(-tg.z)*2.6*sx_, sz2=p.z+tg.x*2.6*sx_; sg.position.set(sx2,groundAt(sx2,sz2),sz2); sg.lookAt(p.x,groundAt(sx2,sz2),p.z); scene.add(sg);
+})();
+function makeTent(color){
+  const g=new THREE.Group(), cm=new THREE.MeshLambertMaterial({color, side:THREE.DoubleSide});
+  const geoT=new THREE.CylinderGeometry(0.85,0.85,1.7,3,1,true); geoT.rotateX(-Math.PI/2); geoT.scale(1,0.95,1);
+  const body=new THREE.Mesh(geoT,cm); body.position.y=0.42; body.castShadow=true; g.add(body);
+  const floor=new THREE.Mesh(new THREE.PlaneGeometry(1.45,1.7),new THREE.MeshLambertMaterial({color:shade(color,-0.35)})); floor.rotation.x=-Math.PI/2; floor.position.y=0.02; g.add(floor);
+  const door=new THREE.Mesh(new THREE.CircleGeometry(0.34,3),new THREE.MeshLambertMaterial({color:0x2a2520})); door.position.set(0,0.3,0.86); door.rotation.z=Math.PI/2; door.scale.set(1,1.1,1); g.add(door);
+  const pole=new THREE.Mesh(new THREE.CylinderGeometry(0.02,0.02,1.25,4),M.wood); pole.position.set(0,0.62,0.9); g.add(pole);
+  const lan=new THREE.Sprite(new THREE.SpriteMaterial({map:GLOW_MAT.map, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending, opacity:0.0, color:0xffc070})); lan.scale.set(1.2,1.2,1); lan.position.set(0,0.5,0.6); g.add(lan); g.userData.lan=lan;
+  return g;
+}
+
+/* ================= End of day & sleeping ================= */
+let myTent=null;
+function todayKey(){ return todayStr(); }
+function ensureToday(){ const k=todayKey(); if(!S.today || S.today.date!==k) S.today={date:k, p0:S.progress, met0:S.met.length+((S.metReal||[]).length)}; }
+const todayKm = () => Math.max(0,(S.progress-(S.today?S.today.p0:S.progress))*7.8);
+const todayMet = () => Math.max(0,S.met.length+((S.metReal||[]).length)-(S.today?S.today.met0:0));
+function openDayCard(){
+  ensureToday();
+  $('#dayStats').textContent = tx('dayStats',{km:todayKm().toFixed(1), n:todayMet()});
+  $('#dayText').value='';
+  openModal('#mDay');
+}
+function sleepNow(note){
+  ensureToday();
+  if(!S.days) S.days=[];
+  S.days.push({date:todayKey(), km:+todayKm().toFixed(1), met:todayMet(), note:(note||'').slice(0,200), at:Date.now()});
+  if(S.days.length>400) S.days.shift();
+  $('#mDay').hidden=true;
+  if(resting) setRest(false);
+  const p=player.outer.position, ry=player.outer.rotation.y;
+  const nearCamp=Math.hypot(p.x-CAMP.x,p.z-CAMP.z)<6;
+  let tx_=p.x+Math.cos(ry)*1.4, tz_=p.z-Math.sin(ry)*1.4;
+  if(nearCamp){ const a=Math.atan2(p.z-CAMP.z,p.x-CAMP.x); tx_=CAMP.x+Math.cos(a)*3.2; tz_=CAMP.z+Math.sin(a)*3.2; }
+  placeMyTent(tx_,tz_,Math.atan2(p.x-tx_,p.z-tz_), true);
+  S.sleep={x:+tx_.toFixed(2), z:+tz_.toFixed(2), at:Date.now()};
+  persist(); enterSleep();
+  saveTent(true);
+}
+function placeMyTent(x,z,ry,anim){
+  if(!myTent){ myTent=makeTent(S.look.packC); scene.add(myTent); }
+  myTent.position.set(x,groundAt(x,z),z); myTent.rotation.y=ry; myTent.visible=true; myTent.userData.grow=anim?0:1; myTent.scale.setScalar(anim?0.01:1);
+}
+function enterSleep(){
+  mode='sleep'; player.sit=1;
+  ['#bottom','#joy','#prompt','#people','#hint'].forEach(q=>$(q).hidden=true);
+  setTimeout(()=>{ if(mode==='sleep') player.outer.visible=false; },1400);
+  const r=$('#reflect'); r.innerHTML=''; r.append(tx('sleepT')); const sm=document.createElement('small'); sm.textContent=tx('sleepSub'); r.append(sm);
+  const b=document.createElement('button'); b.className='go wake'; b.textContent=tx('wake'); b.onclick=wakeUp; r.append(b);
+  r.hidden=false; r.style.opacity=0; requestAnimationFrame(()=>r.style.opacity=1);
+}
+function wakeUp(){
+  mode='walk'; S.sleep=null; player.outer.visible=true; player.sit=0;
+  if(myTent){ const tp=myTent.position; player.outer.position.set(tp.x+Math.sin(myTent.rotation.y)*1.3, 0, tp.z+Math.cos(myTent.rotation.y)*1.3); player.outer.position.y=groundAt(player.outer.position.x,player.outer.position.z); myTent.userData.fold=1; }
+  S.today={date:todayKey(), p0:S.progress, met0:S.met.length+((S.metReal||[]).length)};
+  $('#reflect').style.opacity=0; setTimeout(()=>{ if(mode!=='sleep') $('#reflect').hidden=true; },1200);
+  ['#bottom'].forEach(q=>$(q).hidden=false); if(coarse) $('#joy').hidden=false;
+  persist(); saveTent(false); toast(tx('morning'),3200);
+}
+function updateTents(dt){
+  if(myTent){ const u=myTent.userData;
+    if(u.grow<1){ u.grow=Math.min(1,u.grow+dt*1.4); myTent.scale.setScalar(Math.max(0.01,u.grow)); }
+    if(u.fold){ u.fold-=dt*1.5; myTent.scale.setScalar(Math.max(0.01,u.fold)); if(u.fold<=0){ u.fold=0; myTent.visible=false; } }
+    if(u.lan) u.lan.material.opacity=(tod.night||0)*0.9*(mode==='sleep'?1:0.4);
+  }
+  OFF_TENTS.forEach(o=>{ if(o.g.userData.lan) o.g.userData.lan.material.opacity=(tod.night||0)*0.7; o.label.visible = player && o.g.position.distanceTo(player.outer.position)<18; });
+  NET.remotes.forEach(r=>{ if(r.tent){ r.tent.visible = r.sleeping && r.have; if(r.tent.visible){ r.tent.position.set(r.tx,groundAt(r.tx,r.tz),r.tz); if(r.tent.userData.lan) r.tent.userData.lan.material.opacity=(tod.night||0)*0.9; } } });
+}
+
+/* ================= Tents of pilgrims who stepped away ================= */
+const OFF_TENTS=[];
+function tentREST(row, keepalive){
+  if(!NET.on) return;
+  try{ fetch(SUPA_URL+'/rest/v1/camino_tents?on_conflict=id', {method:'POST', keepalive:!!keepalive, headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'}, body:JSON.stringify(row)}).catch(()=>{}); }catch(e){}
+}
+function saveTent(sleeping, keepalive){
+  if(!started || !player) return;
+  const p = S.sleep ? S.sleep : player.outer.position;
+  tentREST({id:NET.me, x:+(+p.x).toFixed(2), z:+(+p.z).toFixed(2), name:cleanName(S.name), c:okCode(S.country)?S.country:'NONE', pack:S.look.packC, sleeping:!!sleeping, updated_at:new Date().toISOString()}, keepalive);
+}
+async function loadOffTents(){
+  if(!NET.on) return;
+  try{
+    const since=new Date(Date.now()-3*24*3600*1000).toISOString();
+    const {data,error}=await NET.db.from('camino_tents').select('id,x,z,name,c,pack,updated_at').gt('updated_at',since).order('updated_at',{ascending:false}).limit(40);
+    if(error||!Array.isArray(data)) return;
+    data.forEach(r=>{
+      if(r.id===NET.me || OFF_TENTS.some(o=>o.id===r.id)) return;
+      let x=clamp(+r.x||0,-140,150), z=clamp(+r.z||0,-185,96); if(!isFinite(x)||!isFinite(z)) return;
+      const pi=pathInfo(x,z); if(pi.d<3.2){ const tg=curve.getTangentAt(pi.u), s=(hashN(r.id)%2)?1:-1; x+= -tg.z*3.6*s; z+= tg.x*3.6*s; }
+      const pack=Number.isInteger(r.pack)?r.pack:0xc0582f, g=makeTent(pack); g.position.set(x,groundAt(x,z),z); g.rotation.y=(hashN(r.id)%628)/100; scene.add(g);
+      const c=okCode(r.c)?r.c:'NONE', label=labelSprite(cleanName(r.name)+' · '+tx('resting'),c); label.position.y=1.8; g.add(label);
+      OFF_TENTS.push({id:r.id,g,label});
+    });
+    hideOnlineTents();
+  }catch(e){}
+}
+function hideOnlineTents(){ OFF_TENTS.forEach(o=>{ o.g.visible=!NET.remotes.has(o.id); }); }
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden') saveTent(mode==='sleep',true); });
+addEventListener('pagehide',()=>saveTent(mode==='sleep',true));
 
 /* ================= Input ================= */
 const keys={};
@@ -1524,6 +1752,7 @@ function bird(){
   if(!AC) return;
   if(soundOn){
     const t=AC.currentTime, n=2+Math.floor(Math.random()*3);
+    if((tod.night||0)>0.5){ for(let k=0;k<6;k++){ const o=AC.createOscillator(), g=AC.createGain(), t0=t+k*0.09; o.type='triangle'; o.frequency.setValueAtTime(4300,t0); g.gain.setValueAtTime(0,t0); g.gain.linearRampToValueAtTime(0.018,t0+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t0+0.05); o.connect(g); g.connect(master); o.start(t0); o.stop(t0+0.06); } setTimeout(bird, 1500+Math.random()*2500); return; }
     for(let k=0;k<n;k++){ const o=AC.createOscillator(), g=AC.createGain(), t0=t+k*0.16; o.type='sine'; o.frequency.setValueAtTime(2600+Math.random()*700,t0); o.frequency.exponentialRampToValueAtTime(3600+Math.random()*600,t0+0.08); g.gain.setValueAtTime(0,t0); g.gain.linearRampToValueAtTime(0.035,t0+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t0+0.12); o.connect(g); g.connect(master); o.start(t0); o.stop(t0+0.14); }
   }
   setTimeout(bird, 4000+Math.random()*7000);
@@ -1652,7 +1881,7 @@ let started=false;
 applyLang();
 function begin(fresh){
   S.name = ($('#nm').value||'').trim() || tx('defaultName');
-  if(fresh){ S.progress=0; S.x=0; S.z=74; S.stamps={}; S.stampLog={}; S.met=[]; S.ep={}; S.water=1; S.gave=[]; S.shared=0; npcs.forEach(n=>{ n.thirsty=['Hans','Emma','Siobhán'].includes(n.def.name); }); renderWater(); }
+  if(fresh){ S.sleep=null; S.today=null; S.progress=0; S.x=0; S.z=74; S.stamps={}; S.stampLog={}; S.met=[]; S.ep={}; S.water=1; S.gave=[]; S.shared=0; npcs.forEach(n=>{ n.thirsty=['Hans','Emma','Siobhán'].includes(n.def.name); }); renderWater(); }
   if(!S.stamps.sjpp) stamp('sjpp');
   S.started=true;
   rebuildPlayer();
@@ -1665,7 +1894,9 @@ function begin(fresh){
   $('#pName').textContent=S.name; $('#pFlag').src=flagDataURL(S.country); applyLang();
   $('#hint').hidden=false; $('#hint').textContent = coarse ? tx('hintTouch') : tx('hintKey');
   setTimeout(()=>{ $('#hint').style.opacity=0; setTimeout(()=>$('#hint').hidden=true,900); }, 9000);
-  started=true; initAudio(); persist(); canvas.focus(); netJoin(); renderOnline();
+  started=true; initAudio(); ensureToday(); persist(); canvas.focus(); netJoin(); renderOnline();
+  if(!fresh && S.sleep && isFinite(S.sleep.x)){ placeMyTent(S.sleep.x,S.sleep.z,0,false); setTimeout(enterSleep,300); }
+  clockT=99;
   if(fresh || !saved) setTimeout(()=>toast(tx('welcome'),3600), 600);
 }
 $('#goBtn').onclick=()=>begin(true);
@@ -1772,10 +2003,13 @@ const REFLECT={
 function setRest(on){
   resting=on; $('#bRest').setAttribute('aria-pressed',on);
   const r=$('#reflect');
-  if(on){ const RL=REFLECT[S.lang]; const q=RL[reflectIdx++%RL.length]; r.innerHTML=''; r.append(q[0]); const sm=document.createElement('small'); sm.textContent=q[1]; r.append(sm); r.hidden=false; r.style.opacity=0; requestAnimationFrame(()=>r.style.opacity=1); }
+  if(on){ const RL=REFLECT[S.lang]; const q=RL[reflectIdx++%RL.length]; r.innerHTML=''; r.append(q[0]); const sm=document.createElement('small'); sm.textContent=q[1]; r.append(sm); const eb=document.createElement('button'); eb.className='restEnd'; eb.textContent=tx('restEnd'); eb.onclick=openDayCard; r.append(eb); r.hidden=false; r.style.opacity=0; requestAnimationFrame(()=>r.style.opacity=1); }
   else { r.style.opacity=0; setTimeout(()=>{ if(!resting) r.hidden=true; },1200); }
 }
 $('#bRest').onclick=()=>setRest(!resting);
+$('#daySave').onclick=()=>sleepNow($('#dayText').value.trim());
+$('#daySkip').onclick=()=>sleepNow('');
+$('#clock').onclick=()=>{ if(todOverride) return; const i=PREVIEWS.indexOf(clockPreview); clockPreview=PREVIEWS[(i+1)%PREVIEWS.length]; clockT=99; };
 $('#bStone').onclick=()=>{ $('#leaveText').value=''; openModal('#mLeave'); setTimeout(()=>$('#leaveText').focus(),50); };
 $('#leaveGo').onclick=()=>{
   const text=$('#leaveText').value.trim(); if(!text){ $('#leaveText').focus(); return; }
@@ -1809,7 +2043,7 @@ function ensureRemote(id, m){
   const label=labelSprite(name,c,true); P.outer.add(label);
   NET.remotes.set(id,{id, name, c, P, label, lookKey:JSON.stringify(m.look||null), tx:0, tz:0, ry:0, moving:false, sit:false, seen:0, have:false, bubbleT:0, btext:null, bko:null, def:{say:'Buen Camino!', ko:'', en:''}});
 }
-function removeRemote(id){ const r=NET.remotes.get(id); if(!r) return; scene.remove(r.P.outer); NET.remotes.delete(id); }
+function removeRemote(id){ const r=NET.remotes.get(id); if(!r) return; scene.remove(r.P.outer); if(r.tent) scene.remove(r.tent); NET.remotes.delete(id); }
 function renderOnline(){
   const el=$('#online'); if(!NET.on || !started){ el.hidden=true; return; }
   const n=[...NET.remotes.values()].length; el.hidden = n<1; $('#onlineTxt').textContent=tx('online',{n});
@@ -1822,13 +2056,14 @@ function netJoin(){
     const st=ch.presenceState(); const ids=new Set(Object.keys(st)); ids.delete(NET.me);
     ids.forEach(id=>{ const m=(st[id]&&st[id][0])||null; const r=NET.remotes.get(id); if(r && m && JSON.stringify(m.look||null)!==r.lookKey){ removeRemote(id); } ensureRemote(id, m); });
     [...NET.remotes.keys()].forEach(id=>{ if(!ids.has(id)) removeRemote(id); });
-    renderOnline();
+    renderOnline(); hideOnlineTents();
     sendPos(true);
   });
   ch.on('broadcast',{event:'pos'},({payload:p})=>{
     if(!p || typeof p.id!=='string') return; const r=NET.remotes.get(p.id); if(!r) return;
     const x=+p.x, z=+p.z; if(!isFinite(x)||!isFinite(z)) return;
-    r.tx=clamp(x,-140,150); r.tz=clamp(z,-185,96); r.ry=+p.ry||0; r.moving=!!p.m; r.sit=!!p.s; r.seen=performance.now();
+    r.tx=clamp(x,-140,150); r.tz=clamp(z,-185,96); r.ry=+p.ry||0; r.moving=!!p.m; r.sit=!!p.s; r.sleeping=!!p.sl; r.seen=performance.now();
+    if(r.sleeping && !r.tent){ r.tent=makeTent(Number.isInteger(r.P.look&&r.P.look.packC)?r.P.look.packC:0xc0582f); scene.add(r.tent); }
     if(!r.have){ r.have=true; r.P.outer.position.set(r.tx,groundAt(r.tx,r.tz),r.tz); }
     if(p.w) r.P.wave=1.6;
   });
@@ -1840,7 +2075,7 @@ function netJoin(){
   });
   ch.subscribe(status=>{ if(status==='SUBSCRIBED'){ ch.track(myMeta()); sendPos(true); } });
   NET.ch=ch;
-  loadStones();
+  loadStones(); loadOffTents();
 }
 function sendPos(force){
   if(!NET.ch || !player) return;
@@ -1848,7 +2083,7 @@ function sendPos(force){
   const moved=Math.hypot(p.x-L0.x,p.z-L0.z)>0.05 || Math.abs(ry-L0.ry)>0.05;
   if(!force && !moved) return;
   L0.x=p.x; L0.z=p.z; L0.ry=ry;
-  NET.ch.send({type:'broadcast', event:'pos', payload:{id:NET.me, x:+p.x.toFixed(2), z:+p.z.toFixed(2), ry:+ry.toFixed(2), m:moved, s:resting, w:player.wave>1.4}});
+  NET.ch.send({type:'broadcast', event:'pos', payload:{id:NET.me, x:+p.x.toFixed(2), z:+p.z.toFixed(2), ry:+ry.toFixed(2), m:moved, s:resting, sl:mode==='sleep', w:player.wave>1.4}});
 }
 function netUpdate(dt,t){
   if(!NET.on || !NET.ch) return;
@@ -1857,7 +2092,7 @@ function netUpdate(dt,t){
   const now=performance.now();
   NET.remotes.forEach(r=>{
     const P=r.P, stale = now-r.seen>20000;
-    P.outer.visible = r.have && !stale && mode!=='dinner';
+    P.outer.visible = r.have && !stale && mode!=='dinner' && !r.sleeping;
     if(!P.outer.visible) return;
     const p=P.outer.position, k=1-Math.exp(-dt*8);
     p.x+=(r.tx-p.x)*k; p.z+=(r.tz-p.z)*k; p.y=groundAt(p.x,p.z);
@@ -1969,12 +2204,13 @@ $('#bWard').onclick=()=>openWardrobe('game');
 /* ================= Interaction ================= */
 let target=null;
 function interact(){
-  if(!started || !target || mode==='dinner' || wardOn) return;
+  if(!started || !target || mode==='dinner' || mode==='sleep' || wardOn) return;
   if(target.type==='fountain'){
     if(S.water>=3){ toast(tx('bottleFull')); return; }
     S.water=3; renderWater(); persist(); toast(tx('bottleFilled')); return;
   }
   if(target.type==='dinner'){ startDinner(); return; }
+  if(target.type==='camp'){ openDayCard(); return; }
   if(target.type==='remote'){ greetRemote(target.obj); return; }
   if(target.type==='npc'){
     const n=target.obj; player.wave=1.6; n.P.wave=1.9; n.pause=3.6; n.bubbleT=3.6; n.btext=null; n.bko=null;
@@ -2046,6 +2282,11 @@ function frame(){
     lookAt.set(pp.x, pp.y+(wide?0.85:-0.72), pp.z);
     if(wide){ lookAt.x+=Math.cos(a)*1.05; lookAt.z-=Math.sin(a)*1.05; }
     camera.lookAt(lookAt); prompt.hidden=true;
+  } else if(started && mode==='sleep'){
+    player.sit=1; player.sitY=-0.4; animatePilgrim(player,dt,t,0);
+    const c=myTent?myTent.position:pp, a=t*0.05;
+    _v.set(c.x+Math.sin(a)*7, c.y+3.2, c.z+Math.cos(a)*7); camera.position.lerp(_v,1-Math.exp(-dt*2));
+    lookAt.set(c.x,c.y+0.6,c.z); camera.lookAt(lookAt); prompt.hidden=true;
   } else if(started && mode==='dinner'){
     pp.set(PSEAT.x, tableY, PSEAT.z); player.outer.rotation.y=PSEAT.ry; player.sit=1; player.sitY=-0.08;
     animatePilgrim(player,dt,t,0);
@@ -2084,7 +2325,7 @@ function frame(){
     const pi=pathInfo(pp.x,pp.z);
     if(pi.d<12 && pi.u>S.progress){ S.progress=pi.u; }
     if(mode==='walk') checkEpisodes();
-    DASH_MAT.opacity = 0.32 + 0.45*smooth(4,16,pi.d) + (tod!==TOD.day?0.15:0);
+    DASH_MAT.opacity = 0.32 + 0.45*smooth(4,16,pi.d) + 0.25*(tod.night||0);
     const km=S.progress*7.8;
     $('#pKm').textContent=km.toFixed(1);
     $('#pBar').style.width=(S.progress*100).toFixed(1)+'%';
@@ -2105,11 +2346,12 @@ function frame(){
     for(const c of cairns){ const d=Math.hypot(c.x-pp.x,c.z-pp.z); if(d<Math.min(best,2.8)){ best=d; target={type:'cairn',obj:c}; } }
     if(Math.hypot(FOUNTAIN.x-pp.x,FOUNTAIN.z-pp.z)<2.4) target={type:'fountain'};
     if(mode==='walk' && arrived && !S.stamps.supper && Math.hypot(END.x-pp.x,END.z-pp.z)<5) target={type:'dinner'};
+    if((mode==='walk'||mode==='dawn') && Math.hypot(CAMP.x-pp.x,CAMP.z-pp.z)<5.5) target={type:'camp'};
     if(target && !anyModal){
       prompt.hidden=false;
       promptText.textContent = target.type==='npc' ? (target.obj.thirsty&&S.water>0 ? tx('promptWater',{n:target.obj.def.name}) : tx('promptGreet',{n:target.obj.def.name}))
         : target.type==='fountain' ? (S.water<3?tx('promptFill'):tx('promptFull'))
-        : target.type==='dinner' ? tx('promptDinner') : target.type==='remote' ? tx('promptGreetReal',{n:target.obj.name}) : tx('promptNote');
+        : target.type==='camp' ? tx('promptCamp') : target.type==='dinner' ? tx('promptDinner') : target.type==='remote' ? tx('promptGreetReal',{n:target.obj.name}) : tx('promptNote');
       prompt.querySelector('kbd').hidden=coarse;
     }
     else prompt.hidden=true;
@@ -2144,6 +2386,8 @@ function frame(){
   updateSheep(dt,t);
   netUpdate(dt,t);
   updateWeather(dt,t);
+  updateClock(dt,t);
+  updateTents(dt);
 
   // bubble
   let shown=null;
