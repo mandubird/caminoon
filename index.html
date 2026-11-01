@@ -118,7 +118,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .field{display:grid;gap:8px}
 .field > label,.field > .lab{font-size:13px;letter-spacing:.04em;color:var(--ink-soft)}
 .field input[type=text]{font-family:var(--body);font-size:16px;padding:11px 12px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--ink)}
-.flags{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:6px}
+.flags{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+@media (max-width:420px){.flags{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.flags button{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .flags button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:6px 4px;display:grid;justify-items:center;gap:4px;font-size:11px}
 .flags button img{width:36px;height:24px;border-radius:2px;box-shadow:0 0 0 1px var(--line)}
 .flags button[aria-pressed="true"]{border-color:var(--tile);background:#e8f0f8;box-shadow:0 0 0 2px var(--tile) inset}
@@ -441,8 +443,8 @@ function tx(k, v){ let s=(I[S.lang]&&I[S.lang][k]); if(s===undefined) s=I.ko[k]|
 const L = o => o ? (S.lang==='ko' ? (o.ko||'') : (o.en||'')) : '';
 
 /* ================= Flags ================= */
-const COUNTRIES = [['KR','대한민국'],['JP','일본'],['CN','중국'],['VN','베트남'],['PH','필리핀'],['US','미국'],['CA','캐나다'],['MX','멕시코'],['BR','브라질'],['ES','스페인'],['FR','프랑스'],['PT','포르투갈'],['IT','이탈리아'],['DE','독일'],['GB','영국'],['IE','아일랜드'],['NL','네덜란드'],['PL','폴란드'],['NONE','선택 안 함']];
-const CNAME_EN = {KR:'Korea',JP:'Japan',CN:'China',VN:'Vietnam',PH:'Philippines',US:'USA',CA:'Canada',MX:'Mexico',BR:'Brazil',ES:'Spain',FR:'France',PT:'Portugal',IT:'Italy',DE:'Germany',GB:'UK',IE:'Ireland',NL:'Netherlands',PL:'Poland',NONE:'Prefer not to say'};
+const COUNTRIES = [['KR','대한민국'],['JP','일본'],['CN','중국'],['VN','베트남'],['PH','필리핀'],['US','미국'],['CA','캐나다'],['MX','멕시코'],['BR','브라질'],['ES','스페인'],['FR','프랑스'],['PT','포르투갈'],['IT','이탈리아'],['DE','독일'],['GB','영국'],['IE','아일랜드'],['NL','네덜란드'],['PL','폴란드'],['AU','호주'],['AR','아르헨티나'],['CO','콜롬비아'],['IN','인도'],['ZA','남아프리카공화국'],['NONE','선택 안 함']];
+const CNAME_EN = {KR:'Korea',JP:'Japan',CN:'China',VN:'Vietnam',PH:'Philippines',US:'USA',CA:'Canada',MX:'Mexico',BR:'Brazil',ES:'Spain',FR:'France',PT:'Portugal',IT:'Italy',DE:'Germany',GB:'UK',IE:'Ireland',NL:'Netherlands',PL:'Poland',AU:'Australia',AR:'Argentina',CO:'Colombia',IN:'India',ZA:'South Africa',NONE:'Prefer not to say'};
 const CNAME_KO = Object.fromEntries(COUNTRIES);
 const ALL_CODES = 'AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS XK YE YT ZA ZM ZW'.split(' ');
 const DN = {}; const dn = l => { if(DN[l]!==undefined) return DN[l]; try{ DN[l]=new Intl.DisplayNames([l],{type:'region'}); }catch(e){ DN[l]=null; } return DN[l]; };
@@ -1385,7 +1387,7 @@ function flagBtn(c){ return `<button data-c="${c}" aria-pressed="${c===S.country
 // 나라 추가 요청 → 구글 폼 → 구글 시트 '카미노 온 나라 추가 요청'
 const REQ_FORM='https://docs.google.com/forms/d/e/1FAIpQLSfA_IkeNsk2iXu9XDdDkOhtgkfmrPKXscAUMnCO0uyrbAY1nQ/formResponse';
 const REQ_ENTRY='entry.1745594292';
-function renderFlagGrid(){ const base=COUNTRIES.map(q=>q[0]); const list=base.includes(S.country)?base:[S.country].concat(base); $('#flagGrid').innerHTML = list.map(flagBtn).join(''); }
+function renderFlagGrid(){ const base=COUNTRIES.map(q=>q[0]); const list=base.includes(S.country)?base:[S.country].concat(base.slice(0,base.length-2), base.slice(-1)); $('#flagGrid').innerHTML = list.map(flagBtn).join(''); }
 function renderFlagGridOld(){ $('#flagGrid').innerHTML = COUNTRIES.map(([c])=>`<button data-c="${c}" aria-pressed="${c===S.country}"><img src="${flagDataURL(c)}" alt="">${cname(c)}</button>`).join(''); }
 function renderResume(){
   if(saved && saved.started && saved.progress>0.01){ const r=$('#resumeBtn'); r.hidden=false; r.textContent=tx('resume',{km:(saved.progress*7.8).toFixed(1)}); $('#goBtn').textContent=tx('goAgain'); }
