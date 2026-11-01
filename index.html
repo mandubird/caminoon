@@ -1453,6 +1453,7 @@ function fadeTo(fn, caption, sub){
   setTimeout(()=>{ fn(); setTimeout(()=>{ f.style.opacity=0; f.style.pointerEvents='none'; },1100); },1100);
 }
 function startDinner(){
+  track('dinner',{});
   $('#mArrive').hidden=true;
   fadeTo(()=>{
     mode='dinner'; setWeather('clear'); setTime('dusk'); if(resting) setRest(false);
@@ -1644,7 +1645,7 @@ function openDayCard(){
   openModal('#mDay');
 }
 function sleepNow(note){
-  ensureToday();
+  ensureToday(); track('dayend',{note:!!(note&&note.trim())});
   if(!S.days) S.days=[];
   S.days.push({date:todayKey(), km:+todayKm().toFixed(1), met:todayMet(), note:(note||'').slice(0,200), at:Date.now()});
   if(S.days.length>400) S.days.shift();
@@ -1800,6 +1801,7 @@ document.querySelectorAll('.modal').forEach(m=>{
 function persist(){ if(!player) return; S.x=+player.outer.position.x.toFixed(2); S.z=+player.outer.position.z.toFixed(2); S.savedAt=Date.now(); store.save(S); }
 function stamp(id){
   if(S.stamps[id]) return false;
+  track('stamp',{id});
   S.stamps[id]=todayStr(); if(!S.stampLog) S.stampLog={};
   S.stampLog[id]={date:S.stamps[id], km:+(S.progress*7.8).toFixed(1), wx:(typeof wxType==='string'?wxType:'clear'), met:S.met.length+((S.metReal||[]).length), at:Date.now()};
   return true;
@@ -1893,6 +1895,7 @@ function buildStart(){
     try{ await fetch(REQ_FORM, {method:'POST', mode:'no-cors', body:new URLSearchParams({[REQ_ENTRY]: `${name} (${S.lang}${S.country&&S.country!=='NONE'?' · now '+S.country:''})`})}); ok=true; }catch(e){}
     if(NET.on){ try{ await NET.db.from('camino_country_requests').insert({name, lang:S.lang}); }catch(e){} }
     try{ const k='camino-on-requests'; const a=JSON.parse(localStorage.getItem(k)||'[]'); a.push({name,at:Date.now()}); localStorage.setItem(k,JSON.stringify(a)); }catch(e){}
+    track('country_req',{});
     $('#reqBox').hidden=true; toast(ok?tx('reqDone'):tx('reqLocal'));
   };
   const fb=$('#flagShowBtn');
@@ -1922,6 +1925,7 @@ function begin(fresh){
   $('#pName').textContent=S.name; $('#pFlag').src=flagDataURL(S.country); applyLang();
   $('#hint').hidden=false; $('#hint').textContent = coarse ? tx('hintTouch') : tx('hintKey');
   setTimeout(()=>{ $('#hint').style.opacity=0; setTimeout(()=>$('#hint').hidden=true,900); }, 9000);
+  track('start',{fresh:!!fresh, c:S.country, look:Object.keys(S.look||{}).length});
   started=true; initAudio(); ensureToday(); persist(); canvas.focus(); netJoin(); renderOnline();
   if(!fresh && S.sleep && isFinite(S.sleep.x)){ placeMyTent(S.sleep.x,S.sleep.z,0,false); setTimeout(enterSleep,300); }
   clockT=99;
@@ -2018,7 +2022,7 @@ function showTown(i){
 }
 $('#mapWrap').addEventListener('click',e=>{ const g=e.target.closest('.town'); if(g) showTown(+g.dataset.i); });
 $('#mapWrap').addEventListener('keydown',e=>{ const g=e.target.closest('.town'); if(g && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); showTown(+g.dataset.i); } });
-function openMap(){ renderMap(); openModal('#mMap'); }
+function openMap(){ track('map',{}); renderMap(); openModal('#mMap'); }
 $('#bMap').onclick=openMap;
 
 $('#stampGrid').addEventListener('click',e=>{
@@ -2029,7 +2033,7 @@ $('#stampGrid').addEventListener('click',e=>{
   if(id==='supper' && S.journal && S.journal.length) t += '\n'+tx('sdAnswer',{a:S.journal[S.journal.length-1].a});
   el.textContent=t; el.style.whiteSpace='pre-line';
 });
-$('#bPass').onclick=()=>{ renderPassport(); openModal('#mPass'); };
+$('#bPass').onclick=()=>{ track('passport',{}); renderPassport(); openModal('#mPass'); };
 let resetArm=false;
 $('#resetBtn').onclick=()=>{
   if(!resetArm){ resetArm=true; $('#resetBtn').textContent=tx('resetConfirm'); return; }
@@ -2056,6 +2060,7 @@ $('#leaveGo').onclick=()=>{
   const x=p.x+Math.cos(ry)*1.6, z=p.z-Math.sin(ry)*1.6;
   const note={text, who:S.name, c:S.country, x:+x.toFixed(2), z:+z.toFixed(2), date:todayStr()};
   S.notes.push(note); addCairn(x,z,note,true); persist();
+  track('stone',{len:text.length});
   shareStone(note).then(ok=>{ if(ok) toast(tx('stoneShared')); });
   $('#mLeave').hidden=true; toast(tx('leaveDone'));
 };
@@ -2069,6 +2074,32 @@ const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 const NET = {on:false, db:null, ch:null, me:'', remotes:new Map(), sendT:0, beatT:0, last:{x:0,z:0,ry:0}, online:0, joined:false};
 try{ NET.me=localStorage.getItem('camino-on-id') || ''; if(!NET.me){ NET.me=(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now().toString(36)); localStorage.setItem('camino-on-id',NET.me); } }catch(e){ NET.me='g'+Math.random().toString(36).slice(2); }
 if(SUPA_URL && SUPA_KEY && window.supabase){ try{ NET.db=window.supabase.createClient(SUPA_URL, SUPA_KEY, {auth:{persistSession:true, autoRefreshToken:true, detectSessionInUrl:true, storageKey:'camino-on-auth'}, realtime:{params:{eventsPerSecond:12}}}); NET.on=true; }catch(e){ NET.on=false; } }
+
+/* ================= Measurement (anonymous) ================= */
+// 이름·이메일 없이 브라우저 무작위 번호(cid)와 행동만 보냄. 이 기기 제외: localStorage camino-on-staff=1
+var EV = {q:[], sid:'', walkSec:0, off:false, last:0};
+try{ EV.off = localStorage.getItem('camino-on-staff')==='1' || navigator.webdriver===true; }catch(e){}
+EV.sid = Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-6);
+function track(ev, v){
+  if(!EV || EV.off || !SUPA_URL) return;
+  EV.q.push({cid:NET.me||'anon0000', sid:EV.sid, ev:String(ev).slice(0,32), v:v||{}});
+  if(EV.q.length>=20) flushEv(false);
+}
+function flushEv(keep){
+  if(!EV.q.length || EV.off) return;
+  const batch=EV.q.splice(0, 50);
+  try{ fetch(SUPA_URL+'/rest/v1/camino_events',{method:'POST', keepalive:!!keep, headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=minimal'}, body:JSON.stringify(batch)}).catch(()=>{}); }catch(e){}
+}
+setInterval(()=>flushEv(false), 15000);
+setInterval(()=>{ if(started && document.visibilityState==='visible') track('beat',{walkSec:Math.round(EV.walkSec), km:+(S.progress*7.8).toFixed(2), mode:(typeof mode==='string'?mode:'')}); }, 60000);
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden'){ if(started) track('end',{walkSec:Math.round(EV.walkSec), km:+(S.progress*7.8).toFixed(2)}); flushEv(true); } });
+(function(){
+  let ret=false; try{ ret=!!localStorage.getItem('camino-on-seen'); localStorage.setItem('camino-on-seen','1'); }catch(e){}
+  let ref=''; try{ ref=document.referrer ? new URL(document.referrer).hostname.slice(0,60) : ''; }catch(e){}
+  const qp=new URLSearchParams(location.search);
+  track('open',{lang:S.lang, c:S.country, mobile:!!coarse, ret, ref, src:(qp.get('utm_source')||qp.get('from')||'').slice(0,30), w:qp.has('w')});
+  setTimeout(()=>flushEv(false), 4000);
+})();
 const cleanName = n => String(n||'').replace(/[\u0000-\u001f<>]/g,'').trim().slice(0,12) || 'Pilgrim';
 const hashN = s => { let h=0; for(const ch of String(s)) h=(h*31+ch.charCodeAt(0))|0; return Math.abs(h); };
 const SHIRTS=[0xf2e6cf,0xd96c4f,0x5b7fa6,0x6e8a5a,0xf4c34d,0x9a6fb0,0x4f9a8e,0xe8a5b5];
@@ -2149,6 +2180,7 @@ function greetRemote(r){
   sendPos(true);
   if(!S.metReal) S.metReal=[];
   if(!S.metReal.some(x=>x.id===r.id)){ S.metReal.push({id:r.id, name:r.name, c:r.c}); if(S.metReal.length>60) S.metReal.shift(); persist(); }
+  track('greet',{real:true});
   toast(tx('helloSent',{n:r.name}));
 }
 async function loadStones(){
@@ -2327,6 +2359,7 @@ function closeWardrobe(){
   if(wardFrom==='start'){ $('#start').hidden=false; }
   else { ['#tl','#tr','#bottom'].forEach(q=>$(q).hidden=false); if(coarse) $('#joy').hidden=false; }
   store.save(S); if(NET.ch && started) NET.ch.track(myMeta());
+  track('style',{from:wardFrom, hat:S.look.hat, top:S.look.top});
 }
 $('#wardDone').onclick=closeWardrobe;
 $('#bWard').onclick=()=>openWardrobe('game');
@@ -2344,9 +2377,9 @@ function interact(){
   if(target.type==='camp'){ openDayCard(); return; }
   if(target.type==='remote'){ greetRemote(target.obj); return; }
   if(target.type==='npc'){
-    const n=target.obj; player.wave=1.6; n.P.wave=1.9; n.pause=3.6; n.bubbleT=3.6; n.btext=null; n.bko=null;
+    const n=target.obj; track('greet',{real:false, npc:n.def.name}); player.wave=1.6; n.P.wave=1.9; n.pause=3.6; n.bubbleT=3.6; n.btext=null; n.bko=null;
     if(n.thirsty && S.water>0){
-      S.water--; renderWater(); n.thirsty=false; n.drop.visible=false; S.gave.push(n.def.name); S.shared=(S.shared||0)+1;
+      S.water--; renderWater(); n.thirsty=false; n.drop.visible=false; S.gave.push(n.def.name); S.shared=(S.shared||0)+1; track('water',{});
       const th=THANKS[n.def.name]||['Gracias!','고마워요!','Thank you!']; n.btext=th[0]; n.bko={ko:th[1], en:th[2]}; player.wave=0; n.P.wave=0;
       if(!S.stamps.water){ stamp('water'); setTimeout(()=>toast(tx('waterFirst'),4200),400); }
       else setTimeout(()=>toast(tx('waterAgain',{n:n.def.name})),400);
@@ -2449,6 +2482,7 @@ function frame(){
     pp.y=groundAt(pp.x,pp.z);
     player.sit += ((resting?1:0)-player.sit)*Math.min(1,dt*5); player.sitY=-0.4;
     animatePilgrim(player,dt,t,amt);
+    if(amt>0) EV.walkSec+=dt;
     const ss=Math.sign(Math.sin(player.phase)); if(amt>0 && ss!==lastStepSign){ step(0.12); lastStepSign=ss; }
     if(resting) camYaw+=dt*0.06;
 

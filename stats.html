@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>카미노 온 · 걸음 기록표</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap">
+<style>
+:root{
+  --bg:#f6efe2; --card:#fffaf1; --ink:#3b2a1e; --soft:#7a6250; --line:#e6d8c2;
+  --acc:#d9a521; --acc-ink:#6b4c06; --good:#4f7f3a; --bar:#e9c46a;
+  --display:'Jua','Gowun Dodum',system-ui,sans-serif; --body:'Gowun Dodum',system-ui,-apple-system,'Apple SD Gothic Neo',sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root{ --bg:#1f1914; --card:#2a221b; --ink:#f1e6d4; --soft:#bba68c; --line:#43372b; --acc:#e7b93a; --acc-ink:#f3d27a; --good:#8fc074; --bar:#a8862f; color-scheme:dark } }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--body)}
+.wrap{max-width:980px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}
+header{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-end;justify-content:space-between;margin-bottom:18px}
+h1{font:28px/1.2 var(--display);margin:0}
+h1 small{display:block;font:14px var(--body);color:var(--soft);margin-top:4px}
+h2{font:19px var(--display);margin:30px 0 10px}
+.ctl{display:flex;gap:6px;flex-wrap:wrap}
+.ctl button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px;font:inherit;cursor:pointer}
+.ctl button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:#2b1d05}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:0}
+.card .k{font-size:13px;color:var(--soft)}
+.card .v{font:30px/1.15 var(--display);margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.card .s{font-size:13px;color:var(--soft)}
+.card.key{border-color:var(--acc);box-shadow:inset 0 0 0 1px var(--acc)}
+.card.key .k{color:var(--acc-ink);font-weight:700}
+.meter{height:6px;border-radius:3px;background:var(--line);margin-top:8px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--acc)}
+.tbl{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:720px;font-variant-numeric:tabular-nums}
+th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:12.5px;color:var(--soft);font-weight:400}
+th:first-child,td:first-child{text-align:left}
+tr:last-child td{border-bottom:0}
+.cty{display:flex;flex-direction:column;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.cty div{display:grid;grid-template-columns:110px 1fr 36px;gap:10px;align-items:center;font-size:14px}
+.cty b{display:block;height:10px;border-radius:5px;background:var(--bar)}
+.cty span:last-child{text-align:right;color:var(--soft)}
+.note{color:var(--soft);font-size:13.5px;max-width:68ch}
+.me{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.me button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 14px;font:inherit;cursor:pointer}
+.err{background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>걸음 기록표<small>카미노 온 · 이름 없이, 브라우저 번호와 행동만 셉니다</small></h1>
+    <div class="ctl" role="group" aria-label="기간">
+      <button data-d="1">오늘</button><button data-d="7">7일</button><button data-d="14" aria-pressed="true">14일</button><button data-d="30">30일</button>
+    </div>
+  </header>
+
+  <div id="out"><p class="note">불러오는 중…</p></div>
+
+  <div class="me">
+    <span class="note" id="meTxt"></span>
+    <button id="meBtn"></button>
+  </div>
+  <p class="note">‘처음 5분’ 기준: 한 번 접속해서 실제로 캐릭터를 움직인 시간이 5분 이상인 사람. 날짜는 한국 시간 기준이에요. ‘다음날 재방문’은 그날 왔던 사람 중 바로 다음 날에도 들어온 사람 수예요.</p>
+</div>
+<script>
+const U='https://tctogguvgwvkxpymdsmn.supabase.co';
+const K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjdG9nZ3V2Z3d2a3hweW1kc21uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgwNzA0MzQsImV4cCI6MjA4MzY0NjQzNH0.sd54qY83b09GmsIKVWCB7IkjLrC1vePrhbhPHKnQazE';
+const out=document.getElementById('out');
+const pct=(a,b)=>b?Math.round(a*100/b):0;
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let cname; try{ cname=new Intl.DisplayNames(['ko'],{type:'region'}); }catch(e){}
+const cn=c=>!c||c==='NONE'?'선택 안 함':(cname?(cname.of(c)||c):c);
+
+function card(k,v,s,ratio,key){
+  return `<div class="card${key?' key':''}"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s||'&nbsp;'}</div>${ratio!=null?`<div class="meter"><i style="width:${Math.min(100,ratio)}%"></i></div>`:''}</div>`;
+}
+async function load(d){
+  document.querySelectorAll('.ctl button').forEach(b=>b.setAttribute('aria-pressed', +b.dataset.d===d));
+  try{
+    const r=await fetch(U+'/rest/v1/rpc/camino_stats',{method:'POST',headers:{apikey:K,Authorization:'Bearer '+K,'Content-Type':'application/json'},body:JSON.stringify({n_days:d})});
+    if(!r.ok) throw new Error(r.status);
+    render(await r.json());
+  }catch(e){ out.innerHTML=`<div class="err">기록을 불러오지 못했어요 (${esc(e.message)}). 잠시 뒤 새로고침해 주세요.</div>`; }
+}
+function render(j){
+  const T=j.totals||{}, D=j.daily||[], C=j.countries||[], E=j.events||{};
+  const ret=D.reduce((a,x)=>a+(x.returned_next_day||0),0);
+  let h='<div class="grid">';
+  h+=card('방문한 사람', T.visitors||0, `세션 ${T.sessions||0}번`);
+  h+=card('걷기 시작', T.starters||0, `방문자의 ${pct(T.starters,T.visitors)}%`, pct(T.starters,T.visitors));
+  h+=card('5분 이상 직접 걸음', T.walk5||0, `방문자의 ${pct(T.walk5,T.visitors)}%`, pct(T.walk5,T.visitors), true);
+  h+=card('평균 걸은 시간', (T.avg_walk_min??0)+'분', '움직인 세션 기준');
+  h+=card('다른 순례자에게 인사', T.greeted||0, `실제 사람에게 ${T.greeted_real||0}명`, pct(T.greeted,T.starters), true);
+  h+=card('다음날 다시 옴', ret, `여러 날 온 사람 ${T.returning||0}명`, pct(T.returning,T.visitors), true);
+  h+=card('링크 공유', T.shared||0, `걷기 시작한 사람의 ${pct(T.shared,T.starters)}%`, pct(T.shared,T.starters), true);
+  h+='</div>';
+
+  h+='<h2>날짜별</h2><div class="tbl"><table><thead><tr><th>날짜</th><th>방문</th><th>걷기 시작</th><th>5분+</th><th>평균(분)</th><th>인사</th><th>실제 사람</th><th>하루 마무리</th><th>공유</th><th>다음날 재방문</th></tr></thead><tbody>';
+  h+= D.length ? D.map(x=>`<tr><td>${esc(x.d)}</td><td>${x.visitors}</td><td>${x.starters}</td><td>${x.walked5}</td><td>${x.avg_walk_min??'–'}</td><td>${x.greeted}</td><td>${x.greeted_real}</td><td>${x.day_end}</td><td>${x.shared}</td><td>${x.returned_next_day}</td></tr>`).join('') : '<tr><td colspan="10">아직 기록이 없어요.</td></tr>';
+  h+='</tbody></table></div>';
+
+  if(C.length){
+    const mx=Math.max(...C.map(x=>x.n));
+    h+='<h2>어느 나라로 걷나</h2><div class="cty">'+C.slice(0,20).map(x=>`<div><span>${esc(cn(x.c))}</span><b style="width:${Math.max(4,x.n*100/mx)}%"></b><span>${x.n}</span></div>`).join('')+'</div>';
+  }
+  const names={open:'접속',start:'출발',beat:'걷는 중(1분마다)',end:'창 닫음',greet:'인사',water:'물 나눔',stamp:'도장',stone:'조약돌',style:'꾸미기',dinner:'저녁 식탁',dayend:'하루 마무리',map:'지도 열기',passport:'여권 열기',country_req:'나라 추가 요청',share:'공유'};
+  const ev=Object.entries(E).sort((a,b)=>b[1]-a[1]);
+  if(ev.length){
+    h+='<h2>행동 횟수</h2><div class="tbl"><table style="min-width:0"><tbody>'+ev.map(([k,n])=>`<tr><td>${esc(names[k]||k)}</td><td>${n}</td></tr>`).join('')+'</tbody></table></div>';
+  }
+  h+=`<p class="note">업데이트 ${esc(new Date(j.generated_at).toLocaleString('ko-KR'))}</p>`;
+  out.innerHTML=h;
+}
+document.querySelectorAll('.ctl button').forEach(b=>b.onclick=()=>load(+b.dataset.d));
+function meUI(){
+  let off=false; try{ off=localStorage.getItem('camino-on-staff')==='1'; }catch(e){}
+  document.getElementById('meTxt').textContent = off ? '이 기기는 기록에서 빠져 있어요.' : '이 기기에서 걷는 것도 기록에 들어가요.';
+  document.getElementById('meBtn').textContent = off ? '다시 기록하기' : '내 기기는 기록에서 빼기';
+}
+document.getElementById('meBtn').onclick=()=>{ try{ const k='camino-on-staff'; localStorage.getItem(k)==='1'?localStorage.removeItem(k):localStorage.setItem(k,'1'); }catch(e){} meUI(); };
+meUI(); load(14);
+</script>
+</body>
+</html>

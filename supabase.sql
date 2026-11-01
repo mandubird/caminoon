@@ -60,3 +60,65 @@ drop policy if exists "own journey add" on public.camino_journeys;
 create policy "own journey add" on public.camino_journeys for insert to authenticated with check ((select auth.uid()) = user_id);
 drop policy if exists "own journey update" on public.camino_journeys;
 create policy "own journey update" on public.camino_journeys for update to authenticated using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+
+-- ===== Analytics (anonymous behaviour only) =====
+create table if not exists public.camino_events (
+  id bigint generated always as identity primary key,
+  cid text not null check (char_length(cid) between 4 and 64),
+  sid text not null check (char_length(sid) between 4 and 40),
+  ev text not null check (char_length(ev) between 1 and 32),
+  v jsonb not null default '{}'::jsonb check (pg_column_size(v) < 2000),
+  at timestamptz not null default now()
+);
+create index if not exists camino_events_at on public.camino_events(at);
+alter table public.camino_events enable row level security;
+drop policy if exists "camino events add" on public.camino_events;
+create policy "camino events add" on public.camino_events for insert to anon, authenticated with check (true);
+
+create or replace function public.camino_stats(n_days int default 14)
+returns jsonb language sql stable security definer set search_path = public as $$
+with e as (
+  select cid, sid, ev, v, (at at time zone 'Asia/Seoul')::date d
+  from public.camino_events
+  where at > now() - make_interval(days => least(greatest(coalesce(n_days,14),1),90))
+),
+sess as (
+  select sid, min(cid) cid, min(d) d,
+    max(least(case when ev in ('beat','end') and v->>'walkSec' ~ '^[0-9]{1,6}(\.[0-9]+)?$' then (v->>'walkSec')::numeric else 0 end, 43200)) walk
+  from e group by sid
+),
+opens as (select distinct cid, d from e where ev='open'),
+dlist as (select distinct d from e),
+daily as (
+  select dd.d,
+    (select count(distinct cid) from opens o where o.d=dd.d) visitors,
+    (select count(distinct cid) from e where e.d=dd.d and ev='start') starters,
+    (select count(distinct cid) from sess s where s.d=dd.d and walk>=300) walked5,
+    (select round(avg(walk)/60.0,1) from sess s where s.d=dd.d and walk>0) avg_walk_min,
+    (select count(distinct cid) from e where e.d=dd.d and ev='greet') greeted,
+    (select count(distinct cid) from e where e.d=dd.d and ev='greet' and v->>'real'='true') greeted_real,
+    (select count(distinct cid) from e where e.d=dd.d and ev='dayend') day_end,
+    (select count(distinct cid) from e where e.d=dd.d and ev='share') shared,
+    (select count(*) from opens o where o.d=dd.d and exists(select 1 from opens o2 where o2.cid=o.cid and o2.d=dd.d+1)) returned_next_day
+  from dlist dd
+)
+select jsonb_build_object(
+  'daily', coalesce((select jsonb_agg(to_jsonb(daily) order by d desc) from daily),'[]'::jsonb),
+  'totals', jsonb_build_object(
+    'visitors',(select count(distinct cid) from opens),
+    'starters',(select count(distinct cid) from e where ev='start'),
+    'walk5',(select count(distinct cid) from sess where walk>=300),
+    'avg_walk_min',(select round(avg(walk)/60.0,1) from sess where walk>0),
+    'greeted',(select count(distinct cid) from e where ev='greet'),
+    'greeted_real',(select count(distinct cid) from e where ev='greet' and v->>'real'='true'),
+    'shared',(select count(distinct cid) from e where ev='share'),
+    'returning',(select count(*) from (select cid from opens group by cid having count(*)>1) r),
+    'sessions',(select count(*) from sess)
+  ),
+  'countries', coalesce((select jsonb_agg(jsonb_build_object('c',c,'n',n) order by n desc) from (select v->>'c' c, count(distinct cid) n from e where ev='start' and v ? 'c' group by 1) x),'[]'::jsonb),
+  'events', coalesce((select jsonb_object_agg(ev,n) from (select ev, count(*) n from e group by ev) y),'{}'::jsonb),
+  'generated_at', now()
+);
+$$;
+revoke all on function public.camino_stats(int) from public;
+grant execute on function public.camino_stats(int) to anon, authenticated;
