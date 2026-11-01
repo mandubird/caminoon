@@ -1491,8 +1491,9 @@ $('#bSound').onclick=()=>{ soundOn=!soundOn; $('#bSound').setAttribute('aria-pre
 
 
 /* ================= Live pilgrims (Supabase Realtime) ================= */
-const SUPA_URL = '';   // https://<project>.supabase.co
-const SUPA_KEY = '';   // anon public key (RLS가 켜진 테이블만 접근)
+const SUPA_URL = 'https://tctogguvgwvkxpymdsmn.supabase.co';
+// anon(공개) 키: 브라우저에 공개되는 키예요. 테이블 접근은 RLS 정책으로 제한돼요.
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjdG9nZ3V2Z3d2a3hweW1kc21uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgwNzA0MzQsImV4cCI6MjA4MzY0NjQzNH0.sd54qY83b09GmsIKVWCB7IkjLrC1vePrhbhPHKnQazE';
 const NET = {on:false, db:null, ch:null, me:'', remotes:new Map(), sendT:0, beatT:0, last:{x:0,z:0,ry:0}, online:0, joined:false};
 try{ NET.me=localStorage.getItem('camino-on-id') || ''; if(!NET.me){ NET.me=(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now().toString(36)); localStorage.setItem('camino-on-id',NET.me); } }catch(e){ NET.me='g'+Math.random().toString(36).slice(2); }
 if(SUPA_URL && SUPA_KEY && window.supabase){ try{ NET.db=window.supabase.createClient(SUPA_URL, SUPA_KEY, {auth:{persistSession:false}, realtime:{params:{eventsPerSecond:12}}}); NET.on=true; }catch(e){ NET.on=false; } }
