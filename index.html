@@ -125,6 +125,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .flags button img{width:36px;height:24px;border-radius:2px;box-shadow:0 0 0 1px var(--line)}
 .flags button[aria-pressed="true"]{border-color:var(--tile);background:#e8f0f8;box-shadow:0 0 0 2px var(--tile) inset}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+#wardOpen{padding:10px 16px;font-size:16px}
 .sw{width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1.5px var(--line)}
 .sw[aria-pressed="true"]{box-shadow:0 0 0 3px var(--tile)}
 .chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font-size:14px}
@@ -199,7 +200,29 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
 .sdetail{min-height:1.5em;font-size:14px;line-height:1.6;color:var(--ink);margin:0;padding:10px 12px;border-radius:12px;background:rgba(242,194,48,.14)}
 .stamps .stamp{border:0;background:none;padding:0;cursor:pointer;border-radius:50%}
 .stamps .stamp:focus-visible{outline:3px solid var(--tile)}
-@media (max-width:640px){.mstats{grid-template-columns:repeat(3,minmax(0,1fr))} .mapwrap .minor{display:none}}
+@media (max-width:641px){.mstats{grid-template-columns:repeat(3,minmax(0,1fr))} .mapwrap .minor{display:none}}
+#wardrobe{top:0;right:0;bottom:0;display:flex;padding:calc(env(safe-area-inset-top,0px) + 14px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 14px) 0}
+.wpanel{width:min(440px,calc(100vw - 32px));display:flex;flex-direction:column;gap:12px;padding:16px;min-height:0}
+.whead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.whead h2{margin:0;font-family:var(--display);font-weight:400;font-size:24px}
+.whead .go{padding:9px 20px;font-size:16px}
+.wcats{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;flex:none;scrollbar-width:thin}
+.wcats button{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font-size:13px;white-space:nowrap}
+.wcats button[aria-selected="true"]{background:var(--tile);border-color:var(--tile);color:#fff}
+.witems{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;overflow-y:auto;min-height:0;flex:1;align-content:start}
+.witems button{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:6px 6px 8px;display:grid;gap:5px;justify-items:center;font-size:12.5px;min-width:0}
+.witems button span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.witems button[aria-pressed="true"]{border-color:var(--tile);box-shadow:0 0 0 2px var(--tile) inset;background:#eef4fa}
+.witems img,.witems .noitem{width:100%;aspect-ratio:1;border-radius:10px;background:radial-gradient(circle at 50% 40%,#fbf5ea,#efe3cc);display:block}
+.witems .noitem{display:grid;place-items:center;color:var(--ink-soft);font-size:26px}
+.wcolors{display:flex;gap:8px;flex-wrap:wrap;align-items:center;flex:none;min-height:34px}
+.wcolors .lab{font-size:12px;color:var(--ink-soft);margin-right:2px}
+@media (max-width:760px){
+  #wardrobe{top:auto;left:0;height:58%;padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px));padding-top:0}
+  .wpanel{width:100%;padding:12px}
+  .witems{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .whead h2{font-size:20px}
+}
 @media (max-width:640px){
   #start{align-items:flex-end;background:linear-gradient(0deg,rgba(255,247,234,.6),rgba(255,247,234,0) 70%)}
   .sheet{max-height:72%;padding:18px 16px}
@@ -208,8 +231,9 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
   #tr .st b{font-size:21px}
   #tl{max-width:calc(100vw - 180px)}
   #brand b{font-size:16px}
-  #bottom{gap:2px;padding:6px}
-  #bottom button{min-width:52px;padding:7px 6px;font-size:12px;white-space:nowrap}
+  #bottom{gap:0;padding:5px;width:calc(100vw - 24px);justify-content:space-between}
+  #bottom button{min-width:0;flex:1;padding:7px 2px;font-size:11px;white-space:nowrap}
+  #bottom svg{width:20px;height:20px}
   #hint{white-space:normal;text-align:center;width:calc(100vw - 48px)}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -250,6 +274,15 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
     <div class="dacts" id="dActs"></div>
   </div>
   <div id="fade" aria-live="polite"></div>
+  <div class="hud" id="wardrobe" hidden>
+    <div class="wpanel pill" role="dialog" aria-labelledby="wardT">
+      <div class="whead"><h2 id="wardT" data-i18n="wardT">캐릭터 꾸미기</h2><button class="go" id="wardDone" data-i18n="wardDone">완료</button></div>
+      <div class="wcats" id="wCats" role="tablist"></div>
+      <div class="witems" id="wItems"></div>
+      <div class="wcolors" id="wColors"></div>
+      <p class="fine" data-i18n="wardHint">캐릭터를 드래그하면 돌려 볼 수 있어요.</p>
+    </div>
+  </div>
   <button class="hud" id="prompt" hidden><span id="promptText">인사하기</span><kbd>E</kbd></button>
   <div class="hud" id="hint" hidden>WASD·방향키로 걷기 · Shift 달리기 · 드래그로 둘러보기 · E 인사</div>
   <div class="hud" id="toast" hidden></div>
@@ -259,6 +292,7 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
 
   <nav class="hud" id="bottom" hidden data-i18n-aria="menu" aria-label="메뉴">
     <button id="bMap"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg><span data-i18n="bMap">지도</span></button>
+    <button id="bWard"><svg viewBox="0 0 24 24"><path d="M8 4l4 2 4-2 4 4-3 3v9H7v-9L4 8z"/></svg><span data-i18n="bWard">꾸미기</span></button>
     <button id="bPass"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="11" r="3.2"/><path d="M8.5 17h7"/></svg><span data-i18n="bPass">여권</span></button>
     <button id="bRest" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 18h16M6 18v-5h12v5M8 13V9a4 4 0 0 1 8 0v4"/></svg><span data-i18n="bRest">쉬어가기</span></button>
     <button id="bStone"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="18" rx="7" ry="2.6"/><ellipse cx="12" cy="13" rx="5" ry="2.2"/><ellipse cx="12" cy="8.6" rx="3.2" ry="1.8"/></svg><span data-i18n="bStone">조약돌</span></button>
@@ -285,13 +319,9 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
         <div class="reqbox" id="reqBox" hidden><input type="text" id="reqName" maxlength="60" data-i18n-ph="reqPh" placeholder="나라 이름"><button class="chip" id="reqSend" data-i18n="reqSend">요청 보내기</button></div>
       </div>
       <div class="field">
-        <span class="lab" data-i18n="pack">배낭 색</span>
-        <div class="row" id="packRow"></div>
-      </div>
-      <div class="field">
         <span class="lab" data-i18n="outfit">차림</span>
         <div class="row">
-          <button class="chip" id="hatBtn" aria-pressed="true" data-i18n="hat">밀짚모자</button>
+          <button class="go alt" id="wardOpen" data-i18n="wardOpen">캐릭터 꾸미기</button>
           <button class="chip" id="flagShowBtn" aria-pressed="true" data-i18n="flagShow">배낭에 국기 달기</button>
         </div>
       </div>
@@ -393,6 +423,7 @@ const store = {
   save(d){ try { localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){} },
   clear(){ try { localStorage.removeItem(KEY); } catch(e){} }
 };
+let wardOn=false, wardCat='hat', wardFrom='start', wardYaw=0, wardSnap=false;
 const saved = store.load();
 const S = Object.assign({
   name:'순례자', country:'KR', pack:0xc0582f, hat:true, showFlag:true,
@@ -429,6 +460,7 @@ ko:{
   meetFirst:'{c}에서 온 {n}와 첫 인사를 나눴어요. ‘첫 인사’ 도장을 받았어요.', meetAgain:'{c}에서 온 {n}와 인사했어요.',
   dinnerCap:'그날 저녁, 오리손 알베르게', dinnerSub:'창밖으로 피레네에 해가 넘어가요', ansPh:'직접 말하기', say:'말하기', sleep:'잠자리에 들기', next:'다음',
   supperStamp:'‘순례자의 저녁’ 도장을 받았어요. 오늘 나눈 이야기는 여권에 남겨 둘게요.', journalQ:'왜 이 길에 왔나요?',
+  bWard:'꾸미기', wardT:'캐릭터 꾸미기', wardOpen:'캐릭터 꾸미기', wardDone:'완료', wardHint:'캐릭터를 드래그하면 돌려 볼 수 있어요. 액세서리는 여러 개를 함께 달 수 있어요.', wColor:'색상', rainTip:' 꾸미기에서 우비로 갈아입을 수도 있어요.', snowTip:' 꾸미기에서 패딩과 비니로 갈아입어도 좋아요.',
   bMap:'지도', mapT:'프랑스 길 전체 지도', mapTotal:'전체', mapWalked:'순례 거리', mapLeft:'남은 거리', mapPct:'진행률', mapTowns:'지나온 마을', mapStamps:'받은 도장', mapYou:'나',
   mapNote:'지금은 1구간(생장피에드포르 → 오리손)을 3D로 걸을 수 있어요. 다음 구간은 차례로 열려요. 거리는 실제 프랑스 길 기준 대략값이에요.', mapLocked:'아직 도착하지 않았어요 · 생장에서 약 {km}km', mapGot:'도장 받음 · {d}', mapPassed:'지나온 곳 · 생장에서 약 {km}km', mapTapHint:'마을을 누르면 정보를 볼 수 있어요.', mapStage:'걷는 중인 구간',
   sdTap:'도장을 누르면 그날의 기록을 볼 수 있어요.', sdLine:'순례 거리 {km}km · 날씨 {wx} · 그때까지 만난 순례자 {n}명', sdAnswer:'그날의 대답: “{a}”', sdLocked:'아직 받지 않은 도장이에요.', sdOld:'이 도장은 기록 기능이 생기기 전에 받았어요.',
@@ -463,6 +495,7 @@ en:{
   meetFirst:'You said your first hello to {n} from {c}. You got the “First Hello” stamp.', meetAgain:'You said hello to {n} from {c}.',
   dinnerCap:'That evening, at the Orisson albergue', dinnerSub:'The sun sets over the Pyrenees outside the window', ansPh:'Say it in your own words', say:'Say', sleep:'Go to bed', next:'Next',
   supperStamp:'You got the “Pilgrim’s Supper” stamp. What you shared tonight is kept in your passport.', journalQ:'Why are you on the Camino?',
+  bWard:'Style', wardT:'Customize', wardOpen:'Customize character', wardDone:'Done', wardHint:'Drag the character to turn it around. You can wear several extras at once.', wColor:'Color', rainTip:' You can switch to a raincoat in Style.', snowTip:' A puffer and beanie might help. Change in Style.',
   bMap:'Map', mapT:'The Camino Francés', mapTotal:'Total', mapWalked:'Walked', mapLeft:'To go', mapPct:'Progress', mapTowns:'Towns passed', mapStamps:'Stamps', mapYou:'You',
   mapNote:'For now you can walk Stage 1 (Saint-Jean → Orisson) in 3D. The next stages open one by one. Distances are approximate, based on the real Camino Francés.', mapLocked:'Not reached yet · about {km} km from Saint-Jean', mapGot:'Stamped · {d}', mapPassed:'Passed · about {km} km from Saint-Jean', mapTapHint:'Tap a town to see details.', mapStage:'Stage you’re walking',
   sdTap:'Tap a stamp to see that day’s record.', sdLine:'Walked {km} km · Weather: {wx} · Pilgrims met so far: {n}', sdAnswer:'Your answer that night: “{a}”', sdLocked:'You haven’t earned this stamp yet.', sdOld:'This stamp was earned before records were kept.',
@@ -896,56 +929,166 @@ const PILG_GEO = {
 const GLOW_MAT = new THREE.SpriteMaterial({map:texFromCanvas(64,64,(x,w,h)=>{const g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,246,200,1)');g.addColorStop(0.35,'rgba(255,236,170,.5)');g.addColorStop(1,'rgba(255,236,170,0)');x.fillStyle=g;x.fillRect(0,0,w,h);}), transparent:true, depthWrite:false, blending:THREE.AdditiveBlending});
 const PONCHO_GEO = (()=>{ const g=new THREE.ConeGeometry(0.56,1.02,14,1,true); g.scale(1,1,1.25); return g; })();
 const SKIN = [0xf6d3b3, 0xe7b48f, 0xc98b62, 0x8d5a3b];
-function makePilgrim(o){
+/* ================= Wardrobe catalog (data only) ================= */
+const CAT = {
+  hair:  {ko:'헤어', en:'Hair', colors:[0x2b1a10,0x4a2f1d,0x7a4a2a,0xb7793d,0xd9b36a,0xa8452a,0x9a9a9a],
+          items:[{id:'short',ko:'짧은 머리',en:'Short'},{id:'long',ko:'긴 머리',en:'Long'},{id:'pony',ko:'포니테일',en:'Ponytail'},{id:'curly',ko:'곱슬머리',en:'Curly'},{id:'buzz',ko:'짧게 민 머리',en:'Buzz cut'}]},
+  hat:   {ko:'모자', en:'Hat', colors:[0xe6cc8a,0x5aa9e6,0x8a6a48,0xd9c19a,0x6a8fc7,0xe0662f,0x3e6a4a],
+          items:[{id:'none',ko:'없음',en:'None'},{id:'straw',ko:'밀짚모자',en:'Straw hat',c:0xe6cc8a},{id:'cap',ko:'야구모자',en:'Baseball cap',c:0x5aa9e6},{id:'hiking',ko:'등산 모자',en:'Hiking hat',c:0x8a6a48},{id:'bucket',ko:'버킷햇',en:'Bucket hat',c:0xd9c19a},{id:'beanie',ko:'비니',en:'Beanie',c:0x6a8fc7},{id:'bandana',ko:'두건',en:'Bandana',c:0xe0662f}]},
+  top:   {ko:'상의', en:'Top', colors:[0xf3e7cf,0x6fcf9f,0xd9c7a8,0xe07a2f,0xf2c230,0x2f5d8a,0x5a8a3e,0xd96c4f],
+          items:[{id:'tee',ko:'반팔 티셔츠',en:'T-shirt',c:0x6fcf9f},{id:'shirt',ko:'긴팔 셔츠',en:'Long-sleeve shirt',c:0xd9c7a8},{id:'vest',ko:'등산 조끼',en:'Hiking vest',c:0xe07a2f},{id:'wind',ko:'바람막이',en:'Windbreaker',c:0x2f5d8a},{id:'rain',ko:'우비',en:'Raincoat',c:0xf2c230},{id:'puffer',ko:'겨울 패딩',en:'Puffer jacket',c:0x5a8a3e}]},
+  bottom:{ko:'하의', en:'Bottoms', colors:[0x5a5f3a,0x56657a,0x3e6a4a,0x6b5a48,0x2b2b2b,0xc9b48a],
+          items:[{id:'shorts',ko:'반바지',en:'Shorts',c:0x5a5f3a},{id:'hike',ko:'등산 바지',en:'Hiking pants',c:0x56657a},{id:'cargo',ko:'카고 바지',en:'Cargo pants',c:0x6b5a48},{id:'leggings',ko:'레깅스',en:'Leggings',c:0x3e6a4a}]},
+  shoes: {ko:'신발', en:'Shoes', colors:[0x9a7048,0x2f5a4a,0xf2f2f2,0xc98b4a,0x3b3b3b,0xd96c4f],
+          items:[{id:'boots',ko:'등산화',en:'Hiking boots',c:0x9a7048},{id:'trek',ko:'트레킹화',en:'Trail shoes',c:0x2f5a4a},{id:'sneakers',ko:'운동화',en:'Sneakers',c:0xf2f2f2},{id:'sandals',ko:'샌들',en:'Sandals',c:0xc98b4a}]},
+  pack:  {ko:'배낭', en:'Backpack', colors:[0xc0582f,0x2f5d8a,0x5f8a3e,0xd9a514,0x7a4a7a,0x3b3b3b],
+          items:[{id:'small',ko:'작은 배낭',en:'Daypack'},{id:'pilgrim',ko:'순례 배낭',en:'Pilgrim pack'},{id:'large',ko:'대형 배낭',en:'Big trekking pack'}]},
+  stick: {ko:'지팡이', en:'Staff', colors:[0x9a6b45,0x6b4630,0xc9a26a],
+          items:[{id:'none',ko:'없음',en:'None'},{id:'wood',ko:'나무 지팡이',en:'Walking stick'},{id:'staff',ko:'호리병 지팡이',en:'Staff & gourd'}]},
+  acc:   {ko:'액세서리', en:'Extras', multi:true, colors:[0xd9534f,0xe86fa0,0x2f5d8a,0xf2c230,0x5f8a3e,0xf3e7cf],
+          items:[{id:'shell',ko:'가리비 조개',en:'Scallop shell'},{id:'sunglasses',ko:'선글라스',en:'Sunglasses'},{id:'scarf',ko:'목도리',en:'Scarf'},{id:'arrow',ko:'노란 화살표 배지',en:'Yellow arrow pin'},{id:'flagpin',ko:'국기 배지',en:'Flag pin'},{id:'doll',ko:'배낭 인형',en:'Pack buddy'},{id:'bottle',ko:'물통',en:'Water bottle'},{id:'camera',ko:'카메라',en:'Camera'},{id:'binoculars',ko:'쌍안경',en:'Binoculars'}]},
+  face:  {ko:'얼굴', en:'Face',
+          items:[{id:'blush',ko:'발그레',en:'Rosy cheeks'},{id:'freckles',ko:'주근깨',en:'Freckles'},{id:'glasses',ko:'동그란 안경',en:'Round glasses'},{id:'none',ko:'없음',en:'None'}]}
+};
+const CAT_ORDER=['hat','top','bottom','shoes','pack','stick','acc','hair','face'];
+const DEFAULT_LOOK = {hair:'short',hairC:0x4a2f1d,hat:'straw',hatC:0xe6cc8a,top:'tee',topC:0xf3e7cf,bottom:'hike',bottomC:0x56657a,shoes:'boots',shoesC:0x9a7048,pack:'pilgrim',packC:0xc0582f,stick:'wood',stickC:0x9a6b45,acc:['shell'],accC:0xd9534f,face:'blush'};
+function cleanLook(l){
+  const o=Object.assign({},DEFAULT_LOOK); o.acc=DEFAULT_LOOK.acc.slice();
+  if(!l || typeof l!=='object') return o;
+  for(const k of ['hair','hat','top','bottom','shoes','pack','stick','face']) if(CAT[k].items.some(i=>i.id===l[k])) o[k]=l[k];
+  for(const k of ['hairC','hatC','topC','bottomC','shoesC','packC','stickC','accC']) if(Number.isInteger(l[k]) && l[k]>=0 && l[k]<=0xffffff) o[k]=l[k];
+  if(Array.isArray(l.acc)) o.acc=[...new Set(l.acc.filter(a=>CAT.acc.items.some(i=>i.id===a)))].slice(0,6);
+  return o;
+}
+function legacyLook(o){ return {hat:o.hat?'straw':'none', topC:o.shirt||0xf3e7cf, bottomC:o.pants||0x56657a, packC:o.pack||0xc0582f, hairC:o.hair||0x4a2f1d, shoesC:0x6b4630}; }
+if(!S.look) S.look = cleanLook(Object.assign({}, DEFAULT_LOOK, {hat:S.hat===false?'none':'straw', packC:Number.isInteger(S.pack)?S.pack:DEFAULT_LOOK.packC}));
+else S.look = cleanLook(S.look);
+const catName = k => S.lang==='ko' ? CAT[k].ko : CAT[k].en;
+const itemName = it => S.lang==='ko' ? it.ko : it.en;
+
+/* ================= Pilgrim builder ================= */
+const MC={}; const mat = c => MC[c] || (MC[c]=lam(c));
+const GC={}; const geo = (k,f) => GC[k] || (GC[k]=f());
+const shade = (c,k) => { const r=(c>>16)&255, g=(c>>8)&255, b=c&255, f=v=>Math.max(0,Math.min(255,Math.round(v*(1+k)))); return (f(r)<<16)|(f(g)<<8)|f(b); };
+function addM(parent, g, m, x, y, z, rx, ry, rz){ const o=new THREE.Mesh(g,m); o.position.set(x||0,y||0,z||0); if(rx||ry||rz) o.rotation.set(rx||0,ry||0,rz||0); parent.add(o); return o; }
+const cyl = (a,b,h,n) => geo(`c${a}|${b}|${h}|${n||10}`, ()=>new THREE.CylinderGeometry(a,b,h,n||10));
+const box = (w,h,d) => geo(`b${w}|${h}|${d}`, ()=>new THREE.BoxGeometry(w,h,d));
+const sph = (r,a,b) => geo(`s${r}|${a||12}|${b||8}`, ()=>new THREE.SphereGeometry(r,a||12,b||8));
+const halfS = r => geo(`h${r}`, ()=>new THREE.SphereGeometry(r,20,12,0,TAU,0,Math.PI/2));
+const tor = (r,t) => geo(`t${r}|${t}`, ()=>new THREE.TorusGeometry(r,t,8,20));
+
+function makePilgrim(o, noScene){
+  const L = cleanLook(o.look || legacyLook(o));
   const outer=new THREE.Group(), rig=new THREE.Group(); outer.add(rig);
-  const skin=lam(o.skin||SKIN[0]), shirt=lam(o.shirt||0xf2e6cf), pants=lam(o.pants||0x56657a), packM=lam(o.pack||0xc0582f), hairM=lam(o.hair||0x5a3a24), shoe=lam(0x5b3b28);
-  const P = {outer, rig, phase:0, wave:0, sit:0, sitY:-0.1};
+  const skinC=o.skin||SKIN[0], skin=mat(skinC);
+  const P = {outer, rig, phase:0, wave:0, sit:0, sitY:-0.1, look:L};
+  const topM=mat(L.topC), botM=mat(L.bottomC), shoeM=mat(L.shoesC), dark=mat(0x2b2622), cream=mat(0xf3e7cf);
+  const country = o.country||'NONE', showFlag = o.showFlag!==false;
+
+  // legs, bottoms, shoes
   for(const s of [1,-1]){
-    const pivot=new THREE.Group(); pivot.position.set(0.11*s,0.47,0);
-    const leg=new THREE.Mesh(PILG_GEO.leg,pants); pivot.add(leg);
-    const sh=new THREE.Mesh(PILG_GEO.shoe,shoe); sh.position.set(0,-0.43,0.04); pivot.add(sh);
-    rig.add(pivot); if(s>0) P.legL=pivot; else P.legR=pivot;
+    const pv=new THREE.Group(); pv.position.set(0.11*s,0.47,0);
+    if(L.bottom==='shorts'){ addM(pv,cyl(0.105,0.112,0.2),botM,0,-0.1,0); addM(pv,cyl(0.072,0.078,0.25),skin,0,-0.32,0); }
+    else if(L.bottom==='leggings'){ addM(pv,cyl(0.08,0.086,0.42),botM,0,-0.21,0); }
+    else { addM(pv,PILG_GEO.leg,botM); if(L.bottom==='cargo') addM(pv,box(0.05,0.11,0.12),mat(shade(L.bottomC,-0.18)),s*0.1,-0.2,0); }
+    if(L.shoes==='boots'){ addM(pv,box(0.18,0.16,0.27),shoeM,0,-0.4,0.04); addM(pv,box(0.19,0.04,0.29),dark,0,-0.475,0.04); }
+    else if(L.shoes==='trek'){ addM(pv,box(0.17,0.09,0.27),shoeM,0,-0.43,0.045); addM(pv,box(0.18,0.035,0.29),cream,0,-0.475,0.045); }
+    else if(L.shoes==='sneakers'){ const sh=addM(pv,sph(0.1),shoeM,0,-0.43,0.05); sh.scale.set(0.95,0.65,1.45); addM(pv,box(0.18,0.03,0.29),mat(0xe8e2d6),0,-0.475,0.05); }
+    else { addM(pv,box(0.13,0.06,0.22),skin,0,-0.44,0.04); addM(pv,box(0.17,0.035,0.27),shoeM,0,-0.48,0.04); addM(pv,box(0.175,0.03,0.04),shoeM,0,-0.43,0.08); addM(pv,box(0.175,0.03,0.04),shoeM,0,-0.43,-0.02); }
+    rig.add(pv); if(s>0) P.legL=pv; else P.legR=pv;
   }
-  const body=new THREE.Mesh(PILG_GEO.body,shirt); body.position.y=0.74; rig.add(body);
+
+  // body + top
+  if(L.top==='rain'){ addM(rig,cyl(0.24,0.36,0.66,14),topM,0,0.71,0); addM(rig,box(0.02,0.5,0.02),mat(0xf3e7cf),0,0.74,0.31); }
+  else addM(rig,PILG_GEO.body, L.top==='vest'?cream:topM, 0,0.74,0);
+  if(L.top==='vest'){ addM(rig,cyl(0.252,0.316,0.46,14),topM,0,0.76,0); for(const y of [0.62,0.76,0.9]) addM(rig,tor(0.29,0.012),mat(shade(L.topC,-0.25)),0,y,0,Math.PI/2); addM(rig,box(0.1,0.08,0.02),mat(shade(L.topC,-0.15)),0.12,0.66,0.3); addM(rig,box(0.1,0.08,0.02),mat(shade(L.topC,-0.15)),-0.12,0.66,0.3); }
+  if(L.top==='puffer'){ for(const [y,r] of [[0.58,0.3],[0.74,0.285],[0.9,0.27]]) addM(rig,tor(r,0.055),topM,0,y,0,Math.PI/2); addM(rig,box(0.02,0.5,0.02),mat(shade(L.topC,-0.3)),0,0.74,0.33); }
+  if(L.top==='wind'){ addM(rig,box(0.02,0.52,0.02),dark,0,0.74,0.285); addM(rig,tor(0.27,0.02),mat(shade(L.topC,0.35)),0,0.68,0,Math.PI/2); }
+  if(L.top==='shirt'){ addM(rig,box(0.09,0.07,0.02),mat(shade(L.topC,-0.12)),0.11,0.86,0.255); addM(rig,box(0.09,0.07,0.02),mat(shade(L.topC,-0.12)),-0.11,0.86,0.255); addM(rig,box(0.08,0.05,0.04),mat(shade(L.topC,0.15)),0.07,1.01,0.17,0,0,-0.5); addM(rig,box(0.08,0.05,0.04),mat(shade(L.topC,0.15)),-0.07,1.01,0.17,0,0,0.5); }
+  if(L.top==='tee') addM(rig,tor(0.155,0.024),mat(shade(L.topC,0.25)),0,1.01,0,Math.PI/2);
+  if(['wind','rain','puffer'].includes(L.top)){ const hood=addM(rig,tor(0.2,0.075),topM,0,1.06,-0.13,Math.PI/2.6); hood.scale.set(1,1,0.8); }
+
+  // arms
   for(const s of [1,-1]){
-    const pivot=new THREE.Group(); pivot.position.set(0.29*s,0.97,0); pivot.rotation.z=0.18*s;
-    pivot.add(new THREE.Mesh(PILG_GEO.arm,shirt));
-    const hd=new THREE.Mesh(PILG_GEO.hand,skin); hd.position.y=-0.42; pivot.add(hd);
-    rig.add(pivot); if(s>0) P.armL=pivot; else P.armR=pivot;
+    const pv=new THREE.Group(); pv.position.set(0.29*s,0.97,0); pv.rotation.z=0.18*s;
+    if(L.top==='tee'){ addM(pv,cyl(0.085,0.08,0.17),topM,0,-0.085,0); addM(pv,cyl(0.064,0.06,0.25),skin,0,-0.29,0); }
+    else if(L.top==='vest'){ addM(pv,PILG_GEO.arm,cream); }
+    else if(L.top==='puffer'){ addM(pv,cyl(0.095,0.088,0.4),topM,0,-0.2,0); addM(pv,tor(0.09,0.02),mat(shade(L.topC,-0.2)),0,-0.2,0,Math.PI/2); }
+    else addM(pv,PILG_GEO.arm,topM);
+    addM(pv,PILG_GEO.hand,skin,0,-0.42,0);
+    rig.add(pv); if(s>0) P.armL=pv; else P.armR=pv;
   }
+
+  // head, hair, face
   const head=new THREE.Group(); head.position.y=1.4; rig.add(head); P.head=head;
-  const hm=new THREE.Mesh(PILG_GEO.head,skin); hm.scale.set(1,0.94,0.96); head.add(hm);
-  const hair=new THREE.Mesh(PILG_GEO.hair,hairM); hair.rotation.x=-0.35; hair.position.set(0,0.02,-0.02); head.add(hair);
+  const hm=addM(head,PILG_GEO.head,skin); hm.scale.set(1,0.94,0.96);
+  const hairM=mat(L.hairC);
+  const cap=addM(head,PILG_GEO.hair,hairM,0,0.02,-0.02,-0.35); if(L.hair==='buzz'){ cap.scale.setScalar(0.975); cap.rotation.x=-0.5; }
+  if(L.hair==='long'){ const b=addM(head,sph(0.4,16,12),hairM,0,-0.16,-0.12); b.scale.set(1.04,1.1,0.72); }
+  if(L.hair==='pony'){ addM(head,sph(0.12),hairM,0,0.02,-0.43); addM(head,cyl(0.055,0.03,0.26),hairM,0,-0.14,-0.46,0.2); }
+  if(L.hair==='curly'){ for(let k=0;k<11;k++){ const a=k/11*TAU, r=0.31; addM(head,sph(0.105),hairM,Math.cos(a)*r,0.2+Math.sin(k*1.7)*0.03,Math.sin(a)*r-0.05); } addM(head,sph(0.16),hairM,0,0.33,-0.02); }
   for(const s of [1,-1]){
-    const e=new THREE.Mesh(PILG_GEO.eye,M.black); e.position.set(0.13*s,0.0,0.34); head.add(e);
-    const c=new THREE.Mesh(PILG_GEO.cheek,lam(0xf3a3a0)); c.scale.set(1,0.6,0.4); c.position.set(0.22*s,-0.09,0.3); head.add(c);
+    addM(head,PILG_GEO.eye,M.black,0.13*s,0.0,0.34);
+    if(L.face==='blush'){ const c=addM(head,PILG_GEO.cheek,mat(0xf3a3a0),0.22*s,-0.09,0.3); c.scale.set(1,0.6,0.4); }
+    if(L.face==='freckles') for(const [dx,dy] of [[0.17,-0.07],[0.21,-0.1],[0.24,-0.06]]) addM(head,sph(0.012,6,4),mat(0x9a6040),dx*s,dy,0.33);
+    if(L.face==='glasses'){ addM(head,tor(0.062,0.011),dark,0.13*s,0.0,0.37); }
   }
-  const pack=new THREE.Mesh(PILG_GEO.pack,packM); pack.position.set(0,0.8,-0.3); rig.add(pack);
-  const roll=new THREE.Mesh(PILG_GEO.roll,lam(0xcdb48a)); roll.position.set(0,1.1,-0.3); rig.add(roll);
-  const sh=new THREE.Mesh(PILG_GEO.shellG,M.white); sh.position.set(0.14,0.66,-0.44); rig.add(sh);
-  const flagMat=new THREE.MeshLambertMaterial({map:flagTex(o.country||'NONE')});
-  const fl=new THREE.Mesh(PILG_GEO.flag,flagMat); fl.position.set(0,0.86,-0.435); fl.rotation.y=Math.PI; rig.add(fl);
-  fl.visible = o.showFlag!==false; P.flagBack=fl;
-  if(o.hat){
-    const straw=lam(0xe6cc8a);
-    const brim=new THREE.Mesh(PILG_GEO.brim,straw); brim.position.y=0.27; head.add(brim);
-    const crown=new THREE.Mesh(PILG_GEO.crown,straw); crown.position.y=0.39; head.add(crown);
-    const band=new THREE.Mesh(PILG_GEO.band,lam(o.band||0x7a3a2a)); band.position.y=0.31; head.add(band);
+  if(L.face==='glasses') addM(head,box(0.08,0.012,0.012),dark,0,0.01,0.375);
+
+  // hats
+  const hatM=mat(L.hatC);
+  if(L.hat==='straw'){ addM(head,PILG_GEO.brim,hatM,0,0.27,0); addM(head,PILG_GEO.crown,hatM,0,0.39,0); addM(head,PILG_GEO.band,mat(0x7a3a2a),0,0.31,0); }
+  if(L.hat==='cap'){ const d=addM(head,halfS(0.405),hatM,0,0.06,0); d.scale.set(1,0.82,1); addM(head,box(0.34,0.03,0.24),hatM,0,0.11,0.4,-0.12); addM(head,sph(0.035,8,6),mat(0xffffff),0,0.39,0); }
+  if(L.hat==='hiking'){ addM(head,cyl(0.6,0.6,0.03,22),hatM,0,0.25,0); addM(head,cyl(0.3,0.34,0.27,18),hatM,0,0.38,0); addM(head,cyl(0.345,0.345,0.05,18),mat(shade(L.hatC,-0.4)),0,0.29,0); }
+  if(L.hat==='bucket'){ addM(head,cyl(0.33,0.4,0.28,18),hatM,0,0.31,0); addM(head,cyl(0.4,0.53,0.08,20),mat(shade(L.hatC,-0.06)),0,0.17,0); }
+  if(L.hat==='beanie'){ const d=addM(head,halfS(0.415),hatM,0,0.03,0); d.scale.set(1,1.08,1); addM(head,cyl(0.425,0.425,0.13,20),mat(shade(L.hatC,-0.15)),0,0.08,0); addM(head,sph(0.1),mat(shade(L.hatC,0.25)),0,0.5,0); }
+  if(L.hat==='bandana'){ const d=addM(head,halfS(0.41),hatM,0,0.04,0); d.scale.set(1,0.9,1); addM(head,sph(0.065),hatM,0,0.06,-0.41); addM(head,box(0.05,0.14,0.02),hatM,0.04,-0.05,-0.43,0,0,0.3); addM(head,box(0.05,0.12,0.02),hatM,-0.04,-0.04,-0.43,0,0,-0.3); }
+
+  // backpack
+  const PK={small:[0.36,0.4,0.2,0.88],pilgrim:[0.46,0.52,0.26,0.8],large:[0.5,0.72,0.3,0.86]}[L.pack];
+  const [pw,ph,pd,py]=PK, pz=-(0.24+pd/2), packM=mat(L.packC);
+  addM(rig,box(pw,ph,pd),packM,0,py,pz);
+  addM(rig,box(pw*0.8,0.1,pd*0.5),mat(shade(L.packC,-0.2)),0,py+ph/2-0.08,pz-pd/2-0.01);
+  if(L.pack!=='small') addM(rig,PILG_GEO.roll,mat(0xcdb48a),0,py+ph/2+0.09,pz);
+  if(L.pack==='large'){ addM(rig,box(0.09,0.3,0.18),mat(shade(L.packC,-0.12)),pw/2+0.04,py-0.12,pz); addM(rig,box(0.09,0.3,0.18),mat(shade(L.packC,-0.12)),-pw/2-0.04,py-0.12,pz); }
+  const backZ=pz-pd/2-0.006;
+  const fl=new THREE.Mesh(PILG_GEO.flag,new THREE.MeshLambertMaterial({map:flagTex(country)})); fl.position.set(0,py+0.02,backZ-0.012); fl.rotation.y=Math.PI; rig.add(fl); fl.visible=showFlag; P.flagBack=fl;
+
+  // stick
+  P.pennant=new THREE.Object3D();
+  if(L.stick!=='none'){
+    const sm=mat(L.stickC), long=L.stick==='staff';
+    const st=addM(P.armR, long?cyl(0.026,0.032,1.8,6):PILG_GEO.stick, sm, 0, long?-0.1:-0.15, 0.08);
+    if(long){ const g1=addM(st,sph(0.075),mat(0xc98a3e),0.05,0.48,0.04); g1.scale.set(1,1.25,1); addM(st,sph(0.045),mat(0xc98a3e),0.05,0.6,0.04); addM(st,tor(0.03,0.008),dark,0.03,0.62,0.04); }
+    const pen=new THREE.Mesh(PILG_GEO.pennant,new THREE.MeshLambertMaterial({map:flagTex(country), side:THREE.DoubleSide}));
+    pen.position.set(0,long?0.78:0.62,-0.13); pen.rotation.y=Math.PI/2; st.add(pen); pen.visible=showFlag; P.pennant=pen;
   }
-  // walking stick with pennant flag
-  const stick=new THREE.Mesh(PILG_GEO.stick,M.woodL); stick.position.set(0,-0.15,0.08); P.armR.add(stick);
-  const pen=new THREE.Mesh(PILG_GEO.pennant,new THREE.MeshLambertMaterial({map:flagTex(o.country||'NONE'), side:THREE.DoubleSide}));
-  pen.position.set(0,0.62,-0.13); pen.rotation.y=Math.PI/2; stick.add(pen); pen.visible = o.showFlag!==false; P.pennant=pen;
+
+  // accessories
+  const A=new Set(L.acc), accM=mat(L.accC);
+  if(A.has('shell')){ addM(rig,PILG_GEO.shellG,M.white,pw*0.3,py-ph*0.28,backZ-0.01); }
+  if(A.has('sunglasses')){ for(const s of [1,-1]) addM(head,box(0.13,0.075,0.02),mat(0x1d1d22),0.13*s,0.01,0.375); addM(head,box(0.08,0.015,0.015),mat(0xc9a24a),0,0.03,0.38); }
+  if(A.has('scarf')){ addM(rig,tor(0.19,0.06),accM,0,1.07,0,Math.PI/2); addM(rig,box(0.08,0.22,0.04),accM,0.08,0.92,0.22,0.2,0,0.1); }
+  if(A.has('arrow')){ const a=new THREE.Mesh(geo('arrowPin',()=>new THREE.PlaneGeometry(0.11,0.055)),new THREE.MeshLambertMaterial({map:arrowTex,transparent:true})); a.position.set(-0.12,0.88,0.262); a.rotation.x=-0.12; rig.add(a); }
+  if(A.has('flagpin')){ const f=new THREE.Mesh(geo('flagPin',()=>new THREE.PlaneGeometry(0.1,0.066)),new THREE.MeshLambertMaterial({map:flagTex(country)})); f.position.set(0.12,0.88,0.262); f.rotation.x=-0.12; rig.add(f); }
+  if(A.has('doll')){ const g=new THREE.Group(); addM(g,sph(0.07),mat(0xf7f4ec)); addM(g,box(0.05,0.05,0.05),dark,0,0.01,0.065); addM(g,cyl(0.006,0.006,0.1,4),dark,0,0.09,0); g.position.set(-pw/2-0.05,py-0.05,pz-0.02); rig.add(g); }
+  if(A.has('bottle')){ addM(rig,cyl(0.045,0.045,0.17),mat(0x5f8fa3),pw/2+0.06+(L.pack==='large'?0.06:0),py-0.12,pz+0.03); addM(rig,cyl(0.03,0.03,0.04),mat(0x3b3b3b),pw/2+0.06+(L.pack==='large'?0.06:0),py-0.015,pz+0.03); }
+  const camY = A.has('binoculars') ? 0.66 : 0.72;
+  if(A.has('camera')){ addM(rig,box(0.14,0.1,0.07),mat(0x7fc8b0),0,camY,0.31); addM(rig,cyl(0.035,0.035,0.05),dark,0,camY,0.36,Math.PI/2); addM(rig,tor(0.21,0.008),mat(0x8a5a3a),0,camY+0.2,0.12,1.1); }
+  if(A.has('binoculars')){ const by=A.has('camera')?0.87:0.78; for(const s of [1,-1]) addM(rig,cyl(0.035,0.035,0.11),mat(0xe8a5b5),0.045*s,by,0.31,Math.PI/2); addM(rig,box(0.03,0.04,0.06),mat(0x6fb39e),0,by,0.31); }
+
+  // rain poncho (auto) + headlamp
   const poncho=new THREE.Mesh(PONCHO_GEO, new THREE.MeshLambertMaterial({color:o.poncho||0x2f7fbf, side:THREE.DoubleSide, transparent:true, opacity:0.95}));
-  poncho.position.set(0,0.86,-0.1); poncho.visible=false; rig.add(poncho); P.poncho=poncho;
-  const lamp=new THREE.Group(); const lb=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.08,0.06), M.black); lamp.add(lb);
-  const lg=new THREE.Mesh(new THREE.SphereGeometry(0.04,8,6), new THREE.MeshBasicMaterial({color:0xfff6cf})); lg.position.z=0.035; lamp.add(lg);
+  poncho.position.set(0,0.86,-0.1); poncho.visible=false; rig.add(poncho); P.poncho=poncho; P.noPoncho = (L.top==='rain');
+  const lamp=new THREE.Group(); addM(lamp,box(0.12,0.08,0.06),M.black);
+  addM(lamp,sph(0.04,8,6),new THREE.MeshBasicMaterial({color:0xfff6cf}),0,0,0.035);
   const halo=new THREE.Sprite(GLOW_MAT); halo.scale.set(0.7,0.7,1); halo.position.z=0.08; lamp.add(halo);
   lamp.position.set(0,0.2,0.37); lamp.visible=false; head.add(lamp); P.lamp=lamp;
   rig.traverse(m=>{ if(m.isMesh) m.castShadow=true; });
-  scene.add(outer);
+  if(!noScene) scene.add(outer);
   return P;
 }
+
 function animatePilgrim(P, dt, t, amt){
   if(P.sit>0.01){
     const k=P.sit;
@@ -970,13 +1113,26 @@ function animatePilgrim(P, dt, t, amt){
 let player = null;
 function rebuildPlayer(){
   if(player){ scene.remove(player.outer); }
-  player = makePilgrim({poncho:0xf2c230, country:S.country, pack:S.pack, hat:S.hat, showFlag:S.showFlag, shirt:0xf3e7cf, hair:0x4a2f1d, band:0x2f5d8a});
+  player = makePilgrim({look:S.look, poncho:0xf2c230, country:S.country, showFlag:S.showFlag});
   player.outer.position.set(S.x, groundAt(S.x,S.z), S.z);
   player.outer.rotation.y = Math.PI;
 }
 rebuildPlayer();
 
 /* ================= NPCs ================= */
+const NPC_LOOK = {
+  'Lucía':  {hair:'long',hairC:0x2b1a10,hat:'none',top:'tee',topC:0xd96c4f,bottom:'shorts',bottomC:0x5a5f3a,shoes:'trek',shoesC:0x2f5a4a,pack:'pilgrim',packC:0x2f5d8a,stick:'wood',acc:['shell','sunglasses']},
+  'Pierre': {hair:'short',hairC:0x7a4a2a,hat:'hiking',hatC:0x8a6a48,top:'shirt',topC:0x5b7fa6,bottom:'hike',shoes:'boots',pack:'large',packC:0x7a5a3a,stick:'staff',acc:['shell','scarf'],accC:0xd9534f},
+  'Yuki':   {hair:'pony',hairC:0x15100c,hat:'bucket',hatC:0xd9c19a,top:'wind',topC:0xe8a5b5,bottom:'leggings',bottomC:0x2b2b2b,shoes:'sneakers',shoesC:0xf2f2f2,pack:'small',packC:0x5f8a3e,stick:'none',acc:['camera','doll']},
+  'Hans':   {hair:'buzz',hairC:0xd9b36a,hat:'straw',top:'shirt',topC:0x6e8a5a,bottom:'cargo',bottomC:0x6b5a48,shoes:'boots',pack:'large',packC:0xc29b3a,stick:'wood',acc:['shell','binoculars']},
+  'Ana':    {hair:'curly',hairC:0x2b1a10,hat:'bandana',hatC:0xe0662f,top:'tee',topC:0xf4c34d,bottom:'shorts',bottomC:0x56657a,shoes:'sandals',shoesC:0xc98b4a,pack:'pilgrim',packC:0x2f5d8a,stick:'wood',acc:['arrow','bottle']},
+  'Emma':   {hair:'long',hairC:0xb7793d,hat:'cap',hatC:0x5aa9e6,top:'vest',topC:0xe07a2f,bottom:'leggings',bottomC:0x3e6a4a,shoes:'trek',shoesC:0x2f5a4a,pack:'small',packC:0x444b55,stick:'none',acc:['sunglasses','flagpin']},
+  'Marco':  {hair:'short',hairC:0x2b1a10,hat:'straw',top:'shirt',topC:0xe8e3d5,bottom:'cargo',bottomC:0x5a5f3a,shoes:'boots',pack:'pilgrim',packC:0xa33a2e,stick:'staff',acc:['shell']},
+  'Minh':   {hair:'short',hairC:0x15100c,hat:'cap',hatC:0x4f9a8e,top:'tee',topC:0x4f9a8e,bottom:'shorts',bottomC:0xc9b48a,shoes:'sneakers',shoesC:0xf2f2f2,pack:'small',packC:0xd8a13a,stick:'wood',acc:['bottle']},
+  'Siobhán':{hair:'long',hairC:0xa8452a,hat:'beanie',hatC:0x5f8a3e,top:'wind',topC:0x6a9a4e,bottom:'hike',shoes:'boots',pack:'large',packC:0x8a3a5a,stick:'wood',acc:['scarf'],accC:0xf2c230},
+  'Grace':  {hair:'pony',hairC:0x1a120c,hat:'none',top:'tee',topC:0xf09a7a,bottom:'shorts',shoes:'sandals',pack:'pilgrim',packC:0x2f6f8a,stick:'wood',acc:['shell','sunglasses']},
+  'Jean':   {hair:'buzz',hairC:0x9a9a9a,hat:'hiking',hatC:0x6b5a48,top:'vest',topC:0x3e6a4a,bottom:'hike',shoes:'boots',pack:'small',packC:0x6b4630,stick:'none',acc:['scarf'],accC:0x2f5d8a,face:'glasses'}
+};
 const NPC_DEF = [
   {name:'Lucía',  c:'ES', say:'¡Buen Camino!',               ko:'좋은 순례길 되세요!', en:'Have a good Camino!',            u:0.05, sp:1.45, shirt:0xd96c4f, pack:0x3d6e8f, hair:0x2b1a10, skin:1},
   {name:'Pierre', c:'FR', say:'Bon chemin !',                ko:'좋은 길 되세요!', en:'Have a good way!',                u:0.11, sp:1.9,  shirt:0x5b7fa6, pack:0x7a5a3a, hair:0x8a6a48, hat:true, skin:0},
@@ -1004,7 +1160,7 @@ function labelSprite(name, code, live){
   s.scale.set(2.1,0.53,1); s.position.y=2.25; return s;
 }
 const npcs = NPC_DEF.map((d,i)=>{
-  const P = makePilgrim({poncho:[0x2f7fbf,0x3e8a5a,0xc0582f,0x7a4a7a,0x2f5d8a][i%5], country:d.c, pack:d.pack, hat:d.hat, shirt:d.shirt, hair:d.hair, skin:SKIN[d.skin||0], pants:[0x56657a,0x6b5a48,0x3f4a5a][i%3]});
+  const P = makePilgrim({look:NPC_LOOK[d.name], poncho:[0x2f7fbf,0x3e8a5a,0xc0582f,0x7a4a7a,0x2f5d8a][i%5], country:d.c, skin:SKIN[d.skin||0]});
   const n = {def:d, P, u:d.u, lane:((i*0.37)%1.4)-0.7, pause:0, label:labelSprite(d.name,d.c), bubbleT:0};
   P.outer.add(n.label);
   n.thirsty = ['Hans','Emma','Siobhán'].includes(d.name) && !S.gave.includes(d.name);
@@ -1124,6 +1280,7 @@ const snowMesh=new THREE.Points(snowGeo,new THREE.PointsMaterial({color:0xffffff
 snowMesh.frustumCulled=false; scene.add(snowMesh);
 function setWeather(type, msg){
   if(!WX[type]) return; wxType=type; $('#wxLabel').textContent=tx('wx_'+type);
+  if(msg && started){ if(type==='rain' && S.look.top!=='rain') msg+=tx('rainTip'); if(type==='snow' && S.look.top!=='puffer') msg+=tx('snowTip'); }
   if(msg) toast(msg, 4600);
 }
 const WX_MSG = {clear:'wxm_clear', fog:'wxm_fog', rain:'wxm_rain', snow:'wxm_snow'};
@@ -1168,7 +1325,7 @@ function updateWeather(dt,t){
     snowGeo.attributes.position.needsUpdate=true;
   }
   const wet = wxCur.rain>0.35 || wxCur.snow>0.35;
-  player.poncho.visible=wet; npcs.forEach(n=>{ if(!n.fixed) n.P.poncho.visible=wet; });
+  player.poncho.visible=wet && !player.noPoncho; npcs.forEach(n=>{ if(!n.fixed) n.P.poncho.visible=wet && !n.P.noPoncho; });
   if(mode==='dinner') dinnerLights.forEach((l,i)=>l.intensity=1.3+Math.sin(t*9+i*2)*0.12+Math.sin(t*23+i)*0.06);
   if(rainGain) rainGain.gain.value=0.5*wxCur.rain;
 }
@@ -1316,8 +1473,8 @@ addEventListener('keydown',e=>{
   if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
   keys[e.code]=true;
   if(e.code==='KeyE'){ interact(); }
-  if(e.code==='KeyM' && started){ const m=$('#mMap'); if(m.hidden) openMap(); else m.hidden=true; }
-  if(e.code==='Escape'){ document.querySelectorAll('.modal').forEach(m=>m.hidden=true); }
+  if(e.code==='KeyM' && started && !wardOn){ const m=$('#mMap'); if(m.hidden) openMap(); else m.hidden=true; }
+  if(e.code==='Escape'){ document.querySelectorAll('.modal').forEach(m=>m.hidden=true); if(wardOn) closeWardrobe(); }
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code) && started) e.preventDefault();
 });
 addEventListener('keyup',e=>{ keys[e.code]=false; });
@@ -1451,7 +1608,7 @@ function applyLang(){
   document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label',tx(el.dataset.i18nAria)));
   document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.lang===S.lang));
   $('#wxLabel').textContent=tx('wx_'+wxType);
-  $('#packRow').querySelectorAll('button').forEach(b=>b.setAttribute('aria-label',tx('packAria')));
+  if(wardOn) renderWardrobe();
   const nm=$('#nm'); if(nm.value===I.ko.defaultName||nm.value===I.en.defaultName) nm.value=tx('defaultName');
   if(!started){ renderFlagGrid(); renderResume(); }
   if(started){ $('#pName').textContent=S.name; $('#hint').textContent = coarse ? tx('hintTouch') : tx('hintKey'); }
@@ -1482,12 +1639,9 @@ function buildStart(){
     try{ const k='camino-on-requests'; const a=JSON.parse(localStorage.getItem(k)||'[]'); a.push({name,at:Date.now()}); localStorage.setItem(k,JSON.stringify(a)); }catch(e){}
     $('#reqBox').hidden=true; toast(ok?tx('reqDone'):tx('reqLocal'));
   };
-  const row=$('#packRow');
-  row.innerHTML = PACKS.map(p=>`<button class="sw" data-p="${p}" style="background:#${p.toString(16).padStart(6,'0')}" aria-pressed="${p===S.pack}" aria-label="${tx('packAria')}"></button>`).join('');
-  row.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; S.pack=+b.dataset.p; row.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); rebuildPlayer(); });
-  const hb=$('#hatBtn'), fb=$('#flagShowBtn');
-  hb.setAttribute('aria-pressed',S.hat); fb.setAttribute('aria-pressed',S.showFlag);
-  hb.onclick=()=>{ S.hat=!S.hat; hb.setAttribute('aria-pressed',S.hat); rebuildPlayer(); };
+  const fb=$('#flagShowBtn');
+  fb.setAttribute('aria-pressed',S.showFlag);
+  $('#wardOpen').onclick=()=>openWardrobe('start');
   fb.onclick=()=>{ S.showFlag=!S.showFlag; fb.setAttribute('aria-pressed',S.showFlag); rebuildPlayer(); };
   $('#nm').value=S.name;
   renderResume();
@@ -1645,15 +1799,15 @@ if(SUPA_URL && SUPA_KEY && window.supabase){ try{ NET.db=window.supabase.createC
 const cleanName = n => String(n||'').replace(/[\u0000-\u001f<>]/g,'').trim().slice(0,12) || 'Pilgrim';
 const hashN = s => { let h=0; for(const ch of String(s)) h=(h*31+ch.charCodeAt(0))|0; return Math.abs(h); };
 const SHIRTS=[0xf2e6cf,0xd96c4f,0x5b7fa6,0x6e8a5a,0xf4c34d,0x9a6fb0,0x4f9a8e,0xe8a5b5];
-function myMeta(){ return {name:S.name, c:S.country, pack:S.pack, hat:!!S.hat, flag:!!S.showFlag}; }
+function myMeta(){ return {name:S.name, c:S.country, pack:S.look.packC, hat:S.look.hat!=='none', flag:!!S.showFlag, look:S.look}; }
 function ensureRemote(id, m){
   if(NET.remotes.has(id) || !m) return;
   const c=okCode(m.c)?m.c:'NONE', name=cleanName(m.name), h=hashN(id);
   const pack = Number.isInteger(m.pack) && m.pack>=0 && m.pack<=0xffffff ? m.pack : 0xc0582f;
-  const P=makePilgrim({country:c, pack, hat:!!m.hat, showFlag:m.flag!==false, shirt:SHIRTS[h%SHIRTS.length], hair:[0x2b1a10,0x5a3a24,0xb7793d,0x15100c][h%4], skin:SKIN[h%4], poncho:0x3e8a5a});
+  const P=makePilgrim({look:m.look, country:c, pack, hat:!!m.hat, showFlag:m.flag!==false, shirt:SHIRTS[h%SHIRTS.length], hair:[0x2b1a10,0x5a3a24,0xb7793d,0x15100c][h%4], skin:SKIN[h%4], poncho:0x3e8a5a});
   P.outer.visible=false;
   const label=labelSprite(name,c,true); P.outer.add(label);
-  NET.remotes.set(id,{id, name, c, P, label, tx:0, tz:0, ry:0, moving:false, sit:false, seen:0, have:false, bubbleT:0, btext:null, bko:null, def:{say:'Buen Camino!', ko:'', en:''}});
+  NET.remotes.set(id,{id, name, c, P, label, lookKey:JSON.stringify(m.look||null), tx:0, tz:0, ry:0, moving:false, sit:false, seen:0, have:false, bubbleT:0, btext:null, bko:null, def:{say:'Buen Camino!', ko:'', en:''}});
 }
 function removeRemote(id){ const r=NET.remotes.get(id); if(!r) return; scene.remove(r.P.outer); NET.remotes.delete(id); }
 function renderOnline(){
@@ -1666,7 +1820,7 @@ function netJoin(){
   const ch=NET.db.channel('camino-francés-1', {config:{presence:{key:NET.me}, broadcast:{self:false}}});
   ch.on('presence',{event:'sync'},()=>{
     const st=ch.presenceState(); const ids=new Set(Object.keys(st)); ids.delete(NET.me);
-    ids.forEach(id=>ensureRemote(id, (st[id]&&st[id][0])||null));
+    ids.forEach(id=>{ const m=(st[id]&&st[id][0])||null; const r=NET.remotes.get(id); if(r && m && JSON.stringify(m.look||null)!==r.lookKey){ removeRemote(id); } ensureRemote(id, m); });
     [...NET.remotes.keys()].forEach(id=>{ if(!ids.has(id)) removeRemote(id); });
     renderOnline();
     sendPos(true);
@@ -1740,10 +1894,82 @@ async function shareStone(note){
   try{ const {data,error}=await NET.db.from('camino_cairns').insert({x:note.x, z:note.z, text:note.text, who:cleanName(note.who), c:note.c}).select('id').single(); if(error) return false; note.id=data.id; persist(); return true; }catch(e){ return false; }
 }
 
+
+/* ================= Wardrobe ================= */
+const THUMB_VIEW = {
+  hair:()=>({y:1.45,d:1.55,a:0.6,h:0.1}), hat:()=>({y:1.62,d:1.6,a:0.45,h:0.3}), face:()=>({y:1.4,d:1.05,a:0.25,h:0}),
+  top:()=>({y:0.85,d:1.95,a:0.5,h:0.1}), bottom:()=>({y:0.33,d:1.6,a:0.45,h:0.1}), shoes:()=>({y:0.04,d:1.05,a:0.7,h:0.3}),
+  pack:()=>({y:0.92,d:2.1,a:Math.PI-0.55,h:0.2}), stick:()=>({y:0.8,d:3.2,a:-0.75,h:0.1}),
+  acc:id=> ['shell','doll','bottle'].includes(id) ? {y:0.85,d:1.8,a:Math.PI-0.6,h:0.1} : ['scarf','sunglasses'].includes(id) ? {y:1.25,d:1.45,a:0.3,h:0.05} : {y:0.82,d:1.5,a:0.3,h:0.05}
+};
+let TR=null; const thumbCache={};
+function thumbFor(cat, it){
+  const L=cleanLook(S.look);
+  if(cat==='acc') L.acc=[it.id]; else { L[cat]=it.id; if(it.c!==undefined && S.look[cat]!==it.id) L[cat+'C']=it.c; }
+  const key=cat+'|'+it.id+'|'+S.country+'|'+JSON.stringify(L);
+  if(thumbCache[key]) return thumbCache[key];
+  try{
+    if(!TR){
+      const r=new THREE.WebGLRenderer({antialias:true, alpha:true, preserveDrawingBuffer:true}); r.setPixelRatio(1); r.setSize(150,150);
+      const sc=new THREE.Scene(); sc.add(new THREE.HemisphereLight(0xfff4e0,0x8a7a60,1.0));
+      const dl=new THREE.DirectionalLight(0xffffff,0.55); dl.position.set(2,3,4); sc.add(dl);
+      TR={r, sc, c:new THREE.PerspectiveCamera(30,1,0.05,20)};
+    }
+    const P=makePilgrim({look:L, country:S.country, showFlag:S.showFlag}, true);
+    TR.sc.add(P.outer); P.outer.updateMatrixWorld(true);
+    const F=THUMB_VIEW[cat](it.id);
+    TR.c.position.set(Math.sin(F.a)*F.d, F.y+F.h, Math.cos(F.a)*F.d); TR.c.lookAt(0,F.y,0);
+    TR.r.render(TR.sc,TR.c);
+    const url=TR.r.domElement.toDataURL('image/png');
+    TR.sc.remove(P.outer);
+    return thumbCache[key]=url;
+  }catch(e){ return ''; }
+}
+function renderWardrobe(){
+  const cats=$('#wCats'); cats.innerHTML='';
+  CAT_ORDER.forEach(k=>{ const b=document.createElement('button'); b.textContent=catName(k); b.setAttribute('role','tab'); b.setAttribute('aria-selected',k===wardCat); b.onclick=()=>{ wardCat=k; renderWardrobe(); }; cats.append(b); });
+  const C=CAT[wardCat], grid=$('#wItems'); grid.innerHTML='';
+  C.items.forEach(it=>{
+    const on = C.multi ? S.look.acc.includes(it.id) : S.look[wardCat]===it.id;
+    const b=document.createElement('button'); b.setAttribute('aria-pressed',on);
+    if(it.id==='none'){ const d=document.createElement('div'); d.className='noitem'; d.textContent='∅'; b.append(d); }
+    else { const im=document.createElement('img'); im.alt=''; im.src=thumbFor(wardCat,it); b.append(im); }
+    const sp=document.createElement('span'); sp.textContent=itemName(it); b.append(sp);
+    b.onclick=()=>{
+      if(C.multi){ const a=S.look.acc, i=a.indexOf(it.id); if(i>=0) a.splice(i,1); else if(a.length<6) a.push(it.id); }
+      else { if(S.look[wardCat]!==it.id && it.c!==undefined) S.look[wardCat+'C']=it.c; S.look[wardCat]=it.id; }
+      S.look=cleanLook(S.look); rebuildPlayer(); renderWardrobe();
+    };
+    grid.append(b);
+  });
+  const cw=$('#wColors'); cw.innerHTML='';
+  const current = C.multi ? null : S.look[wardCat];
+  if(C.colors && current!=='none' && (!C.multi || S.look.acc.includes('scarf'))){
+    const lab=document.createElement('span'); lab.className='lab'; lab.textContent=tx('wColor'); cw.append(lab);
+    const ck = wardCat==='acc' ? 'accC' : wardCat+'C';
+    C.colors.forEach(c=>{ const b=document.createElement('button'); b.className='sw'; b.style.background='#'+c.toString(16).padStart(6,'0'); b.setAttribute('aria-pressed',S.look[ck]===c); b.setAttribute('aria-label',tx('wColor')); b.onclick=()=>{ S.look[ck]=c; rebuildPlayer(); renderWardrobe(); }; cw.append(b); });
+  }
+}
+function openWardrobe(from){
+  wardOn=true; wardSnap=true; wardFrom=from; wardYaw=camYaw; camYaw=0;
+  if(resting) setRest(false);
+  $('#start').hidden=true; ['#tl','#tr','#bottom','#joy','#prompt','#hint'].forEach(q=>$(q).hidden=true);
+  document.querySelectorAll('.modal').forEach(m=>m.hidden=true);
+  $('#wardrobe').hidden=false; renderWardrobe();
+}
+function closeWardrobe(){
+  wardOn=false; $('#wardrobe').hidden=true; camYaw=wardYaw;
+  if(wardFrom==='start'){ $('#start').hidden=false; }
+  else { ['#tl','#tr','#bottom'].forEach(q=>$(q).hidden=false); if(coarse) $('#joy').hidden=false; }
+  store.save(S); if(NET.ch && started) NET.ch.track(myMeta());
+}
+$('#wardDone').onclick=closeWardrobe;
+$('#bWard').onclick=()=>openWardrobe('game');
+
 /* ================= Interaction ================= */
 let target=null;
 function interact(){
-  if(!started || !target || mode==='dinner') return;
+  if(!started || !target || mode==='dinner' || wardOn) return;
   if(target.type==='fountain'){
     if(S.water>=3){ toast(tx('bottleFull')); return; }
     S.water=3; renderWater(); persist(); toast(tx('bottleFilled')); return;
@@ -1812,7 +2038,15 @@ function frame(){
   const dt=Math.min(clock.getDelta(),0.05), t=clock.elapsedTime;
   const pp=player.outer.position;
 
-  if(started && mode==='dinner'){
+  if(wardOn){
+    animatePilgrim(player,dt,t,0);
+    const a=player.outer.rotation.y+camYaw, wide=innerWidth>760, d=wide?3.5:5.6;
+    _v.set(pp.x+Math.sin(a)*d, pp.y+(wide?1.25:1.0), pp.z+Math.cos(a)*d);
+    if(wardSnap){ camera.position.copy(_v); wardSnap=false; } else camera.position.lerp(_v, 1-Math.exp(-dt*6));
+    lookAt.set(pp.x, pp.y+(wide?0.85:-0.72), pp.z);
+    if(wide){ lookAt.x+=Math.cos(a)*1.05; lookAt.z-=Math.sin(a)*1.05; }
+    camera.lookAt(lookAt); prompt.hidden=true;
+  } else if(started && mode==='dinner'){
     pp.set(PSEAT.x, tableY, PSEAT.z); player.outer.rotation.y=PSEAT.ry; player.sit=1; player.sitY=-0.08;
     animatePilgrim(player,dt,t,0);
     camera.position.lerp(_v.copy(dinnerCam).add(_t.set(Math.sin(t*0.15)*0.4,0,Math.cos(t*0.12)*0.3)), 1-Math.exp(-dt*2));
