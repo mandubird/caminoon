@@ -188,6 +188,18 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
 .dacts input{flex:1;min-width:0;font-family:var(--body);font-size:16px;padding:9px 12px;border-radius:12px;border:1.5px solid var(--line);color:var(--ink);background:#fff}
 #fade{position:absolute;inset:0;z-index:40;background:#14100c;opacity:0;pointer-events:none;transition:opacity .9s;display:grid;place-items:center;color:#f6e7cf;font-family:var(--display);font-size:clamp(20px,4vw,30px);text-align:center;padding:24px}
 #fade small{display:block;font-family:var(--body);font-size:15px;opacity:.8;margin-top:10px}
+.mapcard{width:min(980px,100%)}
+.mstats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.mstats div{background:rgba(59,42,30,.05);border-radius:12px;padding:8px 10px;font-size:12px;color:var(--ink-soft);min-width:0}
+.mstats b{display:block;font-family:var(--display);font-weight:400;font-size:19px;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.mapwrap{border-radius:14px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+.mapwrap svg{display:block;width:100%;height:auto}
+.mapwrap .town{cursor:pointer}
+.mapwrap .town:focus-visible circle{stroke:var(--tile);stroke-width:4}
+.sdetail{min-height:1.5em;font-size:14px;line-height:1.6;color:var(--ink);margin:0;padding:10px 12px;border-radius:12px;background:rgba(242,194,48,.14)}
+.stamps .stamp{border:0;background:none;padding:0;cursor:pointer;border-radius:50%}
+.stamps .stamp:focus-visible{outline:3px solid var(--tile)}
+@media (max-width:640px){.mstats{grid-template-columns:repeat(3,minmax(0,1fr))} .mapwrap .minor{display:none}}
 @media (max-width:640px){
   #start{align-items:flex-end;background:linear-gradient(0deg,rgba(255,247,234,.6),rgba(255,247,234,0) 70%)}
   .sheet{max-height:72%;padding:18px 16px}
@@ -246,6 +258,7 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
   <div class="bubble" id="bubble" hidden><b></b><small></small></div>
 
   <nav class="hud" id="bottom" hidden data-i18n-aria="menu" aria-label="메뉴">
+    <button id="bMap"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg><span data-i18n="bMap">지도</span></button>
     <button id="bPass"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="11" r="3.2"/><path d="M8.5 17h7"/></svg><span data-i18n="bPass">여권</span></button>
     <button id="bRest" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 18h16M6 18v-5h12v5M8 13V9a4 4 0 0 1 8 0v4"/></svg><span data-i18n="bRest">쉬어가기</span></button>
     <button id="bStone"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="18" rx="7" ry="2.6"/><ellipse cx="12" cy="13" rx="5" ry="2.2"/><ellipse cx="12" cy="8.6" rx="3.2" ry="1.8"/></svg><span data-i18n="bStone">조약돌</span></button>
@@ -301,8 +314,21 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
         <span><b id="psWater">0번</b><span data-i18n="psWaterL">나눈 물</span></span>
       </div>
       <div class="stamps" id="stampGrid"></div>
+      <p class="sdetail" id="stampDetail"></p>
       <p class="fine" data-i18n="passNote">흐린 도장은 앞으로 이어질 프랑스 길의 마을들이에요.</p>
       <button class="link" id="resetBtn" data-i18n="reset">처음부터 다시 걷기</button>
+    </div>
+  </div>
+
+  <!-- Map -->
+  <div class="modal" id="mMap" hidden>
+    <div class="card mapcard" role="dialog" aria-labelledby="mapT">
+      <button class="x" data-close data-i18n-aria="close" aria-label="닫기">×</button>
+      <h2 id="mapT" data-i18n="mapT">프랑스 길 전체 지도</h2>
+      <div class="mstats" id="mapStats"></div>
+      <div class="mapwrap" id="mapWrap"></div>
+      <p class="sdetail" id="mapInfo"></p>
+      <p class="fine" data-i18n="mapNote"></p>
     </div>
   </div>
 
@@ -403,6 +429,9 @@ ko:{
   meetFirst:'{c}에서 온 {n}와 첫 인사를 나눴어요. ‘첫 인사’ 도장을 받았어요.', meetAgain:'{c}에서 온 {n}와 인사했어요.',
   dinnerCap:'그날 저녁, 오리손 알베르게', dinnerSub:'창밖으로 피레네에 해가 넘어가요', ansPh:'직접 말하기', say:'말하기', sleep:'잠자리에 들기', next:'다음',
   supperStamp:'‘순례자의 저녁’ 도장을 받았어요. 오늘 나눈 이야기는 여권에 남겨 둘게요.', journalQ:'왜 이 길에 왔나요?',
+  bMap:'지도', mapT:'프랑스 길 전체 지도', mapTotal:'전체', mapWalked:'순례 거리', mapLeft:'남은 거리', mapPct:'진행률', mapTowns:'지나온 마을', mapStamps:'받은 도장', mapYou:'나',
+  mapNote:'지금은 1구간(생장피에드포르 → 오리손)을 3D로 걸을 수 있어요. 다음 구간은 차례로 열려요. 거리는 실제 프랑스 길 기준 대략값이에요.', mapLocked:'아직 도착하지 않았어요 · 생장에서 약 {km}km', mapGot:'도장 받음 · {d}', mapPassed:'지나온 곳 · 생장에서 약 {km}km', mapTapHint:'마을을 누르면 정보를 볼 수 있어요.', mapStage:'걷는 중인 구간',
+  sdTap:'도장을 누르면 그날의 기록을 볼 수 있어요.', sdLine:'순례 거리 {km}km · 날씨 {wx} · 그때까지 만난 순례자 {n}명', sdAnswer:'그날의 대답: “{a}”', sdLocked:'아직 받지 않은 도장이에요.', sdOld:'이 도장은 기록 기능이 생기기 전에 받았어요.',
   countrySearch:'다른 나라 찾기 (예: 케냐, Kenya)', reqOpen:'찾는 나라가 없나요? 추가 요청하기', reqPh:'나라 이름', reqSend:'요청 보내기', reqDone:'요청을 받았어요. 곧 추가할게요!', reqLocal:'요청을 기록했어요. 곧 추가할게요!', noMatch:'일치하는 나라가 없어요. 아래에서 추가 요청을 보내 주세요.',
   online:'지금 {n}명이 함께 걷는 중', liveH:'지금 함께 걷는 순례자', peopleH2:'만난 순례자', live:'접속 중', promptGreetReal:'{n}님에게 인사하기', helloSent:'{n}님에게 인사를 건넸어요.', helloGot:'{c}에서 온 {n}님이 인사했어요!', helloBubble:'{n}님의 인사', noteOther:'다른 순례자의 돌 · {d}', stoneShared:'길가에 돌 하나를 얹었어요. 이 길을 걷는 다른 순례자들도 볼 수 있어요.',
   dawnCap:'다음 날 새벽 6시', dawnSub:'알베르게에 하나둘 불이 켜져요', dawn1:'순례자들은 해가 뜨기 전, 헤드랜턴을 켜고 조용히 길을 나서요.', dawn2:'다음 구간 오리손 → 론세스바예스(약 17km)는 곧 열려요. ‘새벽 출발’ 도장을 받았어요.'
@@ -434,6 +463,9 @@ en:{
   meetFirst:'You said your first hello to {n} from {c}. You got the “First Hello” stamp.', meetAgain:'You said hello to {n} from {c}.',
   dinnerCap:'That evening, at the Orisson albergue', dinnerSub:'The sun sets over the Pyrenees outside the window', ansPh:'Say it in your own words', say:'Say', sleep:'Go to bed', next:'Next',
   supperStamp:'You got the “Pilgrim’s Supper” stamp. What you shared tonight is kept in your passport.', journalQ:'Why are you on the Camino?',
+  bMap:'Map', mapT:'The Camino Francés', mapTotal:'Total', mapWalked:'Walked', mapLeft:'To go', mapPct:'Progress', mapTowns:'Towns passed', mapStamps:'Stamps', mapYou:'You',
+  mapNote:'For now you can walk Stage 1 (Saint-Jean → Orisson) in 3D. The next stages open one by one. Distances are approximate, based on the real Camino Francés.', mapLocked:'Not reached yet · about {km} km from Saint-Jean', mapGot:'Stamped · {d}', mapPassed:'Passed · about {km} km from Saint-Jean', mapTapHint:'Tap a town to see details.', mapStage:'Stage you’re walking',
+  sdTap:'Tap a stamp to see that day’s record.', sdLine:'Walked {km} km · Weather: {wx} · Pilgrims met so far: {n}', sdAnswer:'Your answer that night: “{a}”', sdLocked:'You haven’t earned this stamp yet.', sdOld:'This stamp was earned before records were kept.',
   countrySearch:'Find another country (e.g. Kenya)', reqOpen:'Can’t find your country? Ask us to add it', reqPh:'Country name', reqSend:'Send request', reqDone:'Thanks! We’ll add it soon.', reqLocal:'Request noted. We’ll add it soon.', noMatch:'No country matches. Send a request below.',
   online:'{n} walking with you now', liveH:'Walking with you now', peopleH2:'Pilgrims you met', live:'online', promptGreetReal:'Say hello to {n}', helloSent:'You said hello to {n}.', helloGot:'{n} from {c} says hello!', helloBubble:'Hello from {n}', noteOther:'A fellow pilgrim’s stone · {d}', stoneShared:'You placed a stone. Other pilgrims on this path can see it too.',
   dawnCap:'6 a.m. the next morning', dawnSub:'Lights come on one by one in the albergue', dawn1:'Before sunrise, pilgrims switch on their headlamps and quietly set off.', dawn2:'The next stage, Orisson → Roncesvalles (about 17 km), opens soon. You got the “Dawn Departure” stamp.'
@@ -826,6 +858,16 @@ function addBench(x,z,ry){
   const tx=x+dir.x*5.5, tz=z+dir.z*5.5;
   const table=new THREE.Mesh(new THREE.CylinderGeometry(0.7,0.7,0.08,16), M.woodL); table.position.set(tx,groundAt(tx,tz)+0.75,tz); table.castShadow=true; scene.add(table);
   const leg=new THREE.Mesh(new THREE.CylinderGeometry(0.07,0.07,0.75,8), M.wood); leg.position.set(tx,groundAt(tx,tz)+0.37,tz); scene.add(leg);
+})();
+const DASH_MAT = new THREE.MeshBasicMaterial({color:0xf2c230, transparent:true, opacity:0.45, depthWrite:false, polygonOffset:true, polygonOffsetFactor:-4});
+(function guideDashes(){
+  const g=new THREE.PlaneGeometry(0.24,0.95); g.rotateX(-Math.PI/2);
+  const n=Math.floor(PATH_LEN/2.5), im=new THREE.InstancedMesh(g, DASH_MAT, n);
+  for(let i=0;i<n;i++){
+    const u=(i+0.5)/n, p=curve.getPointAt(u), tg=curve.getTangentAt(u);
+    dummy.position.set(p.x, groundAt(p.x,p.z)+0.12, p.z); dummy.rotation.set(0, Math.atan2(tg.x,tg.z), 0); dummy.scale.set(1,1,1); dummy.updateMatrix(); im.setMatrixAt(i,dummy.matrix);
+  }
+  im.renderOrder=2; scene.add(im);
 })();
 const arriveRing = new THREE.Mesh(new THREE.RingGeometry(2.2,2.7,40), new THREE.MeshBasicMaterial({color:0xf2c230, transparent:true, opacity:0.7, side:THREE.DoubleSide, depthWrite:false}));
 arriveRing.rotation.x=-Math.PI/2; arriveRing.position.set(END.x, groundAt(END.x,END.z)+0.12, END.z); scene.add(arriveRing);
@@ -1241,7 +1283,7 @@ function answer(text){
   dSteps.push({n:'__me', t:text});
   dSteps.push({n:'Jean', t:"Ici, personne n'a besoin d'une raison parfaite.", ko:'여기선 아무도 완벽한 이유가 필요 없어요.', en:'Here, nobody needs a perfect reason.'});
   dSteps.push({n:'Ana', t:'À nossa caminhada! Saúde!', ko:'우리의 순례를 위하여! 건배!', en:'To our walk! Cheers!', end:true});
-  if(!S.stamps.supper){ S.stamps.supper=todayStr(); setTimeout(()=>toast(tx('supperStamp'),3600),300); }
+  if(!S.stamps.supper){ stamp('supper'); setTimeout(()=>toast(tx('supperStamp'),3600),300); }
   persist(); dIdx++; showStep();
 }
 function startDawn(){
@@ -1257,7 +1299,7 @@ function startDawn(){
       if(n.dinner){ n.dinner=false; n.P.sit=0; if(n.fixed){ n.P.outer.position.copy(n.homePos); n.P.outer.rotation.y=n.homeRy; n.P.sit=1; } else { n.leave={wait:1.5+k*2.2, stage:0, dist:0}; k++; } }
       else if(!n.fixed && !n.gone){ n.P.outer.visible=true; }
     });
-    if(!S.stamps.dawn) S.stamps.dawn=todayStr();
+    if(!S.stamps.dawn) stamp('dawn');
     persist();
     setTimeout(()=>toast(tx('dawn1'),4200),1600);
     setTimeout(()=>toast(tx('dawn2'),4600),6400);
@@ -1274,6 +1316,7 @@ addEventListener('keydown',e=>{
   if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
   keys[e.code]=true;
   if(e.code==='KeyE'){ interact(); }
+  if(e.code==='KeyM' && started){ const m=$('#mMap'); if(m.hidden) openMap(); else m.hidden=true; }
   if(e.code==='Escape'){ document.querySelectorAll('.modal').forEach(m=>m.hidden=true); }
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code) && started) e.preventDefault();
 });
@@ -1343,6 +1386,12 @@ document.querySelectorAll('.modal').forEach(m=>{
   m.addEventListener('click',e=>{ if(e.target===m || e.target.closest('[data-close]')) m.hidden=true; });
 });
 function persist(){ if(!player) return; S.x=+player.outer.position.x.toFixed(2); S.z=+player.outer.position.z.toFixed(2); store.save(S); }
+function stamp(id){
+  if(S.stamps[id]) return false;
+  S.stamps[id]=todayStr(); if(!S.stampLog) S.stampLog={};
+  S.stampLog[id]={date:S.stamps[id], km:+(S.progress*7.8).toFixed(1), wx:(typeof wxType==='string'?wxType:'clear'), met:S.met.length+((S.metReal||[]).length), at:Date.now()};
+  return true;
+}
 const todayStr = () => { const d=new Date(); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`; };
 
 const STAMPS = [
@@ -1374,7 +1423,8 @@ function stampSVG(st, date){
   </svg>`;
 }
 function renderPassport(){
-  $('#stampGrid').innerHTML = STAMPS.map(st=>`<div class="stamp">${stampSVG(st, S.stamps[st.id])}</div>`).join('');
+  $('#stampGrid').innerHTML = STAMPS.map(st=>`<button class="stamp" data-sid="${st.id}">${stampSVG(st, S.stamps[st.id])}</button>`).join('');
+  $('#stampDetail').textContent = tx('sdTap');
   $('#psKm').textContent = (S.progress*7.8).toFixed(1)+' km';
   $('#psMet').textContent = tx('cntPeople',{n:S.met.length});
   $('#psStone').textContent = tx('cntStones',{n:S.notes.length});
@@ -1407,6 +1457,7 @@ function applyLang(){
   if(started){ $('#pName').textContent=S.name; $('#hint').textContent = coarse ? tx('hintTouch') : tx('hintKey'); }
   if(!$('#people').hidden) renderPeople();
   if(!$('#mPass').hidden) renderPassport();
+  if(!$('#mMap').hidden) renderMap();
   if(started) renderOnline();
 }
 document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>{ S.lang=b.dataset.lang; applyLang(); store.save(S); }));
@@ -1447,8 +1498,8 @@ let started=false;
 applyLang();
 function begin(fresh){
   S.name = ($('#nm').value||'').trim() || tx('defaultName');
-  if(fresh){ S.progress=0; S.x=0; S.z=74; S.stamps={}; S.met=[]; S.ep={}; S.water=1; S.gave=[]; S.shared=0; npcs.forEach(n=>{ n.thirsty=['Hans','Emma','Siobhán'].includes(n.def.name); }); renderWater(); }
-  if(!S.stamps.sjpp) S.stamps.sjpp=todayStr();
+  if(fresh){ S.progress=0; S.x=0; S.z=74; S.stamps={}; S.stampLog={}; S.met=[]; S.ep={}; S.water=1; S.gave=[]; S.shared=0; npcs.forEach(n=>{ n.thirsty=['Hans','Emma','Siobhán'].includes(n.def.name); }); renderWater(); }
+  if(!S.stamps.sjpp) stamp('sjpp');
   S.started=true;
   rebuildPlayer();
   player.outer.position.set(S.x, groundAt(S.x,S.z), S.z);
@@ -1467,6 +1518,93 @@ $('#goBtn').onclick=()=>begin(true);
 $('#resumeBtn').onclick=()=>begin(false);
 
 /* ================= Buttons ================= */
+
+/* ================= Whole-route map ================= */
+const ROUTE = [
+  {ko:'생장피에드포르',en:'Saint-Jean-Pied-de-Port',lp:'l',sk:'생장',se:'St-Jean',km:0,lon:-1.235,lat:43.163,stamp:'sjpp',major:1},
+  {ko:'오리손',en:'Orisson',lp:'r',km:7.8,lon:-1.262,lat:43.112,stamp:'orisson'},
+  {ko:'론세스바예스',en:'Roncesvalles',lp:'l',km:25,lon:-1.319,lat:43.009,stamp:'ronces',major:1},
+  {ko:'수비리',en:'Zubiri',lp:'r',km:47,lon:-1.503,lat:42.931},
+  {ko:'팜플로나',en:'Pamplona',lp:'l',km:68,lon:-1.645,lat:42.812,stamp:'pamplona',major:1},
+  {ko:'푸엔테 라 레이나',en:'Puente la Reina',lp:'d',km:92,lon:-1.815,lat:42.672},
+  {ko:'에스테야',en:'Estella',lp:'u',km:114,lon:-2.028,lat:42.671},
+  {ko:'로그로뇨',en:'Logroño',lp:'r',km:162,lon:-2.445,lat:42.465,major:1},
+  {ko:'나헤라',en:'Nájera',lp:'u',km:191,lon:-2.732,lat:42.416},
+  {ko:'산토 도밍고',en:'Santo Domingo',lp:'d',km:212,lon:-2.953,lat:42.441},
+  {ko:'부르고스',en:'Burgos',lp:'u',km:284,lon:-3.704,lat:42.344,stamp:'burgos',major:1},
+  {ko:'카스트로헤리스',en:'Castrojeriz',lp:'r',km:324,lon:-4.139,lat:42.288},
+  {ko:'프로미스타',en:'Frómista',lp:'d',km:349,lon:-4.406,lat:42.267},
+  {ko:'카리온',en:'Carrión',lp:'u',km:368,lon:-4.603,lat:42.338},
+  {ko:'사아군',en:'Sahagún',lp:'u',km:408,lon:-5.03,lat:42.371},
+  {ko:'레온',en:'León',lp:'u',km:463,lon:-5.567,lat:42.599,stamp:'leon',major:1},
+  {ko:'아스토르가',en:'Astorga',lp:'d',km:512,lon:-6.056,lat:42.459},
+  {ko:'폰페라다',en:'Ponferrada',lp:'d',km:566,lon:-6.598,lat:42.546},
+  {ko:'오 세브레이로',en:'O Cebreiro',lp:'u',km:619,lon:-7.042,lat:42.708},
+  {ko:'사리아',en:'Sarria',lp:'d',km:664,lon:-7.414,lat:42.781,stamp:'sarria',major:1},
+  {ko:'포르토마린',en:'Portomarín',lp:'n',km:686,lon:-7.616,lat:42.807},
+  {ko:'팔라스 데 레이',en:'Palas de Rei',lp:'n',km:711,lon:-7.869,lat:42.873},
+  {ko:'아르수아',en:'Arzúa',lp:'u',km:740,lon:-8.163,lat:42.927},
+  {ko:'산티아고 데 콤포스텔라',en:'Santiago de Compostela',lp:'u',sk:'산티아고',se:'Santiago',km:779,lon:-8.544,lat:42.880,stamp:'santiago',major:1}
+];
+const ROUTE_KM = 779;
+const mapXY = r => [ 100 + (r.lon+8.75)/7.75*800 , 60 + (43.25-r.lat)/1.06*290 ];
+const userKm = () => Math.min(ROUTE_KM, S.progress*7.8);
+const townName = r => S.lang==='ko' ? r.ko : r.en;
+function pointAtKm(km){
+  for(let i=0;i<ROUTE.length-1;i++){ const a=ROUTE[i], b=ROUTE[i+1]; if(km<=b.km){ const t=(km-a.km)/(b.km-a.km||1); const A=mapXY(a), B=mapXY(b); return [A[0]+(B[0]-A[0])*t, A[1]+(B[1]-A[1])*t]; } }
+  return mapXY(ROUTE[ROUTE.length-1]);
+}
+function renderMap(){
+  const km=userKm(), passed=ROUTE.filter(r=>r.km<=km+0.05), stamps=Object.keys(S.stamps).length;
+  const st=[[tx('mapTotal'),'≈ '+ROUTE_KM+' km'],[tx('mapWalked'),km.toFixed(1)+' km'],[tx('mapLeft'),(ROUTE_KM-km).toFixed(1)+' km'],[tx('mapPct'),(km/ROUTE_KM*100).toFixed(1)+'%'],[tx('mapTowns'),passed.length+' / '+ROUTE.length],[tx('mapStamps'),stamps+' / '+STAMPS.length]];
+  const box=$('#mapStats'); box.innerHTML=''; st.forEach(([l,v])=>{ const d=document.createElement('div'); const b=document.createElement('b'); b.textContent=v; d.append(b,l); box.append(d); });
+  const pts=ROUTE.map(mapXY), all=pts.map(p=>p.join(',')).join(' ');
+  const done=[...ROUTE.filter(r=>r.km<=km).map(mapXY), pointAtKm(km)].map(p=>p.join(',')).join(' ');
+  const me=pointAtKm(km);
+  const mtns=[[60,40,26],[95,58,20],[130,34,18],[820,90,22],[860,74,26],[895,96,18],[640,120,16]].map(([x,y,s])=>`<path d="M${x-s} ${y+s*0.7} L${x} ${y-s*0.5} L${x+s} ${y+s*0.7}" fill="none" stroke="#b69c74" stroke-width="2" stroke-linejoin="round" opacity=".7"/>`).join('');
+  const trees=[[300,330],[318,342],[520,60],[540,52],[700,330],[716,344],[960,300],[180,300],[420,330]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="8" fill="#9fb07a" opacity=".55"/>`).join('');
+  const towns=ROUTE.map((r,i)=>{
+    const [x,y]=pts[i], got=r.stamp && S.stamps[r.stamp], past=r.km<=km+0.05;
+    const fill = got ? '#2f5d8a' : past ? '#d9a514' : '#fffaf0', stroke = got||past ? '#3b2a1e' : '#b8a996';
+    const lab = S.lang==='ko' ? (r.sk||r.ko) : (r.se||r.en), g=(r.major?10:7);
+    const [lx,ly,la] = r.lp==='d' ? [x,y+g+15,'middle'] : r.lp==='l' ? [x-g-4,y+5,'end'] : r.lp==='r' ? [x+g+4,y+5,'start'] : [x,y-g-6,'middle'];
+    return `<g class="town${r.major?'':' minor'}" data-i="${i}" tabindex="0" role="button" aria-label="${lab}">
+      <circle cx="${x}" cy="${y}" r="${r.major?9:6}" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      ${got?`<path d="M${x-4} ${y+1} L${x} ${y-4} L${x+4} ${y+1}" fill="none" stroke="#f2c230" stroke-width="2"/>`:''}
+      <text x="${lx}" y="${ly}" ${r.lp==='n'?'display="none"':''} text-anchor="${la}" font-size="${r.major?15:12}" fill="#3b2a1e" paint-order="stroke" stroke="#fbf3df" stroke-width="3" font-family="Jua, 'Gowun Dodum', sans-serif">${lab}</text></g>`;
+  }).join('');
+  $('#mapWrap').innerHTML = `<svg viewBox="0 0 1000 380" role="img" aria-label="${tx('mapT')}">
+    <defs><radialGradient id="paper" cx="50%" cy="45%" r="75%"><stop offset="0" stop-color="#fbf3df"/><stop offset="1" stop-color="#ead9b4"/></radialGradient></defs>
+    <rect width="1000" height="380" fill="url(#paper)"/>${mtns}${trees}
+    <g transform="translate(950 50)" opacity=".75"><circle r="22" fill="none" stroke="#8a6a48" stroke-width="1.5"/><path d="M0 -20 L5 0 L0 20 L-5 0 Z" fill="#8a6a48"/><text y="-28" text-anchor="middle" font-size="12" fill="#8a6a48">N</text></g>
+    <polyline points="${all}" fill="none" stroke="#a69378" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/>
+    <polyline points="${done}" fill="none" stroke="#e0a91a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    ${towns}
+    <g transform="translate(${me[0]} ${me[1]})"><circle r="15" fill="#f2c230" opacity=".35"><animate attributeName="r" values="11;18;11" dur="2.4s" repeatCount="indefinite"/></circle><circle r="8" fill="#c0582f" stroke="#fff" stroke-width="3"/>
+      <rect x="-24" y="-46" width="48" height="22" rx="11" fill="#3b2a1e"/><text y="-30" text-anchor="middle" font-size="13" fill="#fff7ea" font-family="Jua, sans-serif">${tx('mapYou')}</text></g>
+  </svg>`;
+  $('#mapInfo').textContent = tx('mapTapHint');
+}
+function showTown(i){
+  const r=ROUTE[i], km=userKm(), got=r.stamp && S.stamps[r.stamp];
+  let t=townName(r)+' · ';
+  if(got) t+=tx('mapGot',{d:S.stamps[r.stamp]}); else if(r.km<=km+0.05) t+=tx('mapPassed',{km:Math.round(r.km)}); else t+=tx('mapLocked',{km:Math.round(r.km)});
+  if(i<=1) t+=' · '+tx('mapStage');
+  $('#mapInfo').textContent=t;
+}
+$('#mapWrap').addEventListener('click',e=>{ const g=e.target.closest('.town'); if(g) showTown(+g.dataset.i); });
+$('#mapWrap').addEventListener('keydown',e=>{ const g=e.target.closest('.town'); if(g && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); showTown(+g.dataset.i); } });
+function openMap(){ renderMap(); openModal('#mMap'); }
+$('#bMap').onclick=openMap;
+
+$('#stampGrid').addEventListener('click',e=>{
+  const b=e.target.closest('[data-sid]'); if(!b) return; const id=b.dataset.sid, st=STAMPS.find(x=>x.id===id), el=$('#stampDetail');
+  if(!S.stamps[id]){ const town=ROUTE.find(r=>r.stamp===id); el.textContent = stName(st)+' · '+(town?tx('mapLocked',{km:Math.round(town.km)}):tx('sdLocked')); return; }
+  const lg=(S.stampLog||{})[id]; let t=stName(st)+' · '+S.stamps[id]+'\n';
+  t += lg ? tx('sdLine',{km:lg.km, wx:tx('wx_'+(lg.wx||'clear')), n:lg.met}) : tx('sdOld');
+  if(id==='supper' && S.journal && S.journal.length) t += '\n'+tx('sdAnswer',{a:S.journal[S.journal.length-1].a});
+  el.textContent=t; el.style.whiteSpace='pre-line';
+});
 $('#bPass').onclick=()=>{ renderPassport(); openModal('#mPass'); };
 let resetArm=false;
 $('#resetBtn').onclick=()=>{
@@ -1617,13 +1755,13 @@ function interact(){
     if(n.thirsty && S.water>0){
       S.water--; renderWater(); n.thirsty=false; n.drop.visible=false; S.gave.push(n.def.name); S.shared=(S.shared||0)+1;
       const th=THANKS[n.def.name]||['Gracias!','고마워요!','Thank you!']; n.btext=th[0]; n.bko={ko:th[1], en:th[2]}; player.wave=0; n.P.wave=0;
-      if(!S.stamps.water){ S.stamps.water=todayStr(); setTimeout(()=>toast(tx('waterFirst'),4200),400); }
+      if(!S.stamps.water){ stamp('water'); setTimeout(()=>toast(tx('waterFirst'),4200),400); }
       else setTimeout(()=>toast(tx('waterAgain',{n:n.def.name})),400);
     }
     const face=Math.atan2(n.P.outer.position.x-player.outer.position.x, n.P.outer.position.z-player.outer.position.z); player.outer.rotation.y=face;
     if(!S.met.includes(n.def.name)){
       S.met.push(n.def.name);
-      if(!S.stamps.firstmeet){ S.stamps.firstmeet=todayStr(); setTimeout(()=>toast(tx('meetFirst',{n:n.def.name,c:cname(n.def.c)}),3400),400); }
+      if(!S.stamps.firstmeet){ stamp('firstmeet'); setTimeout(()=>toast(tx('meetFirst',{n:n.def.name,c:cname(n.def.c)}),3400),400); }
       else setTimeout(()=>toast(tx('meetAgain',{n:n.def.name,c:cname(n.def.c)})),400);
       persist(); if(!$('#people').hidden) renderPeople();
     }
@@ -1712,6 +1850,7 @@ function frame(){
     const pi=pathInfo(pp.x,pp.z);
     if(pi.d<12 && pi.u>S.progress){ S.progress=pi.u; }
     if(mode==='walk') checkEpisodes();
+    DASH_MAT.opacity = 0.32 + 0.45*smooth(4,16,pi.d) + (tod!==TOD.day?0.15:0);
     const km=S.progress*7.8;
     $('#pKm').textContent=km.toFixed(1);
     $('#pBar').style.width=(S.progress*100).toFixed(1)+'%';
@@ -1720,7 +1859,7 @@ function frame(){
     $('#pMet').textContent=S.met.length+(S.metReal?S.metReal.length:0); $('#pLeft').textContent=Math.max(0,7.8-km).toFixed(1);
 
     if(mode==='walk' && !arrived && Math.hypot(pp.x-END.x,pp.z-END.z)<3 ){
-      arrived=true; S.progress=1; S.stamps.orisson=todayStr(); persist();
+      arrived=true; S.progress=1; stamp('orisson'); persist();
       $('#arrStamp').innerHTML=stampSVG(STAMPS.find(x=>x.id==='orisson'), S.stamps.orisson);
       setTimeout(()=>openModal('#mArrive'),500);
     }
