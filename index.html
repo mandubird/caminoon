@@ -1382,6 +1382,9 @@ function renderPassport(){
 /* ================= Start screen ================= */
 const PACKS=[0xc0582f,0x2f5d8a,0x5f8a3e,0xd9a514,0x7a4a7a,0x3b3b3b];
 function flagBtn(c){ return `<button data-c="${c}" aria-pressed="${c===S.country}"><img src="${flagDataURL(c)}" alt="" loading="lazy">${cname(c)}</button>`; }
+// 나라 추가 요청 → 구글 폼 → 구글 시트 '카미노 온 나라 추가 요청'
+const REQ_FORM='https://docs.google.com/forms/d/e/1FAIpQLSfA_IkeNsk2iXu9XDdDkOhtgkfmrPKXscAUMnCO0uyrbAY1nQ/formResponse';
+const REQ_ENTRY='entry.1745594292';
 function renderFlagGrid(){ const base=COUNTRIES.map(q=>q[0]); const list=base.includes(S.country)?base:[S.country].concat(base); $('#flagGrid').innerHTML = list.map(flagBtn).join(''); }
 function renderFlagGridOld(){ $('#flagGrid').innerHTML = COUNTRIES.map(([c])=>`<button data-c="${c}" aria-pressed="${c===S.country}"><img src="${flagDataURL(c)}" alt="">${cname(c)}</button>`).join(''); }
 function renderResume(){
@@ -1420,7 +1423,9 @@ function buildStart(){
   $('#reqOpen').onclick=()=>{ $('#reqBox').hidden=false; $('#reqName').value=$('#cq').value; $('#reqName').focus(); };
   $('#reqSend').onclick=async()=>{
     const name=$('#reqName').value.trim().slice(0,60); if(!name){ $('#reqName').focus(); return; }
-    let ok=false; if(NET.on){ try{ const {error}=await NET.db.from('camino_country_requests').insert({name, lang:S.lang}); ok=!error; }catch(e){} }
+    let ok=false;
+    try{ await fetch(REQ_FORM, {method:'POST', mode:'no-cors', body:new URLSearchParams({[REQ_ENTRY]: `${name} (${S.lang}${S.country&&S.country!=='NONE'?' · now '+S.country:''})`})}); ok=true; }catch(e){}
+    if(NET.on){ try{ await NET.db.from('camino_country_requests').insert({name, lang:S.lang}); }catch(e){} }
     try{ const k='camino-on-requests'; const a=JSON.parse(localStorage.getItem(k)||'[]'); a.push({name,at:Date.now()}); localStorage.setItem(k,JSON.stringify(a)); }catch(e){}
     $('#reqBox').hidden=true; toast(ok?tx('reqDone'):tx('reqLocal'));
   };
