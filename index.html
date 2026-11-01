@@ -11,6 +11,16 @@
 <meta property="og:title" content="카미노 온 · Camino On">
 <meta property="og:description" content="언제든, 마음으로 걷는 산티아고 순례길.">
 <meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:url" content="https://caminoon.vercel.app/">
+<meta property="og:image" content="https://caminoon.vercel.app/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="카미노 온 · Camino On — 국기를 단 순례자가 피레네 순례길을 걷는 3D 장면">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="카미노 온 · Camino On">
+<meta name="twitter:description" content="언제든, 마음으로 걷는 산티아고 순례길. The Camino de Santiago, whenever your heart needs it.">
+<meta name="twitter:image" content="https://caminoon.vercel.app/og.jpg">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,7 +71,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 #me[aria-expanded="true"] svg{transform:rotate(180deg)}
 #people{width:min(280px,calc(100vw - 32px));padding:12px 14px;display:grid;gap:8px}
 #people .ph{font-size:12px;letter-spacing:.04em;color:var(--ink-soft)}
-#peopleList{list-style:none;margin:0;padding:0;display:grid;gap:7px;max-height:38vh;overflow:auto}
+#peopleList{list-style:none;margin:0;padding:0;display:grid;gap:7px;max-height:30vh;overflow:auto}
 #peopleList li{display:flex;align-items:center;gap:9px;font-size:14px;line-height:1.4}
 #peopleList img{width:27px;height:18px;border-radius:2px;box-shadow:0 0 0 1px var(--line);flex:none}
 #peopleList small{color:var(--ink-soft);margin-left:auto;font-size:12px;white-space:nowrap}
@@ -121,6 +131,16 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .go:active{transform:translateY(2px);box-shadow:0 2px 0 var(--arrow-deep)}
 .go.alt{background:#fff;border:1.5px solid var(--line);box-shadow:none;font-size:17px}
 .langs{display:flex;gap:6px;flex-wrap:wrap}
+.cq{font-family:var(--body);font-size:15px;padding:9px 12px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--ink)}
+#cres:empty{display:none}
+.reqbox{display:flex;gap:8px}
+.reqbox input{flex:1;min-width:0;font-family:var(--body);font-size:15px;padding:8px 12px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--ink)}
+#online{display:flex;align-items:center;gap:7px;padding:5px 11px;font-size:12.5px}
+#online i{width:8px;height:8px;border-radius:50%;background:#3fa46a;box-shadow:0 0 0 3px rgba(63,164,106,.2)}
+#liveList{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+#liveList li{display:flex;align-items:center;gap:9px;font-size:14px}
+#liveList img{width:27px;height:18px;border-radius:2px;box-shadow:0 0 0 1px var(--line);flex:none}
+#liveList small{margin-left:auto;font-size:11px;color:#3fa46a;white-space:nowrap}
 .langs .chip{padding:5px 12px;font-size:13px}
 .fine{font-size:12px;color:var(--ink-soft);line-height:1.5;margin:0}
 
@@ -191,8 +211,12 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
   <div class="hud" id="tl" hidden>
     <div id="brand" class="pill"><i class="mk"></i><div><b>Camino On</b><small data-i18n="stage">프랑스 길 · 1구간</small></div></div>
     <button id="me" class="pill" aria-expanded="false" aria-controls="people"><img id="pFlag" alt=""><b id="pName">순례자</b><span class="met"><span id="pMet">0</span><span data-i18n="met">명 만남</span></span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+    <div id="online" class="pill" hidden><i></i><span id="onlineTxt"></span></div>
     <div id="people" class="pill" hidden>
       <div class="ph" data-i18n="peopleH">길에서 인사한 순례자</div>
+      <div class="ph" id="liveH" data-i18n="liveH" hidden>지금 함께 걷는 순례자</div>
+      <ul id="liveList"></ul>
+      <div class="ph" data-i18n="peopleH2">만난 순례자</div>
       <ul id="peopleList"></ul>
       <p class="fine" id="peopleMore"></p>
     </div>
@@ -240,6 +264,10 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
       <div class="field">
         <span class="lab" data-i18n="from">어디에서 왔나요?</span>
         <div class="flags" id="flagGrid"></div>
+        <input type="search" id="cq" class="cq" data-i18n-ph="countrySearch" placeholder="다른 나라 찾기" autocomplete="off">
+        <div class="flags" id="cres"></div>
+        <button class="link" id="reqOpen" data-i18n="reqOpen">찾는 나라가 없나요? 추가 요청하기</button>
+        <div class="reqbox" id="reqBox" hidden><input type="text" id="reqName" maxlength="60" data-i18n-ph="reqPh" placeholder="나라 이름"><button class="chip" id="reqSend" data-i18n="reqSend">요청 보내기</button></div>
       </div>
       <div class="field">
         <span class="lab" data-i18n="pack">배낭 색</span>
@@ -318,6 +346,7 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 (function(){
 'use strict';
@@ -372,6 +401,8 @@ ko:{
   meetFirst:'{c}에서 온 {n}와 첫 인사를 나눴어요. ‘첫 인사’ 도장을 받았어요.', meetAgain:'{c}에서 온 {n}와 인사했어요.',
   dinnerCap:'그날 저녁, 오리손 알베르게', dinnerSub:'창밖으로 피레네에 해가 넘어가요', ansPh:'직접 말하기', say:'말하기', sleep:'잠자리에 들기', next:'다음',
   supperStamp:'‘순례자의 저녁’ 도장을 받았어요. 오늘 나눈 이야기는 여권에 남겨 둘게요.', journalQ:'왜 이 길에 왔나요?',
+  countrySearch:'다른 나라 찾기 (예: 케냐, Kenya)', reqOpen:'찾는 나라가 없나요? 추가 요청하기', reqPh:'나라 이름', reqSend:'요청 보내기', reqDone:'요청을 받았어요. 곧 추가할게요!', reqLocal:'요청을 기록했어요. 곧 추가할게요!', noMatch:'일치하는 나라가 없어요. 아래에서 추가 요청을 보내 주세요.',
+  online:'지금 {n}명이 함께 걷는 중', liveH:'지금 함께 걷는 순례자', peopleH2:'만난 순례자', live:'접속 중', promptGreetReal:'{n}님에게 인사하기', helloSent:'{n}님에게 인사를 건넸어요.', helloGot:'{c}에서 온 {n}님이 인사했어요!', helloBubble:'{n}님의 인사', noteOther:'다른 순례자의 돌 · {d}', stoneShared:'길가에 돌 하나를 얹었어요. 이 길을 걷는 다른 순례자들도 볼 수 있어요.',
   dawnCap:'다음 날 새벽 6시', dawnSub:'알베르게에 하나둘 불이 켜져요', dawn1:'순례자들은 해가 뜨기 전, 헤드랜턴을 켜고 조용히 길을 나서요.', dawn2:'다음 구간 오리손 → 론세스바예스(약 17km)는 곧 열려요. ‘새벽 출발’ 도장을 받았어요.'
 },
 en:{
@@ -401,6 +432,8 @@ en:{
   meetFirst:'You said your first hello to {n} from {c}. You got the “First Hello” stamp.', meetAgain:'You said hello to {n} from {c}.',
   dinnerCap:'That evening, at the Orisson albergue', dinnerSub:'The sun sets over the Pyrenees outside the window', ansPh:'Say it in your own words', say:'Say', sleep:'Go to bed', next:'Next',
   supperStamp:'You got the “Pilgrim’s Supper” stamp. What you shared tonight is kept in your passport.', journalQ:'Why are you on the Camino?',
+  countrySearch:'Find another country (e.g. Kenya)', reqOpen:'Can’t find your country? Ask us to add it', reqPh:'Country name', reqSend:'Send request', reqDone:'Thanks! We’ll add it soon.', reqLocal:'Request noted. We’ll add it soon.', noMatch:'No country matches. Send a request below.',
+  online:'{n} walking with you now', liveH:'Walking with you now', peopleH2:'Pilgrims you met', live:'online', promptGreetReal:'Say hello to {n}', helloSent:'You said hello to {n}.', helloGot:'{n} from {c} says hello!', helloBubble:'Hello from {n}', noteOther:'A fellow pilgrim’s stone · {d}', stoneShared:'You placed a stone. Other pilgrims on this path can see it too.',
   dawnCap:'6 a.m. the next morning', dawnSub:'Lights come on one by one in the albergue', dawn1:'Before sunrise, pilgrims switch on their headlamps and quietly set off.', dawn2:'The next stage, Orisson → Roncesvalles (about 17 km), opens soon. You got the “Dawn Departure” stamp.'
 }};
 if(S.lang!=='ko' && S.lang!=='en') S.lang = /^ko/i.test(navigator.language||'') ? 'ko' : 'en';
@@ -411,7 +444,11 @@ const L = o => o ? (S.lang==='ko' ? (o.ko||'') : (o.en||'')) : '';
 const COUNTRIES = [['KR','대한민국'],['JP','일본'],['CN','중국'],['VN','베트남'],['PH','필리핀'],['US','미국'],['CA','캐나다'],['MX','멕시코'],['BR','브라질'],['ES','스페인'],['FR','프랑스'],['PT','포르투갈'],['IT','이탈리아'],['DE','독일'],['GB','영국'],['IE','아일랜드'],['NL','네덜란드'],['PL','폴란드'],['NONE','선택 안 함']];
 const CNAME_EN = {KR:'Korea',JP:'Japan',CN:'China',VN:'Vietnam',PH:'Philippines',US:'USA',CA:'Canada',MX:'Mexico',BR:'Brazil',ES:'Spain',FR:'France',PT:'Portugal',IT:'Italy',DE:'Germany',GB:'UK',IE:'Ireland',NL:'Netherlands',PL:'Poland',NONE:'Prefer not to say'};
 const CNAME_KO = Object.fromEntries(COUNTRIES);
-const cname = c => (S.lang==='ko'?CNAME_KO:CNAME_EN)[c]||'';
+const ALL_CODES = 'AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS XK YE YT ZA ZM ZW'.split(' ');
+const DN = {}; const dn = l => { if(DN[l]!==undefined) return DN[l]; try{ DN[l]=new Intl.DisplayNames([l],{type:'region'}); }catch(e){ DN[l]=null; } return DN[l]; };
+const regionName = (c,l) => { if(c==='XK') return l==='ko'?'코소보':'Kosovo'; const d=dn(l); try{ return d?d.of(c):c; }catch(e){ return c; } };
+const cname = c => (S.lang==='ko'?CNAME_KO:CNAME_EN)[c] || (ALL_CODES.includes(c)?regionName(c,S.lang):'');
+const okCode = c => typeof c==='string' && (c==='NONE' || ALL_CODES.includes(c));
 
 function star(x,cx,cy,r,col,rot){ rot = rot===undefined?-Math.PI/2:rot; x.fillStyle=col; x.beginPath(); for(let i=0;i<10;i++){ const q=i%2?r*0.4:r, a=rot+i*Math.PI/5; x.lineTo(cx+Math.cos(a)*q, cy+Math.sin(a)*q);} x.closePath(); x.fill(); }
 function shell(x,cx,cy,r,col){
@@ -470,7 +507,21 @@ function drawFlag(x,code,w,h){
   }
 }
 const flagURL = {};
+const DRAWN = new Set(['KR','JP','CN','VN','PH','US','CA','MX','BR','ES','FR','PT','IT','DE','GB','IE','NL','PL','NONE']);
+const FLAG_CDN = c => `https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/flags/4x3/${c.toLowerCase()}.svg`;
+const flagImgs = {};
+function withFlagImg(code, cb){
+  let o=flagImgs[code];
+  if(!o){ o=flagImgs[code]={img:new Image(), ok:false, cbs:[]}; o.img.crossOrigin='anonymous'; o.img.onload=()=>{ o.ok=true; o.cbs.splice(0).forEach(f=>f(o.img)); }; o.img.src=FLAG_CDN(code); }
+  if(o.ok) cb(o.img); else o.cbs.push(cb);
+}
+function paintFlag(x, code, ox, oy, w, h, after){
+  if(DRAWN.has(code) || !okCode(code)){ x.save(); x.translate(ox,oy); x.beginPath(); x.rect(0,0,w,h); x.clip(); drawFlag(x, okCode(code)?code:'NONE', w, h); x.restore(); if(after) after(); return; }
+  x.fillStyle='#e9e3d7'; x.fillRect(ox,oy,w,h);
+  withFlagImg(code, img=>{ try{ x.drawImage(img,ox,oy,w,h); }catch(e){} if(after) after(); });
+}
 function flagDataURL(code){
+  if(!DRAWN.has(code) && okCode(code)) return FLAG_CDN(code);
   if(flagURL[code]) return flagURL[code];
   const cv=document.createElement('canvas'); cv.width=90; cv.height=60; drawFlag(cv.getContext('2d'),code,90,60);
   return flagURL[code]=cv.toDataURL();
@@ -479,8 +530,9 @@ const flagTexCache = {};
 function flagTex(code){
   if(flagTexCache[code]) return flagTexCache[code];
   const cv=document.createElement('canvas'); cv.width=150; cv.height=100; const x=cv.getContext('2d');
-  drawFlag(x,code,150,100); x.strokeStyle='rgba(0,0,0,.25)'; x.lineWidth=4; x.strokeRect(0,0,150,100);
-  const t=new THREE.CanvasTexture(cv); t.anisotropy=4; return flagTexCache[code]=t;
+  const t=new THREE.CanvasTexture(cv); t.anisotropy=4; flagTexCache[code]=t;
+  paintFlag(x,code,0,0,150,100,()=>{ x.strokeStyle='rgba(0,0,0,.25)'; x.lineWidth=4; x.strokeRect(0,0,150,100); t.needsUpdate=true; });
+  return t;
 }
 function roundRect(x,a,b,w,h,r){ x.beginPath(); x.moveTo(a+r,b); x.arcTo(a+w,b,a+w,b+h,r); x.arcTo(a+w,b+h,a,b+h,r); x.arcTo(a,b+h,a,b,r); x.arcTo(a,b,a+w,b,r); x.closePath(); }
 
@@ -895,14 +947,16 @@ const NPC_DEF = [
   {name:'Jean',   c:'FR', say:'Bienvenue à Orisson !',       ko:'오리손에 온 걸 환영해요!', en:'Welcome to Orisson!',        u:0.995, sit:'albergue', shirt:0xf2e6cf, pack:0x6b4630, hair:0x9a9a9a, hat:true, skin:0}
 ];
 const DROP_MAT = new THREE.SpriteMaterial({map:texFromCanvas(64,80,(x,w,h)=>{ x.fillStyle='#fff7ea'; x.beginPath(); x.arc(32,48,26,0,TAU); x.fill(); x.beginPath(); x.moveTo(32,4); x.lineTo(54,40); x.lineTo(10,40); x.fill(); x.fillStyle='#2f7fbf'; x.beginPath(); x.arc(32,50,18,0,TAU); x.fill(); x.beginPath(); x.moveTo(32,16); x.lineTo(48,44); x.lineTo(16,44); x.fill(); }), transparent:true, depthWrite:false});
-function labelSprite(name, code){
+function labelSprite(name, code, live){
   const cv=document.createElement('canvas'); cv.width=300; cv.height=76; const x=cv.getContext('2d');
   x.font='bold 30px system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif';
   const tw=Math.min(190, x.measureText(name).width), W=tw+100;
   x.fillStyle='rgba(255,247,234,.94)'; roundRect(x,(300-W)/2,8,W,58,29); x.fill();
-  x.save(); x.translate((300-W)/2+18,21); x.beginPath(); x.rect(0,0,48,32); x.clip(); drawFlag(x,code,48,32); x.restore();
+  const tex=new THREE.CanvasTexture(cv);
+  paintFlag(x,code,(300-W)/2+18,21,48,32,()=>{ tex.needsUpdate=true; });
+  if(live){ x.fillStyle='#3fa46a'; x.beginPath(); x.arc((300-W)/2+W-14,37,6,0,TAU); x.fill(); }
   x.fillStyle='#3b2a1e'; x.textBaseline='middle'; x.fillText(name,(300-W)/2+78,38);
-  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(cv), transparent:true, depthWrite:false}));
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false}));
   s.scale.set(2.1,0.53,1); s.position.y=2.25; return s;
 }
 const npcs = NPC_DEF.map((d,i)=>{
@@ -1327,7 +1381,9 @@ function renderPassport(){
 
 /* ================= Start screen ================= */
 const PACKS=[0xc0582f,0x2f5d8a,0x5f8a3e,0xd9a514,0x7a4a7a,0x3b3b3b];
-function renderFlagGrid(){ $('#flagGrid').innerHTML = COUNTRIES.map(([c])=>`<button data-c="${c}" aria-pressed="${c===S.country}"><img src="${flagDataURL(c)}" alt="">${cname(c)}</button>`).join(''); }
+function flagBtn(c){ return `<button data-c="${c}" aria-pressed="${c===S.country}"><img src="${flagDataURL(c)}" alt="" loading="lazy">${cname(c)}</button>`; }
+function renderFlagGrid(){ const base=COUNTRIES.map(q=>q[0]); const list=base.includes(S.country)?base:[S.country].concat(base); $('#flagGrid').innerHTML = list.map(flagBtn).join(''); }
+function renderFlagGridOld(){ $('#flagGrid').innerHTML = COUNTRIES.map(([c])=>`<button data-c="${c}" aria-pressed="${c===S.country}"><img src="${flagDataURL(c)}" alt="">${cname(c)}</button>`).join(''); }
 function renderResume(){
   if(saved && saved.started && saved.progress>0.01){ const r=$('#resumeBtn'); r.hidden=false; r.textContent=tx('resume',{km:(saved.progress*7.8).toFixed(1)}); $('#goBtn').textContent=tx('goAgain'); }
   else $('#goBtn').textContent=tx('go');
@@ -1346,12 +1402,28 @@ function applyLang(){
   if(started){ $('#pName').textContent=S.name; $('#hint').textContent = coarse ? tx('hintTouch') : tx('hintKey'); }
   if(!$('#people').hidden) renderPeople();
   if(!$('#mPass').hidden) renderPassport();
+  if(started) renderOnline();
 }
 document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>{ S.lang=b.dataset.lang; applyLang(); store.save(S); }));
 function buildStart(){
   const grid=$('#flagGrid');
   renderFlagGrid();
-  grid.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; S.country=b.dataset.c; grid.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); rebuildPlayer(); });
+  const pick=c=>{ if(!okCode(c)) return; S.country=c; renderFlagGrid(); $('#cres').innerHTML=''; $('#cq').value=''; rebuildPlayer(); };
+  grid.addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) pick(b.dataset.c); });
+  $('#cres').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) pick(b.dataset.c); });
+  $('#cq').addEventListener('input',()=>{
+    const q=$('#cq').value.trim().toLowerCase(); const out=$('#cres');
+    if(!q){ out.innerHTML=''; return; }
+    const hits=ALL_CODES.filter(c=>{ const k=(CNAME_KO[c]||regionName(c,'ko')||'').toLowerCase(), e=(CNAME_EN[c]||regionName(c,'en')||'').toLowerCase(); return c.toLowerCase()===q || k.includes(q) || e.includes(q); }).slice(0,12);
+    out.innerHTML = hits.length ? hits.map(flagBtn).join('') : `<p class="fine" style="grid-column:1/-1">${tx('noMatch')}</p>`;
+  });
+  $('#reqOpen').onclick=()=>{ $('#reqBox').hidden=false; $('#reqName').value=$('#cq').value; $('#reqName').focus(); };
+  $('#reqSend').onclick=async()=>{
+    const name=$('#reqName').value.trim().slice(0,60); if(!name){ $('#reqName').focus(); return; }
+    let ok=false; if(NET.on){ try{ const {error}=await NET.db.from('camino_country_requests').insert({name, lang:S.lang}); ok=!error; }catch(e){} }
+    try{ const k='camino-on-requests'; const a=JSON.parse(localStorage.getItem(k)||'[]'); a.push({name,at:Date.now()}); localStorage.setItem(k,JSON.stringify(a)); }catch(e){}
+    $('#reqBox').hidden=true; toast(ok?tx('reqDone'):tx('reqLocal'));
+  };
   const row=$('#packRow');
   row.innerHTML = PACKS.map(p=>`<button class="sw" data-p="${p}" style="background:#${p.toString(16).padStart(6,'0')}" aria-pressed="${p===S.pack}" aria-label="${tx('packAria')}"></button>`).join('');
   row.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; S.pack=+b.dataset.p; row.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); rebuildPlayer(); });
@@ -1381,7 +1453,7 @@ function begin(fresh){
   $('#pName').textContent=S.name; $('#pFlag').src=flagDataURL(S.country); applyLang();
   $('#hint').hidden=false; $('#hint').textContent = coarse ? tx('hintTouch') : tx('hintKey');
   setTimeout(()=>{ $('#hint').style.opacity=0; setTimeout(()=>$('#hint').hidden=true,900); }, 9000);
-  started=true; initAudio(); persist(); canvas.focus();
+  started=true; initAudio(); persist(); canvas.focus(); netJoin(); renderOnline();
   if(fresh || !saved) setTimeout(()=>toast(tx('welcome'),3600), 600);
 }
 $('#goBtn').onclick=()=>begin(true);
@@ -1412,9 +1484,115 @@ $('#leaveGo').onclick=()=>{
   const x=p.x+Math.cos(ry)*1.6, z=p.z-Math.sin(ry)*1.6;
   const note={text, who:S.name, c:S.country, x:+x.toFixed(2), z:+z.toFixed(2), date:todayStr()};
   S.notes.push(note); addCairn(x,z,note,true); persist();
+  shareStone(note).then(ok=>{ if(ok) toast(tx('stoneShared')); });
   $('#mLeave').hidden=true; toast(tx('leaveDone'));
 };
 $('#bSound').onclick=()=>{ soundOn=!soundOn; $('#bSound').setAttribute('aria-pressed',soundOn); initAudio(); if(master) master.gain.value=soundOn?0.9:0; if(AC&&AC.state==='suspended') AC.resume(); };
+
+
+/* ================= Live pilgrims (Supabase Realtime) ================= */
+const SUPA_URL = '';   // https://<project>.supabase.co
+const SUPA_KEY = '';   // anon public key (RLS가 켜진 테이블만 접근)
+const NET = {on:false, db:null, ch:null, me:'', remotes:new Map(), sendT:0, beatT:0, last:{x:0,z:0,ry:0}, online:0, joined:false};
+try{ NET.me=localStorage.getItem('camino-on-id') || ''; if(!NET.me){ NET.me=(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now().toString(36)); localStorage.setItem('camino-on-id',NET.me); } }catch(e){ NET.me='g'+Math.random().toString(36).slice(2); }
+if(SUPA_URL && SUPA_KEY && window.supabase){ try{ NET.db=window.supabase.createClient(SUPA_URL, SUPA_KEY, {auth:{persistSession:false}, realtime:{params:{eventsPerSecond:12}}}); NET.on=true; }catch(e){ NET.on=false; } }
+const cleanName = n => String(n||'').replace(/[\u0000-\u001f<>]/g,'').trim().slice(0,12) || 'Pilgrim';
+const hashN = s => { let h=0; for(const ch of String(s)) h=(h*31+ch.charCodeAt(0))|0; return Math.abs(h); };
+const SHIRTS=[0xf2e6cf,0xd96c4f,0x5b7fa6,0x6e8a5a,0xf4c34d,0x9a6fb0,0x4f9a8e,0xe8a5b5];
+function myMeta(){ return {name:S.name, c:S.country, pack:S.pack, hat:!!S.hat, flag:!!S.showFlag}; }
+function ensureRemote(id, m){
+  if(NET.remotes.has(id) || !m) return;
+  const c=okCode(m.c)?m.c:'NONE', name=cleanName(m.name), h=hashN(id);
+  const pack = Number.isInteger(m.pack) && m.pack>=0 && m.pack<=0xffffff ? m.pack : 0xc0582f;
+  const P=makePilgrim({country:c, pack, hat:!!m.hat, showFlag:m.flag!==false, shirt:SHIRTS[h%SHIRTS.length], hair:[0x2b1a10,0x5a3a24,0xb7793d,0x15100c][h%4], skin:SKIN[h%4], poncho:0x3e8a5a});
+  P.outer.visible=false;
+  const label=labelSprite(name,c,true); P.outer.add(label);
+  NET.remotes.set(id,{id, name, c, P, label, tx:0, tz:0, ry:0, moving:false, sit:false, seen:0, have:false, bubbleT:0, btext:null, bko:null, def:{say:'Buen Camino!', ko:'', en:''}});
+}
+function removeRemote(id){ const r=NET.remotes.get(id); if(!r) return; scene.remove(r.P.outer); NET.remotes.delete(id); }
+function renderOnline(){
+  const el=$('#online'); if(!NET.on || !started){ el.hidden=true; return; }
+  const n=[...NET.remotes.values()].length; el.hidden = n<1; $('#onlineTxt').textContent=tx('online',{n});
+  if(!$('#people').hidden) renderPeople();
+}
+function netJoin(){
+  if(!NET.on || NET.joined) return; NET.joined=true;
+  const ch=NET.db.channel('camino-francés-1', {config:{presence:{key:NET.me}, broadcast:{self:false}}});
+  ch.on('presence',{event:'sync'},()=>{
+    const st=ch.presenceState(); const ids=new Set(Object.keys(st)); ids.delete(NET.me);
+    ids.forEach(id=>ensureRemote(id, (st[id]&&st[id][0])||null));
+    [...NET.remotes.keys()].forEach(id=>{ if(!ids.has(id)) removeRemote(id); });
+    renderOnline();
+    sendPos(true);
+  });
+  ch.on('broadcast',{event:'pos'},({payload:p})=>{
+    if(!p || typeof p.id!=='string') return; const r=NET.remotes.get(p.id); if(!r) return;
+    const x=+p.x, z=+p.z; if(!isFinite(x)||!isFinite(z)) return;
+    r.tx=clamp(x,-140,150); r.tz=clamp(z,-185,96); r.ry=+p.ry||0; r.moving=!!p.m; r.sit=!!p.s; r.seen=performance.now();
+    if(!r.have){ r.have=true; r.P.outer.position.set(r.tx,groundAt(r.tx,r.tz),r.tz); }
+    if(p.w) r.P.wave=1.6;
+  });
+  ch.on('broadcast',{event:'hello'},({payload:p})=>{
+    if(!p || p.to!==NET.me) return; const r=NET.remotes.get(p.from); if(!r) return;
+    r.P.wave=1.8; r.bubbleT=3.6; r.btext='¡Buen Camino!'; r.bko={ko:tx('helloBubble',{n:r.name}), en:tx('helloBubble',{n:r.name})};
+    if(S.lang==='ko') r.bko.ko=I.ko.helloBubble.split('{n}').join(r.name); else r.bko.en=I.en.helloBubble.split('{n}').join(r.name);
+    toast(tx('helloGot',{n:r.name, c:cname(r.c)}));
+  });
+  ch.subscribe(status=>{ if(status==='SUBSCRIBED'){ ch.track(myMeta()); sendPos(true); } });
+  NET.ch=ch;
+  loadStones();
+}
+function sendPos(force){
+  if(!NET.ch || !player) return;
+  const p=player.outer.position, ry=player.outer.rotation.y, L0=NET.last;
+  const moved=Math.hypot(p.x-L0.x,p.z-L0.z)>0.05 || Math.abs(ry-L0.ry)>0.05;
+  if(!force && !moved) return;
+  L0.x=p.x; L0.z=p.z; L0.ry=ry;
+  NET.ch.send({type:'broadcast', event:'pos', payload:{id:NET.me, x:+p.x.toFixed(2), z:+p.z.toFixed(2), ry:+ry.toFixed(2), m:moved, s:resting, w:player.wave>1.4}});
+}
+function netUpdate(dt,t){
+  if(!NET.on || !NET.ch) return;
+  NET.sendT+=dt; NET.beatT+=dt;
+  if(NET.sendT>0.2 && mode!=='dinner'){ NET.sendT=0; sendPos(NET.beatT>3); if(NET.beatT>3) NET.beatT=0; }
+  const now=performance.now();
+  NET.remotes.forEach(r=>{
+    const P=r.P, stale = now-r.seen>20000;
+    P.outer.visible = r.have && !stale && mode!=='dinner';
+    if(!P.outer.visible) return;
+    const p=P.outer.position, k=1-Math.exp(-dt*8);
+    p.x+=(r.tx-p.x)*k; p.z+=(r.tz-p.z)*k; p.y=groundAt(p.x,p.z);
+    P.outer.rotation.y=lerpAngle(P.outer.rotation.y,r.ry,k);
+    const moving = r.moving && now-r.seen<600;
+    P.sit += ((r.sit?1:0)-P.sit)*Math.min(1,dt*5); P.sitY=-0.4;
+    animatePilgrim(P,dt,t,moving?1:0);
+    r.label.visible = P.outer.position.distanceTo(player.outer.position)<22;
+  });
+}
+function greetRemote(r){
+  if(!NET.ch) return;
+  player.wave=1.6;
+  NET.ch.send({type:'broadcast', event:'hello', payload:{from:NET.me, to:r.id}});
+  sendPos(true);
+  if(!S.metReal) S.metReal=[];
+  if(!S.metReal.some(x=>x.id===r.id)){ S.metReal.push({id:r.id, name:r.name, c:r.c}); if(S.metReal.length>60) S.metReal.shift(); persist(); }
+  toast(tx('helloSent',{n:r.name}));
+}
+async function loadStones(){
+  if(!NET.on) return;
+  try{
+    const {data,error}=await NET.db.from('camino_cairns').select('id,x,z,text,who,c,created_at').order('created_at',{ascending:false}).limit(80);
+    if(error||!Array.isArray(data)) return;
+    const mine=new Set(S.notes.map(n=>n.id).filter(Boolean));
+    data.forEach(r=>{
+      if(mine.has(r.id)) return; const x=+r.x, z=+r.z; if(!isFinite(x)||!isFinite(z)) return;
+      addCairn(clamp(x,-140,150), clamp(z,-185,96), {text:String(r.text||'').slice(0,80), who:cleanName(r.who), c:okCode(r.c)?r.c:'NONE', date:String(r.created_at||'').slice(0,10), remote:true}, false);
+    });
+  }catch(e){}
+}
+async function shareStone(note){
+  if(!NET.on) return false;
+  try{ const {data,error}=await NET.db.from('camino_cairns').insert({x:note.x, z:note.z, text:note.text, who:cleanName(note.who), c:note.c}).select('id').single(); if(error) return false; note.id=data.id; persist(); return true; }catch(e){ return false; }
+}
 
 /* ================= Interaction ================= */
 let target=null;
@@ -1425,6 +1603,7 @@ function interact(){
     S.water=3; renderWater(); persist(); toast(tx('bottleFilled')); return;
   }
   if(target.type==='dinner'){ startDinner(); return; }
+  if(target.type==='remote'){ greetRemote(target.obj); return; }
   if(target.type==='npc'){
     const n=target.obj; player.wave=1.6; n.P.wave=1.9; n.pause=3.6; n.bubbleT=3.6; n.btext=null; n.bko=null;
     if(n.thirsty && S.water>0){
@@ -1444,8 +1623,8 @@ function interact(){
     const c=target.obj, n=c.note;
     $('#noteText').textContent=n.text; $('#noteFlag').src=flagDataURL(n.c||'NONE');
     $('#noteWho').textContent=`${n.who} · ${cname(n.c)||''}`;
-    $('#noteBadge').textContent = c.mine ? tx('noteMine',{d:n.date||''}) : tx('noteSample');
-    const ntr=c.mine?'':L(n); $('#noteKo').textContent = ntr ? `“${ntr}”` : ''; $('#noteKo').hidden=!ntr;
+    $('#noteBadge').textContent = c.mine ? tx('noteMine',{d:n.date||''}) : n.remote ? tx('noteOther',{d:n.date||''}) : tx('noteSample');
+    const ntr=(c.mine||n.remote)?'':L(n); $('#noteKo').textContent = ntr ? `“${ntr}”` : ''; $('#noteKo').hidden=!ntr;
     const key=(n.who+n.text).slice(0,40), L=S.liked[key]||{};
     const lb=$('#likeBtn'), tb=$('#teaBtn');
     lb.setAttribute('aria-pressed',!!L.like); tb.setAttribute('aria-pressed',!!L.tea);
@@ -1457,7 +1636,11 @@ function interact(){
 $('#prompt').onclick=interact;
 $('#dinnerGo').onclick=startDinner;
 function renderPeople(){
+  const lv=$('#liveList'); lv.innerHTML=''; const lives=[...NET.remotes.values()];
+  $('#liveH').hidden = !lives.length;
+  lives.forEach(r=>{ const li=document.createElement('li'); const im=document.createElement('img'); im.src=flagDataURL(r.c); im.alt=''; const b=document.createElement('span'); b.textContent=r.name; const sm=document.createElement('small'); sm.textContent=tx('live'); li.append(im,b,sm); lv.append(li); });
   const ul=$('#peopleList'); ul.innerHTML='';
+  (S.metReal||[]).slice().reverse().forEach(m=>{ const li=document.createElement('li'); const im=document.createElement('img'); im.src=flagDataURL(okCode(m.c)?m.c:'NONE'); im.alt=''; const b=document.createElement('span'); b.textContent=cleanName(m.name); const sm=document.createElement('small'); sm.textContent=cname(m.c); li.append(im,b,sm); ul.append(li); });
   S.met.forEach(name=>{ const d=NPC_DEF.find(x=>x.name===name); if(!d) return;
     const li=document.createElement('li'); const im=document.createElement('img'); im.src=flagDataURL(d.c); im.alt='';
     const b=document.createElement('span'); b.textContent=d.name; const sm=document.createElement('small'); sm.textContent=cname(d.c);
@@ -1526,7 +1709,7 @@ function frame(){
     $('#pBar').style.width=(S.progress*100).toFixed(1)+'%';
     const endY=groundAt(END.x,END.z);
     $('#pAlt').textContent=Math.round(170+clamp(pp.y/endY,0,1.08)*620);
-    $('#pMet').textContent=S.met.length; $('#pLeft').textContent=Math.max(0,7.8-km).toFixed(1);
+    $('#pMet').textContent=S.met.length+(S.metReal?S.metReal.length:0); $('#pLeft').textContent=Math.max(0,7.8-km).toFixed(1);
 
     if(mode==='walk' && !arrived && Math.hypot(pp.x-END.x,pp.z-END.z)<3 ){
       arrived=true; S.progress=1; S.stamps.orisson=todayStr(); persist();
@@ -1537,6 +1720,7 @@ function frame(){
     // targets
     target=null; let best=3.4;
     for(const n of npcs){ if(!n.P.outer.visible||n.leave||n.dinner) continue; const d=n.P.outer.position.distanceTo(pp); if(d<best){best=d; target={type:'npc',obj:n};} }
+    NET.remotes.forEach(r=>{ if(!r.P.outer.visible) return; const d=r.P.outer.position.distanceTo(pp); if(d<best){ best=d; target={type:'remote',obj:r}; } });
     for(const c of cairns){ const d=Math.hypot(c.x-pp.x,c.z-pp.z); if(d<Math.min(best,2.8)){ best=d; target={type:'cairn',obj:c}; } }
     if(Math.hypot(FOUNTAIN.x-pp.x,FOUNTAIN.z-pp.z)<2.4) target={type:'fountain'};
     if(mode==='walk' && arrived && !S.stamps.supper && Math.hypot(END.x-pp.x,END.z-pp.z)<5) target={type:'dinner'};
@@ -1544,7 +1728,7 @@ function frame(){
       prompt.hidden=false;
       promptText.textContent = target.type==='npc' ? (target.obj.thirsty&&S.water>0 ? tx('promptWater',{n:target.obj.def.name}) : tx('promptGreet',{n:target.obj.def.name}))
         : target.type==='fountain' ? (S.water<3?tx('promptFill'):tx('promptFull'))
-        : target.type==='dinner' ? tx('promptDinner') : tx('promptNote');
+        : target.type==='dinner' ? tx('promptDinner') : target.type==='remote' ? tx('promptGreetReal',{n:target.obj.name}) : tx('promptNote');
       prompt.querySelector('kbd').hidden=coarse;
     }
     else prompt.hidden=true;
@@ -1577,11 +1761,13 @@ function frame(){
     n.drop.visible = n.thirsty && n.label.visible && n.P.outer.visible && S.water>=0;
   }
   updateSheep(dt,t);
+  netUpdate(dt,t);
   updateWeather(dt,t);
 
   // bubble
   let shown=null;
   for(const n of npcs){ if(n.bubbleT>0){ n.bubbleT-=dt; shown=n; } }
+  NET.remotes.forEach(r=>{ if(r.bubbleT>0){ r.bubbleT-=dt; if(r.P.outer.visible) shown=r; } });
   if(shown){
     proj.copy(shown.P.outer.position); proj.y+=2.6; proj.project(camera);
     if(proj.z<1){ bubble.hidden=false; bubble.style.left=((proj.x+1)/2*innerWidth)+'px'; bubble.style.top=((1-proj.y)/2*innerHeight)+'px'; bubble.querySelector('b').textContent=shown.btext||shown.def.say; const btr=shown.bko?L(shown.bko):L(shown.def); const bs=bubble.querySelector('small'); bs.textContent=btr; bs.hidden=!btr; }
