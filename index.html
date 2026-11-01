@@ -120,6 +120,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .go{border:0;background:var(--arrow);font-family:var(--display);font-size:20px;padding:14px;border-radius:14px;box-shadow:0 4px 0 var(--arrow-deep);transition:transform .1s}
 .go:active{transform:translateY(2px);box-shadow:0 2px 0 var(--arrow-deep)}
 .go.alt{background:#fff;border:1.5px solid var(--line);box-shadow:none;font-size:17px}
+.langs{display:flex;gap:6px;flex-wrap:wrap}
+.langs .chip{padding:5px 12px;font-size:13px}
 .fine{font-size:12px;color:var(--ink-soft);line-height:1.5;margin:0}
 
 /* ---------- Modals ---------- */
@@ -183,24 +185,24 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
 
 
 <div id="app">
-  <canvas id="c" tabindex="0" aria-label="카미노 온 3D 순례길"></canvas>
+  <canvas id="c" tabindex="0" data-i18n-aria="canvasAria" aria-label="카미노 온 3D 순례길"></canvas>
   <div id="wx" aria-hidden="true"></div>
 
   <div class="hud" id="tl" hidden>
-    <div id="brand" class="pill"><i class="mk"></i><div><b>Camino On</b><small>프랑스 길 · 1구간</small></div></div>
-    <button id="me" class="pill" aria-expanded="false" aria-controls="people"><img id="pFlag" alt=""><b id="pName">순례자</b><span class="met"><span id="pMet">0</span>명 만남</span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+    <div id="brand" class="pill"><i class="mk"></i><div><b>Camino On</b><small data-i18n="stage">프랑스 길 · 1구간</small></div></div>
+    <button id="me" class="pill" aria-expanded="false" aria-controls="people"><img id="pFlag" alt=""><b id="pName">순례자</b><span class="met"><span id="pMet">0</span><span data-i18n="met">명 만남</span></span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
     <div id="people" class="pill" hidden>
-      <div class="ph">길에서 인사한 순례자</div>
+      <div class="ph" data-i18n="peopleH">길에서 인사한 순례자</div>
       <ul id="peopleList"></ul>
       <p class="fine" id="peopleMore"></p>
     </div>
   </div>
 
-  <div class="hud pill" id="tr" hidden aria-label="진행 상황">
+  <div class="hud pill" id="tr" hidden data-i18n-aria="progressAria" aria-label="진행 상황">
     <div class="st"><b id="pKm">0.0</b><span>/ 7.8 km</span></div>
     <div class="bar"><i id="pBar"></i></div>
-    <div class="st2"><span>해발 <b id="pAlt">170</b>m</span><span>남은 <b id="pLeft">7.8</b>km</span></div>
-    <div class="st3"><span>물병</span><span class="drops" id="pWater"></span></div>
+    <div class="st2"><span><span data-i18n="alt">해발</span> <b id="pAlt">170</b>m</span><span><span data-i18n="left">남은</span> <b id="pLeft">7.8</b>km</span></div>
+    <div class="st3"><span data-i18n="water">물병</span><span class="drops" id="pWater"></span></div>
   </div>
 
   <div class="hud pill" id="dinner" hidden>
@@ -217,72 +219,74 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
   <div class="hud" id="joy" hidden><i></i></div>
   <div class="bubble" id="bubble" hidden><b></b><small></small></div>
 
-  <nav class="hud" id="bottom" hidden aria-label="메뉴">
-    <button id="bPass"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="11" r="3.2"/><path d="M8.5 17h7"/></svg>여권</button>
-    <button id="bRest" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 18h16M6 18v-5h12v5M8 13V9a4 4 0 0 1 8 0v4"/></svg>쉬어가기</button>
-    <button id="bStone"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="18" rx="7" ry="2.6"/><ellipse cx="12" cy="13" rx="5" ry="2.2"/><ellipse cx="12" cy="8.6" rx="3.2" ry="1.8"/></svg>조약돌</button>
-    <button id="bWx" aria-label="날씨 바꾸기"><svg viewBox="0 0 24 24"><path d="M7 17h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 10.2 3.5 3.5 0 0 0 7 17z"/></svg><span id="wxLabel">맑음</span></button>
-    <button id="bSound" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="M4 10v4h4l5 4V6L8 10H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg>소리</button>
+  <nav class="hud" id="bottom" hidden data-i18n-aria="menu" aria-label="메뉴">
+    <button id="bPass"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="11" r="3.2"/><path d="M8.5 17h7"/></svg><span data-i18n="bPass">여권</span></button>
+    <button id="bRest" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 18h16M6 18v-5h12v5M8 13V9a4 4 0 0 1 8 0v4"/></svg><span data-i18n="bRest">쉬어가기</span></button>
+    <button id="bStone"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="18" rx="7" ry="2.6"/><ellipse cx="12" cy="13" rx="5" ry="2.2"/><ellipse cx="12" cy="8.6" rx="3.2" ry="1.8"/></svg><span data-i18n="bStone">조약돌</span></button>
+    <button id="bWx" data-i18n-aria="bWxAria" aria-label="날씨 바꾸기"><svg viewBox="0 0 24 24"><path d="M7 17h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 10.2 3.5 3.5 0 0 0 7 17z"/></svg><span id="wxLabel">맑음</span></button>
+    <button id="bSound" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="M4 10v4h4l5 4V6L8 10H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg><span data-i18n="bSound">소리</span></button>
   </nav>
 
   <!-- Start -->
   <section id="start">
     <div class="sheet">
       <h1><i></i>Camino On</h1>
-      <p class="tag">언제든, 마음으로 걷는 산티아고 순례길.<br>생장피에드포르에서 첫 걸음을 떼어 볼까요?</p>
+      <div class="langs" role="group" aria-label="Language"><button class="chip" data-lang="ko">한국어</button><button class="chip" data-lang="en">English</button></div>
+      <p class="tag" data-i18n-html="tagline">언제든, 마음으로 걷는 산티아고 순례길.<br>생장피에드포르에서 첫 걸음을 떼어 볼까요?</p>
       <div class="field">
-        <label for="nm">순례자 이름</label>
+        <label for="nm" data-i18n="nameLabel">순례자 이름</label>
         <input type="text" id="nm" maxlength="12" value="순례자" autocomplete="off">
       </div>
       <div class="field">
-        <span class="lab">어디에서 왔나요?</span>
+        <span class="lab" data-i18n="from">어디에서 왔나요?</span>
         <div class="flags" id="flagGrid"></div>
       </div>
       <div class="field">
-        <span class="lab">배낭 색</span>
+        <span class="lab" data-i18n="pack">배낭 색</span>
         <div class="row" id="packRow"></div>
       </div>
       <div class="field">
-        <span class="lab">차림</span>
+        <span class="lab" data-i18n="outfit">차림</span>
         <div class="row">
-          <button class="chip" id="hatBtn" aria-pressed="true">밀짚모자</button>
-          <button class="chip" id="flagShowBtn" aria-pressed="true">배낭에 국기 달기</button>
+          <button class="chip" id="hatBtn" aria-pressed="true" data-i18n="hat">밀짚모자</button>
+          <button class="chip" id="flagShowBtn" aria-pressed="true" data-i18n="flagShow">배낭에 국기 달기</button>
         </div>
       </div>
       <button class="go" id="goBtn">생장피에드포르에서 출발하기</button>
       <button class="go alt" id="resumeBtn" hidden>이어 걷기</button>
-      <p class="fine">프로토타입이에요. 걸은 기록은 이 브라우저에만 저장되고, 함께 걷는 순례자들은 아직 예시 캐릭터예요.</p>
+      <p class="fine" data-i18n="startFine">프로토타입이에요. 걸은 기록은 이 브라우저에만 저장되고, 함께 걷는 순례자들은 아직 예시 캐릭터예요.</p>
     </div>
   </section>
 
   <!-- Passport -->
   <div class="modal" id="mPass" hidden>
     <div class="card" role="dialog" aria-labelledby="passT">
-      <button class="x" data-close aria-label="닫기">×</button>
-      <h2 id="passT">순례 여권 · Credencial</h2>
+      <button class="x" data-close data-i18n-aria="close" aria-label="닫기">×</button>
+      <h2 id="passT" data-i18n="passT">순례 여권 · Credencial</h2>
+      <div class="langs" role="group" aria-label="Language"><button class="chip" data-lang="ko">한국어</button><button class="chip" data-lang="en">English</button></div>
       <div class="pstats">
-        <span><b id="psKm">0.0 km</b>걸은 거리</span>
-        <span><b id="psMet">0명</b>인사한 순례자</span>
-        <span><b id="psStone">0개</b>남긴 조약돌</span>
-        <span><b id="psWater">0번</b>나눈 물</span>
+        <span><b id="psKm">0.0 km</b><span data-i18n="psKmL">걸은 거리</span></span>
+        <span><b id="psMet">0명</b><span data-i18n="psMetL">인사한 순례자</span></span>
+        <span><b id="psStone">0개</b><span data-i18n="psStoneL">남긴 조약돌</span></span>
+        <span><b id="psWater">0번</b><span data-i18n="psWaterL">나눈 물</span></span>
       </div>
       <div class="stamps" id="stampGrid"></div>
-      <p class="fine">흐린 도장은 앞으로 이어질 프랑스 길의 마을들이에요.</p>
-      <button class="link" id="resetBtn">처음부터 다시 걷기</button>
+      <p class="fine" data-i18n="passNote">흐린 도장은 앞으로 이어질 프랑스 길의 마을들이에요.</p>
+      <button class="link" id="resetBtn" data-i18n="reset">처음부터 다시 걷기</button>
     </div>
   </div>
 
   <!-- Read note -->
   <div class="modal" id="mNote" hidden>
     <div class="card" role="dialog" aria-labelledby="noteT">
-      <button class="x" data-close aria-label="닫기">×</button>
-      <h2 id="noteT">길가의 조약돌</h2>
+      <button class="x" data-close data-i18n-aria="close" aria-label="닫기">×</button>
+      <h2 id="noteT" data-i18n="noteT">길가의 조약돌</h2>
       <div class="note-text" id="noteText"></div>
       <div class="note-meta"><img id="noteFlag" alt=""><span id="noteWho"></span><span class="badge" id="noteBadge">예시 메모</span></div>
       <p class="fine" id="noteKo"></p>
       <div class="acts">
-        <button id="likeBtn" aria-pressed="false">공감해요</button>
-        <button id="teaBtn" aria-pressed="false">차 한 잔 건네기</button>
+        <button id="likeBtn" aria-pressed="false" data-i18n="like">공감해요</button>
+        <button id="teaBtn" aria-pressed="false" data-i18n="tea">차 한 잔 건네기</button>
       </div>
     </div>
   </div>
@@ -290,25 +294,25 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
   <!-- Leave note -->
   <div class="modal" id="mLeave" hidden>
     <div class="card" role="dialog" aria-labelledby="leaveT">
-      <button class="x" data-close aria-label="닫기">×</button>
-      <h2 id="leaveT">조약돌 남기기</h2>
-      <p>순례자들은 길가에 돌을 하나씩 얹으며 마음을 내려놓아요. 뒤에 올 누군가에게, 혹은 오늘의 나에게 한 줄 남겨 보세요.</p>
-      <textarea id="leaveText" maxlength="80" placeholder="예) 오르막이 길었지만, 생각보다 잘 걷고 있어요."></textarea>
-      <button class="go" id="leaveGo">여기에 돌 얹기</button>
-      <p class="fine">지금은 이 브라우저에만 남아요. 다른 순례자와 나누는 기능은 다음 단계에서 열 거예요.</p>
+      <button class="x" data-close data-i18n-aria="close" aria-label="닫기">×</button>
+      <h2 id="leaveT" data-i18n="leaveT">조약돌 남기기</h2>
+      <p data-i18n="leaveP">순례자들은 길가에 돌을 하나씩 얹으며 마음을 내려놓아요. 뒤에 올 누군가에게, 혹은 오늘의 나에게 한 줄 남겨 보세요.</p>
+      <textarea id="leaveText" maxlength="80" data-i18n-ph="leavePh" placeholder="예) 오르막이 길었지만, 생각보다 잘 걷고 있어요."></textarea>
+      <button class="go" id="leaveGo" data-i18n="leaveGo">여기에 돌 얹기</button>
+      <p class="fine" data-i18n="leaveFine">지금은 이 브라우저에만 남아요. 다른 순례자와 나누는 기능은 다음 단계에서 열 거예요.</p>
     </div>
   </div>
 
   <!-- Arrival -->
   <div class="modal" id="mArrive" hidden>
     <div class="card" role="dialog" aria-labelledby="arrT">
-      <button class="x" data-close aria-label="닫기">×</button>
-      <h2 id="arrT">오리손 알베르게에 도착했어요</h2>
+      <button class="x" data-close data-i18n-aria="close" aria-label="닫기">×</button>
+      <h2 id="arrT" data-i18n="arrT">오리손 알베르게에 도착했어요</h2>
       <div class="arrive-km">7.8 km</div>
-      <p>피레네의 첫 오르막을 넘어 여기까지 왔어요.<br>누군가에게는 짧은 거리일 수 있지만, 오늘의 당신에게는 분명 쉽지 않은 길이었을 거예요.</p>
-      <p><b>오늘도 잘 걸어왔어요.</b></p>
+      <p data-i18n-html="arrP">피레네의 첫 오르막을 넘어 여기까지 왔어요.<br>누군가에게는 짧은 거리일 수 있지만, 오늘의 당신에게는 분명 쉽지 않은 길이었을 거예요.</p>
+      <p><b data-i18n="arrB">오늘도 잘 걸어왔어요.</b></p>
       <div class="stamp" style="width:130px" id="arrStamp"></div>
-      <button class="go" id="dinnerGo">알베르게 저녁 식탁에 앉기</button>
+      <button class="go" id="dinnerGo" data-i18n="dinnerGo">알베르게 저녁 식탁에 앉기</button>
     </div>
   </div>
 </div>
@@ -338,9 +342,76 @@ const S = Object.assign({
   progress:0, x:0, z:74, met:[], stamps:{}, notes:[], liked:{}, started:false, water:1, gave:[], shared:0, journal:[]
 }, saved || {});
 
+
+/* ================= i18n ================= */
+const I = {
+ko:{
+  title:'카미노 온 · Camino On', canvasAria:'카미노 온 3D 순례길', stage:'프랑스 길 · 1구간', met:'명 만남', peopleH:'길에서 인사한 순례자',
+  peopleNone:'아직 인사한 순례자가 없어요. 길 위의 사람에게 다가가 인사해 보세요.', peopleLeft:'이 구간에 {n}명이 더 걷거나 쉬고 있어요.', peopleAll:'이 구간의 순례자 모두와 인사했어요.',
+  progressAria:'진행 상황', alt:'해발', left:'남은', water:'물병', menu:'메뉴', bPass:'여권', bRest:'쉬어가기', bStone:'조약돌', bWxAria:'날씨 바꾸기', bSound:'소리',
+  tagline:'언제든, 마음으로 걷는 산티아고 순례길.<br>생장피에드포르에서 첫 걸음을 떼어 볼까요?', nameLabel:'순례자 이름', defaultName:'순례자', from:'어디에서 왔나요?', pack:'배낭 색', packAria:'배낭 색', outfit:'차림', hat:'밀짚모자', flagShow:'배낭에 국기 달기',
+  go:'생장피에드포르에서 출발하기', goAgain:'처음부터 다시 출발하기', resume:'이어 걷기 · {km}km 지점',
+  startFine:'프로토타입이에요. 걸은 기록은 이 브라우저에만 저장되고, 함께 걷는 순례자들은 아직 예시 캐릭터예요.',
+  close:'닫기', passT:'순례 여권 · Credencial', psKmL:'걸은 거리', psMetL:'인사한 순례자', psStoneL:'남긴 조약돌', psWaterL:'나눈 물', cntPeople:'{n}명', cntStones:'{n}개', cntTimes:'{n}번',
+  passNote:'흐린 도장은 앞으로 이어질 프랑스 길의 마을들이에요.', reset:'처음부터 다시 걷기', resetConfirm:'정말 처음부터 걸을까요? 한 번 더 누르면 기록이 지워져요.',
+  stampAria:'{n} 도장', notYet:' (아직)',
+  noteT:'길가의 조약돌', noteSample:'예시 메모', noteMine:'내가 남긴 돌 · {d}', like:'공감해요', tea:'차 한 잔 건네기',
+  leaveT:'조약돌 남기기', leaveP:'순례자들은 길가에 돌을 하나씩 얹으며 마음을 내려놓아요. 뒤에 올 누군가에게, 혹은 오늘의 나에게 한 줄 남겨 보세요.', leavePh:'예) 오르막이 길었지만, 생각보다 잘 걷고 있어요.', leaveGo:'여기에 돌 얹기',
+  leaveFine:'지금은 이 브라우저에만 남아요. 다른 순례자와 나누는 기능은 다음 단계에서 열 거예요.', leaveDone:'길가에 돌 하나를 얹었어요.',
+  arrT:'오리손 알베르게에 도착했어요', arrP:'피레네의 첫 오르막을 넘어 여기까지 왔어요.<br>누군가에게는 짧은 거리일 수 있지만, 오늘의 당신에게는 분명 쉽지 않은 길이었을 거예요.', arrB:'오늘도 잘 걸어왔어요.', dinnerGo:'알베르게 저녁 식탁에 앉기',
+  promptGreet:'{n}에게 인사하기', promptWater:'{n}에게 물 건네기', promptFill:'샘터에서 물병 채우기', promptFull:'물병이 가득해요', promptDinner:'알베르게 저녁 식탁에 앉기', promptNote:'조약돌 메모 읽기',
+  hintKey:'WASD·방향키로 걷기 · Shift 달리기 · 드래그로 둘러보기 · E 인사', hintTouch:'왼쪽 조이스틱으로 걷기 · 화면을 끌어 둘러보기',
+  wx_clear:'맑음', wx_fog:'안개', wx_rain:'비', wx_snow:'눈',
+  wxm_clear:'구름이 걷히고 햇살이 돌아왔어요.', wxm_fog:'피레네의 안개가 순식간에 몰려왔어요. 노란 화살표를 놓치지 마세요.', wxm_rain:'비가 쏟아져요. 배낭에서 판초를 꺼내 입었어요.',
+  wxm_snow:'눈이 내려요. 겨울(11월~3월)에는 이 산길 대신 아랫마을 발카를로스로 돌아가는 길을 걸어요.',
+  ep_fountain:'출발 전 마을 샘터에서 물병을 가득 채워 가세요. 오리손까지는 물을 구할 곳이 거의 없어요.', ep_thirsty:'언덕 중턱에서 물이 떨어진 순례자를 만날지도 몰라요. 머리 위에 물방울이 보이면 다가가 보세요.',
+  ep_climb:'오르막이 시작됐어요. 프랑스 길에서 가장 가파른 구간이에요. 숨이 차면 천천히 걸어도 괜찮아요.', ep_blister:'젖은 신발 속 발뒤꿈치가 따끔해요. 물집이 커지기 전에 잠깐 앉아 양말을 갈아 신어요.',
+  ep_clear:'비가 그치자 구름 사이로 피레네 능선이 모습을 드러냈어요.', ep_wave:'오리손 테라스에서 먼저 온 순례자들이 손을 흔들어요. 거의 다 왔어요.',
+  welcome:'생장피에드포르 도장을 받았어요. 이제 피레네로 걸어가 볼까요?', bottleFull:'물병이 이미 가득해요.', bottleFilled:'물병을 가득 채웠어요. 오르막에서 목마른 순례자를 만나면 나눠 주세요.',
+  waterFirst:'물을 나눴어요. 길 위의 작은 친절이 누군가의 하루를 버티게 해요. ‘물 한 모금’ 도장을 받았어요.', waterAgain:'{n}에게 물을 나눴어요.',
+  meetFirst:'{c}에서 온 {n}와 첫 인사를 나눴어요. ‘첫 인사’ 도장을 받았어요.', meetAgain:'{c}에서 온 {n}와 인사했어요.',
+  dinnerCap:'그날 저녁, 오리손 알베르게', dinnerSub:'창밖으로 피레네에 해가 넘어가요', ansPh:'직접 말하기', say:'말하기', sleep:'잠자리에 들기', next:'다음',
+  supperStamp:'‘순례자의 저녁’ 도장을 받았어요. 오늘 나눈 이야기는 여권에 남겨 둘게요.', journalQ:'왜 이 길에 왔나요?',
+  dawnCap:'다음 날 새벽 6시', dawnSub:'알베르게에 하나둘 불이 켜져요', dawn1:'순례자들은 해가 뜨기 전, 헤드랜턴을 켜고 조용히 길을 나서요.', dawn2:'다음 구간 오리손 → 론세스바예스(약 17km)는 곧 열려요. ‘새벽 출발’ 도장을 받았어요.'
+},
+en:{
+  title:'Camino On · Walk the Camino Online', canvasAria:'Camino On 3D pilgrim path', stage:'Camino Francés · Stage 1', met:' met', peopleH:'Pilgrims you greeted',
+  peopleNone:'You haven’t greeted anyone yet. Walk up to a pilgrim and say hello.', peopleLeft:'{n} more pilgrims are walking or resting on this stage.', peopleAll:'You’ve greeted every pilgrim on this stage.',
+  progressAria:'Progress', alt:'Alt', left:'Left', water:'Water', menu:'Menu', bPass:'Passport', bRest:'Rest', bStone:'Stone', bWxAria:'Change weather', bSound:'Sound',
+  tagline:'The Camino de Santiago, whenever your heart needs it.<br>Ready to take your first step in Saint-Jean-Pied-de-Port?', nameLabel:'Pilgrim name', defaultName:'Pilgrim', from:'Where are you from?', pack:'Backpack', packAria:'Backpack color', outfit:'Outfit', hat:'Straw hat', flagShow:'Flag on backpack',
+  go:'Set off from Saint-Jean', goAgain:'Start over from Saint-Jean', resume:'Keep walking · from {km} km',
+  startFine:'This is a prototype. Your journey is saved only in this browser, and the pilgrims you meet are sample characters for now.',
+  close:'Close', passT:'Pilgrim Passport · Credencial', psKmL:'Walked', psMetL:'Pilgrims greeted', psStoneL:'Stones left', psWaterL:'Water shared', cntPeople:'{n}', cntStones:'{n}', cntTimes:'{n}×',
+  passNote:'Faded stamps are the towns still ahead on the Camino Francés.', reset:'Start the walk over', resetConfirm:'Start over? Tap once more to erase your journey.',
+  stampAria:'{n} stamp', notYet:' (not yet)',
+  noteT:'A stone by the path', noteSample:'Sample note', noteMine:'Your stone · {d}', like:'Me too', tea:'Offer a cup of tea',
+  leaveT:'Leave a stone', leaveP:'Pilgrims add a stone to the cairns along the way and leave a little weight behind. Write a line for someone walking after you, or for yourself today.', leavePh:'e.g. The climb was long, but I’m doing better than I thought.', leaveGo:'Place my stone here',
+  leaveFine:'For now it stays in this browser. Sharing stones with other pilgrims comes in a later update.', leaveDone:'You placed a stone by the path.',
+  arrT:'You made it to Orisson', arrP:'You crossed the first climb of the Pyrenees.<br>It may be a short distance to some, but today it was surely not an easy road for you.', arrB:'You walked well today.', dinnerGo:'Join supper at the albergue',
+  promptGreet:'Say hello to {n}', promptWater:'Share water with {n}', promptFill:'Fill your bottle', promptFull:'Your bottle is full', promptDinner:'Join supper at the albergue', promptNote:'Read the stone note',
+  hintKey:'WASD or arrows to walk · Shift to run · Drag to look around · E to interact', hintTouch:'Walk with the joystick · Drag to look around',
+  wx_clear:'Clear', wx_fog:'Fog', wx_rain:'Rain', wx_snow:'Snow',
+  wxm_clear:'The clouds part and the sunshine is back.', wxm_fog:'Pyrenean fog rolls in fast. Keep an eye out for the yellow arrows.', wxm_rain:'Rain is pouring down. You pull the poncho out of your pack.',
+  wxm_snow:'Snow is falling. In winter (Nov–Mar) pilgrims skip this mountain path and take the lower road through Valcarlos.',
+  ep_fountain:'Fill your bottle at the village fountain before you go. There’s almost nowhere to get water before Orisson.', ep_thirsty:'You may meet pilgrims who ran out of water on the slope. If you see a water drop above someone, go over.',
+  ep_climb:'The climb begins: the steepest part of the whole Camino Francés. It’s fine to slow down when you’re out of breath.', ep_blister:'Your heel stings inside your wet shoes. Sit for a moment and change your socks before a blister forms.',
+  ep_clear:'The rain stops and the Pyrenean ridges appear through the clouds.', ep_wave:'Pilgrims on the Orisson terrace are waving at you. Almost there.',
+  welcome:'You got your Saint-Jean stamp. Shall we head for the Pyrenees?', bottleFull:'Your bottle is already full.', bottleFilled:'Bottle filled. Share it if you meet a thirsty pilgrim on the climb.',
+  waterFirst:'You shared your water. Small kindnesses on the road keep someone going. You got the “Shared Water” stamp.', waterAgain:'You shared water with {n}.',
+  meetFirst:'You said your first hello to {n} from {c}. You got the “First Hello” stamp.', meetAgain:'You said hello to {n} from {c}.',
+  dinnerCap:'That evening, at the Orisson albergue', dinnerSub:'The sun sets over the Pyrenees outside the window', ansPh:'Say it in your own words', say:'Say', sleep:'Go to bed', next:'Next',
+  supperStamp:'You got the “Pilgrim’s Supper” stamp. What you shared tonight is kept in your passport.', journalQ:'Why are you on the Camino?',
+  dawnCap:'6 a.m. the next morning', dawnSub:'Lights come on one by one in the albergue', dawn1:'Before sunrise, pilgrims switch on their headlamps and quietly set off.', dawn2:'The next stage, Orisson → Roncesvalles (about 17 km), opens soon. You got the “Dawn Departure” stamp.'
+}};
+if(S.lang!=='ko' && S.lang!=='en') S.lang = /^ko/i.test(navigator.language||'') ? 'ko' : 'en';
+function tx(k, v){ let s=(I[S.lang]&&I[S.lang][k]); if(s===undefined) s=I.ko[k]||k; if(v) for(const x in v) s=s.split('{'+x+'}').join(v[x]); return s; }
+const L = o => o ? (S.lang==='ko' ? (o.ko||'') : (o.en||'')) : '';
+
 /* ================= Flags ================= */
 const COUNTRIES = [['KR','대한민국'],['JP','일본'],['CN','중국'],['VN','베트남'],['PH','필리핀'],['US','미국'],['CA','캐나다'],['MX','멕시코'],['BR','브라질'],['ES','스페인'],['FR','프랑스'],['PT','포르투갈'],['IT','이탈리아'],['DE','독일'],['GB','영국'],['IE','아일랜드'],['NL','네덜란드'],['PL','폴란드'],['NONE','선택 안 함']];
-const CNAME = Object.fromEntries(COUNTRIES);
+const CNAME_EN = {KR:'Korea',JP:'Japan',CN:'China',VN:'Vietnam',PH:'Philippines',US:'USA',CA:'Canada',MX:'Mexico',BR:'Brazil',ES:'Spain',FR:'France',PT:'Portugal',IT:'Italy',DE:'Germany',GB:'UK',IE:'Ireland',NL:'Netherlands',PL:'Poland',NONE:'Prefer not to say'};
+const CNAME_KO = Object.fromEntries(COUNTRIES);
+const cname = c => (S.lang==='ko'?CNAME_KO:CNAME_EN)[c]||'';
 
 function star(x,cx,cy,r,col,rot){ rot = rot===undefined?-Math.PI/2:rot; x.fillStyle=col; x.beginPath(); for(let i=0;i<10;i++){ const q=i%2?r*0.4:r, a=rot+i*Math.PI/5; x.lineTo(cx+Math.cos(a)*q, cy+Math.sin(a)*q);} x.closePath(); x.fill(); }
 function shell(x,cx,cy,r,col){
@@ -689,7 +760,7 @@ function addBench(x,z,ry){
   const roof=new THREE.Mesh(rg,M.roofA); roof.position.y=7.5+1.35; g.add(roof);
   for(let k=-2;k<=2;k++){ if(k===0) continue; const w=new THREE.Mesh(new THREE.BoxGeometry(0.9,1.1,0.08), M.glass); w.position.set(k*2.3,5,3.52); g.add(w); const s=new THREE.Mesh(new THREE.BoxGeometry(1.5,1.2,0.06), M.shutG); s.position.set(k*2.3,5,3.5); g.add(s); }
   const door=new THREE.Mesh(new THREE.BoxGeometry(1.6,2.4,0.1), M.wood); door.position.set(0,2.7,3.53); g.add(door);
-  const signT=texFromCanvas(512,160,(c,w,h)=>{ c.fillStyle='#6b4630'; roundRect(c,0,0,w,h,18); c.fill(); c.fillStyle='#f2c230'; c.font='bold 64px Georgia, serif'; c.textAlign='center'; c.fillText('ORISSON',w/2,78); c.fillStyle='#fff7ea'; c.font='bold 40px "Apple SD Gothic Neo","Malgun Gothic",sans-serif'; c.fillText('오리손 알베르게',w/2,132); });
+  const signT=texFromCanvas(512,160,(c,w,h)=>{ c.fillStyle='#6b4630'; roundRect(c,0,0,w,h,18); c.fill(); c.fillStyle='#f2c230'; c.font='bold 64px Georgia, serif'; c.textAlign='center'; c.fillText('ORISSON',w/2,78); c.fillStyle='#fff7ea'; c.font='bold 40px "Apple SD Gothic Neo","Malgun Gothic",sans-serif'; c.fillText('Refuge · Albergue',w/2,132); });
   const sign=new THREE.Mesh(new THREE.PlaneGeometry(3.6,1.12), new THREE.MeshLambertMaterial({map:signT})); sign.position.set(0,4.4,3.56); g.add(sign);
   const awn=new THREE.Mesh(new THREE.BoxGeometry(12.5,0.15,3), lam(0xd9c7a2)); awn.position.set(0,3.1,5); awn.rotation.x=0.12; g.add(awn);
   g.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});
@@ -811,17 +882,17 @@ rebuildPlayer();
 
 /* ================= NPCs ================= */
 const NPC_DEF = [
-  {name:'Lucía',  c:'ES', say:'¡Buen Camino!',               ko:'좋은 순례길 되세요!',            u:0.05, sp:1.45, shirt:0xd96c4f, pack:0x3d6e8f, hair:0x2b1a10, skin:1},
-  {name:'Pierre', c:'FR', say:'Bon chemin !',                ko:'좋은 길 되세요!',                u:0.11, sp:1.9,  shirt:0x5b7fa6, pack:0x7a5a3a, hair:0x8a6a48, hat:true, skin:0},
-  {name:'Yuki',   c:'JP', say:'ブエン・カミーノ！',          ko:'부엔 카미노!',                    u:0.19, sp:1.25, shirt:0xf2d0d6, pack:0x5d7a4b, hair:0x1d1410, skin:0},
-  {name:'Hans',   c:'DE', say:'Langsam, langsam.',           ko:'천천히, 천천히요.',              u:0.27, sp:1.6,  shirt:0x6e8a5a, pack:0xc29b3a, hair:0xc9a86a, hat:true, skin:0},
-  {name:'Ana',    c:'BR', say:'Bom Caminho!',                ko:'좋은 순례길!',                    u:0.36, sp:1.35, shirt:0xf4c34d, pack:0x2f5d8a, hair:0x3a2416, skin:2},
-  {name:'Emma',   c:'US', say:'Buen Camino! You got this.',  ko:'할 수 있어요!',                  u:0.55, sp:1.75, shirt:0x9a6fb0, pack:0x444b55, hair:0xb7793d, skin:0},
-  {name:'Marco',  c:'IT', say:'Buon Cammino!',               ko:'좋은 길 되세요!',                u:0.64, sp:1.55, shirt:0xe8e3d5, pack:0xa33a2e, hair:0x2b1a10, hat:true, skin:1},
-  {name:'Minh',   c:'VN', say:'Buen Camino!',                ko:'좋은 순례길 되세요!',            u:0.76, sp:1.2,  shirt:0x4f9a8e, pack:0xd8a13a, hair:0x15100c, skin:1},
-  {name:'Siobhán',c:'IE', say:'Mind the hill, it gets steep!',ko:'언덕 조심해요, 점점 가팔라져요!', u:0.86, sp:1.4,  shirt:0x6a9a4e, pack:0x8a3a5a, hair:0xa8452a, skin:0},
-  {name:'Grace',  c:'PH', say:'Rest a little. The mountain will wait.', ko:'잠깐 쉬어가요. 산은 기다려 줄 거예요.', u:0.47, sit:'bench', shirt:0xf09a7a, pack:0x2f6f8a, hair:0x1a120c, skin:1},
-  {name:'Jean',   c:'FR', say:'Bienvenue à Orisson !',       ko:'오리손에 온 걸 환영해요!',        u:0.995, sit:'albergue', shirt:0xf2e6cf, pack:0x6b4630, hair:0x9a9a9a, hat:true, skin:0}
+  {name:'Lucía',  c:'ES', say:'¡Buen Camino!',               ko:'좋은 순례길 되세요!', en:'Have a good Camino!',            u:0.05, sp:1.45, shirt:0xd96c4f, pack:0x3d6e8f, hair:0x2b1a10, skin:1},
+  {name:'Pierre', c:'FR', say:'Bon chemin !',                ko:'좋은 길 되세요!', en:'Have a good way!',                u:0.11, sp:1.9,  shirt:0x5b7fa6, pack:0x7a5a3a, hair:0x8a6a48, hat:true, skin:0},
+  {name:'Yuki',   c:'JP', say:'ブエン・カミーノ！',          ko:'부엔 카미노!', en:'Buen Camino!',                    u:0.19, sp:1.25, shirt:0xf2d0d6, pack:0x5d7a4b, hair:0x1d1410, skin:0},
+  {name:'Hans',   c:'DE', say:'Langsam, langsam.',           ko:'천천히, 천천히요.', en:'Slowly, slowly.',              u:0.27, sp:1.6,  shirt:0x6e8a5a, pack:0xc29b3a, hair:0xc9a86a, hat:true, skin:0},
+  {name:'Ana',    c:'BR', say:'Bom Caminho!',                ko:'좋은 순례길!', en:'Have a good Camino!',                    u:0.36, sp:1.35, shirt:0xf4c34d, pack:0x2f5d8a, hair:0x3a2416, skin:2},
+  {name:'Emma',   c:'US', say:'Buen Camino! You got this.',  ko:'할 수 있어요!', en:'',                  u:0.55, sp:1.75, shirt:0x9a6fb0, pack:0x444b55, hair:0xb7793d, skin:0},
+  {name:'Marco',  c:'IT', say:'Buon Cammino!',               ko:'좋은 길 되세요!', en:'Have a good Camino!',                u:0.64, sp:1.55, shirt:0xe8e3d5, pack:0xa33a2e, hair:0x2b1a10, hat:true, skin:1},
+  {name:'Minh',   c:'VN', say:'Buen Camino!',                ko:'좋은 순례길 되세요!', en:'Have a good Camino!',            u:0.76, sp:1.2,  shirt:0x4f9a8e, pack:0xd8a13a, hair:0x15100c, skin:1},
+  {name:'Siobhán',c:'IE', say:'Mind the hill, it gets steep!',ko:'언덕 조심해요, 점점 가팔라져요!', en:'', u:0.86, sp:1.4,  shirt:0x6a9a4e, pack:0x8a3a5a, hair:0xa8452a, skin:0},
+  {name:'Grace',  c:'PH', say:'Rest a little. The mountain will wait.', ko:'잠깐 쉬어가요. 산은 기다려 줄 거예요.', en:'', u:0.47, sit:'bench', shirt:0xf09a7a, pack:0x2f6f8a, hair:0x1a120c, skin:1},
+  {name:'Jean',   c:'FR', say:'Bienvenue à Orisson !',       ko:'오리손에 온 걸 환영해요!', en:'Welcome to Orisson!',        u:0.995, sit:'albergue', shirt:0xf2e6cf, pack:0x6b4630, hair:0x9a9a9a, hat:true, skin:0}
 ];
 const DROP_MAT = new THREE.SpriteMaterial({map:texFromCanvas(64,80,(x,w,h)=>{ x.fillStyle='#fff7ea'; x.beginPath(); x.arc(32,48,26,0,TAU); x.fill(); x.beginPath(); x.moveTo(32,4); x.lineTo(54,40); x.lineTo(10,40); x.fill(); x.fillStyle='#2f7fbf'; x.beginPath(); x.arc(32,50,18,0,TAU); x.fill(); x.beginPath(); x.moveTo(32,16); x.lineTo(48,44); x.lineTo(16,44); x.fill(); }), transparent:true, depthWrite:false});
 function labelSprite(name, code){
@@ -917,9 +988,9 @@ function updateSheep(dt,t){
 
 /* ================= Cairns / notes ================= */
 const SEED_NOTES = [
-  {u:0.17, text:'처음엔 도망치듯 왔어요. 그래도 첫 언덕은 넘었네요.', who:'지은', c:'KR'},
-  {u:0.43, text:'Slow is fine. Slow is still forward.', ko:'느려도 괜찮아요. 느려도 앞으로 가는 거예요.', who:'Noah', c:'CA'},
-  {u:0.71, text:'Si te cansas, descansa. No renuncies.', ko:'지치면 쉬어요. 포기하지는 말고요.', who:'Sofía', c:'MX'}
+  {u:0.17, text:'처음엔 도망치듯 왔어요. 그래도 첫 언덕은 넘었네요.', en:'I came here almost running away. Still, I made it over the first hill.', who:'지은', c:'KR'},
+  {u:0.43, text:'Slow is fine. Slow is still forward.', ko:'느려도 괜찮아요. 느려도 앞으로 가는 거예요.', en:'', who:'Noah', c:'CA'},
+  {u:0.71, text:'Si te cansas, descansa. No renuncies.', ko:'지치면 쉬어요. 포기하지는 말고요.', en:'If you get tired, rest. Just don’t give up.', who:'Sofía', c:'MX'}
 ];
 const cairns=[];
 const cairnMat=new THREE.MeshPhongMaterial({color:0xb9b1a2, shininess:0, specular:0x000000, flatShading:true}), cairnGeo=new THREE.DodecahedronGeometry(1,0);
@@ -954,31 +1025,26 @@ const snowGeo=new THREE.BufferGeometry(); snowGeo.setAttribute('position',new TH
 const snowMesh=new THREE.Points(snowGeo,new THREE.PointsMaterial({color:0xffffff,size:0.16,transparent:true,opacity:0,depthWrite:false}));
 snowMesh.frustumCulled=false; scene.add(snowMesh);
 function setWeather(type, msg){
-  if(!WX[type]) return; wxType=type; $('#wxLabel').textContent=WX[type].ko;
+  if(!WX[type]) return; wxType=type; $('#wxLabel').textContent=tx('wx_'+type);
   if(msg) toast(msg, 4600);
 }
-const WX_MSG = {
-  clear:'구름이 걷히고 햇살이 돌아왔어요.',
-  fog:'피레네의 안개가 순식간에 몰려왔어요. 노란 화살표를 놓치지 마세요.',
-  rain:'비가 쏟아져요. 배낭에서 판초를 꺼내 입었어요.',
-  snow:'눈이 내려요. 겨울(11월~3월)에는 이 산길 대신 아랫마을 발카를로스로 돌아가는 길을 걸어요.'
-};
-$('#bWx').onclick=()=>{ const n=WX_ORDER[(WX_ORDER.indexOf(wxType)+1)%WX_ORDER.length]; setWeather(n, WX_MSG[n]); };
+const WX_MSG = {clear:'wxm_clear', fog:'wxm_fog', rain:'wxm_rain', snow:'wxm_snow'};
+$('#bWx').onclick=()=>{ const n=WX_ORDER[(WX_ORDER.indexOf(wxType)+1)%WX_ORDER.length]; setWeather(n, tx(WX_MSG[n])); };
 const EPISODES = [
-  {u:0.02, msg:'출발 전 마을 샘터에서 물병을 가득 채워 가세요. 오리손까지는 물을 구할 곳이 거의 없어요.'},
-  {u:0.3, msg:'언덕 중턱에서 물이 떨어진 순례자를 만날지도 몰라요. 머리 위에 물방울이 보이면 다가가 보세요.'},
-  {u:0.22, msg:'오르막이 시작됐어요. 프랑스 길에서 가장 가파른 구간이에요. 숨이 차면 천천히 걸어도 괜찮아요.'},
+  {u:0.02, msg:'ep_fountain'},
+  {u:0.22, msg:'ep_climb'},
+  {u:0.3, msg:'ep_thirsty'},
   {u:0.34, wx:'fog'},
   {u:0.52, wx:'rain'},
-  {u:0.64, msg:'젖은 신발 속 발뒤꿈치가 따끔해요. 물집이 커지기 전에 잠깐 앉아 양말을 갈아 신어요.'},
-  {u:0.8,  wx:'clear', msg:'비가 그치자 구름 사이로 피레네 능선이 모습을 드러냈어요.'},
-  {u:0.93, msg:'오리손 테라스에서 먼저 온 순례자들이 손을 흔들어요. 거의 다 왔어요.'}
+  {u:0.64, msg:'ep_blister'},
+  {u:0.8,  wx:'clear', msg:'ep_clear'},
+  {u:0.93, msg:'ep_wave'}
 ];
 if(!S.ep) S.ep={};
 function checkEpisodes(){
   for(let i=0;i<EPISODES.length;i++){
     const e=EPISODES[i]; if(S.ep[i] || S.progress<e.u) continue;
-    S.ep[i]=1; if(e.wx) setWeather(e.wx, e.msg||WX_MSG[e.wx]); else toast(e.msg,4600);
+    S.ep[i]=1; if(e.wx) setWeather(e.wx, tx(e.msg||WX_MSG[e.wx])); else toast(tx(e.msg),4600);
     persist(); break;
   }
 }
@@ -1067,14 +1133,14 @@ const dinnerCam=new THREE.Vector3(TABLE.x-7.6, tableY+3.7, TABLE.z+1.4), dinnerL
 /* ================= Supper & dawn scenes ================= */
 let mode='walk', dSteps=[], dIdx=0;
 const DINNER_LINES=[
-  {n:'Jean',  t:'Bon appétit ! Ce soir, on mange tous ensemble.', ko:'맛있게 드세요! 오늘 저녁은 다 같이 먹어요.'},
-  {n:'Hans',  t:'Im Nebel habe ich jedem gelben Pfeil vertraut.', ko:'안개 속에선 노란 화살표 하나하나를 믿고 걸었어요.'},
-  {n:'Yuki',  t:'雨の中で、知らない人がポンチョを直してくれました。', ko:'빗속에서 모르는 분이 제 판초를 고쳐 줬어요.'},
-  {n:'Ana',   t:'No Brasil dizemos: devagar se vai ao longe.', ko:'브라질에선 "천천히 가야 멀리 간다"고 해요.'},
-  {n:'Emma',  t:'I came here to think. Mostly I just walked. Somehow that helped.', ko:'생각하러 왔는데 그냥 걷기만 했어요. 그런데 그게 도움이 됐어요.'},
-  {n:'Pierre',t:'Et toi ? Pourquoi es-tu sur le Chemin ?', ko:'당신은요? 왜 이 길에 왔어요?', ask:true}
+  {n:'Jean',  t:'Bon appétit ! Ce soir, on mange tous ensemble.', ko:'맛있게 드세요! 오늘 저녁은 다 같이 먹어요.', en:'Enjoy your meal! Tonight we all eat together.'},
+  {n:'Hans',  t:'Im Nebel habe ich jedem gelben Pfeil vertraut.', ko:'안개 속에선 노란 화살표 하나하나를 믿고 걸었어요.', en:'In the fog, I trusted every single yellow arrow.'},
+  {n:'Yuki',  t:'雨の中で、知らない人がポンチョを直してくれました。', ko:'빗속에서 모르는 분이 제 판초를 고쳐 줬어요.', en:'In the rain, a stranger fixed my poncho for me.'},
+  {n:'Ana',   t:'No Brasil dizemos: devagar se vai ao longe.', ko:'브라질에선 "천천히 가야 멀리 간다"고 해요.', en:'In Brazil we say: go slowly and you’ll go far.'},
+  {n:'Emma',  t:'I came here to think. Mostly I just walked. Somehow that helped.', ko:'생각하러 왔는데 그냥 걷기만 했어요. 그런데 그게 도움이 됐어요.', en:''},
+  {n:'Pierre',t:'Et toi ? Pourquoi es-tu sur le Chemin ?', ko:'당신은요? 왜 이 길에 왔어요?', en:'And you? Why are you on the Camino?', ask:true}
 ];
-const ANSWERS=['잠깐 멈추고 싶었어요.','새로운 시작이 필요했어요.','아직 잘 모르겠어요. 걸으면서 찾아보려고요.'];
+const ANSWERS={ko:['잠깐 멈추고 싶었어요.','새로운 시작이 필요했어요.','아직 잘 모르겠어요. 걸으면서 찾아보려고요.'], en:['I needed to pause for a while.','I needed a new beginning.','I’m not sure yet. I hope to find out as I walk.']};
 function npcByName(nm){ return npcs.find(n=>n.def.name===nm); }
 function fadeTo(fn, caption, sub){
   const f=$('#fade'); f.innerHTML=''; f.append(caption||''); if(sub){ const sm=document.createElement('small'); sm.textContent=sub; f.append(sm); }
@@ -1089,37 +1155,37 @@ function startDinner(){
     ['#bottom','#joy','#prompt','#people','#hint','#tr'].forEach(q=>$(q).hidden=true); $('#me').setAttribute('aria-expanded',false);
     camera.position.copy(dinnerCam);
     dSteps=DINNER_LINES.slice(); dIdx=0; $('#dinner').hidden=false; showStep();
-  }, '그날 저녁, 오리손 알베르게', '창밖으로 피레네에 해가 넘어가요');
+  }, tx('dinnerCap'), tx('dinnerSub'));
 }
 function speakerInfo(nm){ if(nm==='__me') return {name:S.name, c:S.country}; const n=npcByName(nm); return {name:n.def.name, c:n.def.c}; }
 function showStep(){
   const st=dSteps[dIdx], sp=speakerInfo(st.n);
   if(st.n!=='__me'){ const n=npcByName(st.n); if(n) n.P.wave=1.3; } else player.wave=1.3;
-  $('#dFlag').src=flagDataURL(sp.c); $('#dName').textContent=sp.name; $('#dCountry').textContent=CNAME[sp.c]||'';
-  $('#dLine').textContent=st.t; $('#dKo').textContent=st.ko||''; $('#dKo').hidden=!st.ko;
+  $('#dFlag').src=flagDataURL(sp.c); $('#dName').textContent=sp.name; $('#dCountry').textContent=cname(sp.c)||'';
+  const tr=L(st); $('#dLine').textContent=st.t; $('#dKo').textContent=tr; $('#dKo').hidden=!tr;
   const acts=$('#dActs'); acts.innerHTML=''; acts.className='dacts';
   const btn=(label,fn,cls)=>{ const b=document.createElement('button'); b.textContent=label; if(cls) b.className=cls; b.onclick=fn; acts.append(b); return b; };
   if(st.ask){
     acts.className='dacts col';
-    ANSWERS.forEach(a=>btn(a,()=>answer(a)));
+    ANSWERS[S.lang].forEach(a=>btn(a,()=>answer(a)));
     const row=document.createElement('div'); row.className='row2';
-    const inp=document.createElement('input'); inp.id='dAnswer'; inp.maxLength=60; inp.placeholder='직접 말하기';
-    const go=document.createElement('button'); go.textContent='말하기'; go.className='pri';
+    const inp=document.createElement('input'); inp.id='dAnswer'; inp.maxLength=60; inp.placeholder=tx('ansPh');
+    const go=document.createElement('button'); go.textContent=tx('say'); go.className='pri';
     go.onclick=()=>{ const v=inp.value.trim(); if(v) answer(v); else inp.focus(); };
     inp.addEventListener('keydown',e=>{ if(e.key==='Enter') go.click(); });
     row.append(inp,go); acts.append(row);
   } else if(st.end){
-    btn('잠자리에 들기',startDawn,'pri');
+    btn(tx('sleep'),startDawn,'pri');
   } else {
-    btn('다음',()=>{ dIdx++; showStep(); },'pri').focus();
+    btn(tx('next'),()=>{ dIdx++; showStep(); },'pri').focus();
   }
 }
 function answer(text){
-  S.journal.push({date:todayStr(), q:'왜 이 길에 왔나요?', a:text});
+  S.journal.push({date:todayStr(), q:tx('journalQ'), a:text});
   dSteps.push({n:'__me', t:text});
-  dSteps.push({n:'Jean', t:"Ici, personne n'a besoin d'une raison parfaite.", ko:'여기선 아무도 완벽한 이유가 필요 없어요.'});
-  dSteps.push({n:'Ana', t:'À nossa caminhada! Saúde!', ko:'우리의 순례를 위하여! 건배!', end:true});
-  if(!S.stamps.supper){ S.stamps.supper=todayStr(); setTimeout(()=>toast('‘순례자의 저녁’ 도장을 받았어요. 오늘 나눈 이야기는 여권에 남겨 둘게요.',3600),300); }
+  dSteps.push({n:'Jean', t:"Ici, personne n'a besoin d'une raison parfaite.", ko:'여기선 아무도 완벽한 이유가 필요 없어요.', en:'Here, nobody needs a perfect reason.'});
+  dSteps.push({n:'Ana', t:'À nossa caminhada! Saúde!', ko:'우리의 순례를 위하여! 건배!', en:'To our walk! Cheers!', end:true});
+  if(!S.stamps.supper){ S.stamps.supper=todayStr(); setTimeout(()=>toast(tx('supperStamp'),3600),300); }
   persist(); dIdx++; showStep();
 }
 function startDawn(){
@@ -1137,12 +1203,12 @@ function startDawn(){
     });
     if(!S.stamps.dawn) S.stamps.dawn=todayStr();
     persist();
-    setTimeout(()=>toast('순례자들은 해가 뜨기 전, 헤드랜턴을 켜고 조용히 길을 나서요.',4200),1600);
-    setTimeout(()=>toast('다음 구간 오리손 → 론세스바예스(약 17km)는 곧 열려요. ‘새벽 출발’ 도장을 받았어요.',4600),6400);
-  }, '다음 날 새벽 6시', '알베르게에 하나둘 불이 켜져요');
+    setTimeout(()=>toast(tx('dawn1'),4200),1600);
+    setTimeout(()=>toast(tx('dawn2'),4600),6400);
+  }, tx('dawnCap'), tx('dawnSub'));
 }
 function pp_set(x,z){ player.outer.position.set(x,groundAt(x,z),z); }
-const THANKS={Hans:['Danke! Du bist ein Engel.','고마워요! 천사가 따로 없네요.'], Emma:['Oh, thank you so much!','정말 고마워요!'], 'Siobhán':['Go raibh maith agat!','고마워요! (아일랜드어로)']};
+const THANKS={Hans:['Danke! Du bist ein Engel.','고마워요! 천사가 따로 없네요.','Thank you! You’re an angel.'], Emma:['Oh, thank you so much!','정말 고마워요!',''], 'Siobhán':['Go raibh maith agat!','고마워요! (아일랜드어로)','Thank you! (in Irish)']};
 function renderWater(){ $('#pWater').innerHTML=[0,1,2].map(i=>`<i class="${i<S.water?'':'e'}"></i>`).join(''); }
 renderWater();
 
@@ -1224,60 +1290,84 @@ function persist(){ if(!player) return; S.x=+player.outer.position.x.toFixed(2);
 const todayStr = () => { const d=new Date(); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`; };
 
 const STAMPS = [
-  {id:'sjpp', ko:'생장피에드포르', en:'ST-JEAN-PIED-DE-PORT', col:'#2f5d8a'},
-  {id:'firstmeet', ko:'첫 인사', en:'BUEN CAMINO', col:'#5f8a3e'},
-  {id:'water', ko:'물 한 모금', en:'AGUA COMPARTIDA', col:'#2f7fbf'},
-  {id:'orisson', ko:'오리손', en:'ORISSON', col:'#a3352a'},
-  {id:'supper', ko:'순례자의 저녁', en:'CENA DEL PEREGRINO', col:'#b8860b'},
-  {id:'dawn', ko:'새벽 출발', en:'AL AMANECER', col:'#5c5f94'},
-  {id:'ronces', ko:'론세스바예스', en:'RONCESVALLES'},
-  {id:'pamplona', ko:'팜플로나', en:'PAMPLONA'},
-  {id:'burgos', ko:'부르고스', en:'BURGOS'},
-  {id:'leon', ko:'레온', en:'LEÓN'},
-  {id:'sarria', ko:'사리아', en:'SARRIA'},
-  {id:'santiago', ko:'산티아고', en:'SANTIAGO'}
+  {id:'sjpp', ko:'생장피에드포르', e:'St-Jean', en:'ST-JEAN-PIED-DE-PORT', col:'#2f5d8a'},
+  {id:'firstmeet', ko:'첫 인사', e:'First Hello', en:'BUEN CAMINO', col:'#5f8a3e'},
+  {id:'water', ko:'물 한 모금', e:'Shared Water', en:'AGUA COMPARTIDA', col:'#2f7fbf'},
+  {id:'orisson', ko:'오리손', e:'Orisson', en:'ORISSON', col:'#a3352a'},
+  {id:'supper', ko:'순례자의 저녁', e:'Supper', en:'CENA DEL PEREGRINO', col:'#b8860b'},
+  {id:'dawn', ko:'새벽 출발', e:'Dawn', en:'AL AMANECER', col:'#5c5f94'},
+  {id:'ronces', ko:'론세스바예스', e:'Roncesvalles', en:'RONCESVALLES'},
+  {id:'pamplona', ko:'팜플로나', e:'Pamplona', en:'PAMPLONA'},
+  {id:'burgos', ko:'부르고스', e:'Burgos', en:'BURGOS'},
+  {id:'leon', ko:'레온', e:'León', en:'LEÓN'},
+  {id:'sarria', ko:'사리아', e:'Sarria', en:'SARRIA'},
+  {id:'santiago', ko:'산티아고', e:'Santiago', en:'SANTIAGO'}
 ];
+const stName = st => S.lang==='ko'?st.ko:st.e;
+const stSize = st => { const n=stName(st).length; return S.lang==='ko' ? (n>5?13:17) : (n>9?11:n>6?13:15); };
 function stampSVG(st, date){
   const got=!!date, col=got?st.col:'#b8a996', op=got?1:0.45;
   const rot = got ? ((st.id.length*37)%20-10) : 0;
-  return `<svg viewBox="0 0 120 120" role="img" aria-label="${st.ko} 도장${got?'':' (아직)'}" style="opacity:${op};transform:rotate(${rot}deg)">
+  return `<svg viewBox="0 0 120 120" role="img" aria-label="${tx('stampAria',{n:stName(st)})}${got?'':tx('notYet')}" style="opacity:${op};transform:rotate(${rot}deg)">
     <circle cx="60" cy="60" r="54" fill="none" stroke="${col}" stroke-width="4" ${got?'':'stroke-dasharray="6 6"'}/>
     <circle cx="60" cy="60" r="44" fill="none" stroke="${col}" stroke-width="1.5"/>
     <path id="arc${st.id}" d="M 22 60 A 38 38 0 0 1 98 60" fill="none"/>
     <text font-size="9.5" letter-spacing="1.5" fill="${col}" font-family="Georgia,serif"><textPath href="#arc${st.id}" startOffset="50%" text-anchor="middle">${st.en}</textPath></text>
-    <text x="60" y="${got?66:68}" text-anchor="middle" font-size="${st.ko.length>5?13:17}" fill="${col}" font-family="Jua,sans-serif">${st.ko}</text>
+    <text x="60" y="${got?66:68}" text-anchor="middle" font-size="${stSize(st)}" fill="${col}" font-family="Jua,sans-serif">${stName(st)}</text>
     ${got?`<text x="60" y="86" text-anchor="middle" font-size="9" fill="${col}" font-family="Georgia,serif">${date}</text>`:''}
   </svg>`;
 }
 function renderPassport(){
   $('#stampGrid').innerHTML = STAMPS.map(st=>`<div class="stamp">${stampSVG(st, S.stamps[st.id])}</div>`).join('');
   $('#psKm').textContent = (S.progress*7.8).toFixed(1)+' km';
-  $('#psMet').textContent = S.met.length+'명';
-  $('#psStone').textContent = S.notes.length+'개';
-  $('#psWater').textContent = (S.shared||0)+'번';
+  $('#psMet').textContent = tx('cntPeople',{n:S.met.length});
+  $('#psStone').textContent = tx('cntStones',{n:S.notes.length});
+  $('#psWater').textContent = tx('cntTimes',{n:S.shared||0});
 }
 
 /* ================= Start screen ================= */
 const PACKS=[0xc0582f,0x2f5d8a,0x5f8a3e,0xd9a514,0x7a4a7a,0x3b3b3b];
+function renderFlagGrid(){ $('#flagGrid').innerHTML = COUNTRIES.map(([c])=>`<button data-c="${c}" aria-pressed="${c===S.country}"><img src="${flagDataURL(c)}" alt="">${cname(c)}</button>`).join(''); }
+function renderResume(){
+  if(saved && saved.started && saved.progress>0.01){ const r=$('#resumeBtn'); r.hidden=false; r.textContent=tx('resume',{km:(saved.progress*7.8).toFixed(1)}); $('#goBtn').textContent=tx('goAgain'); }
+  else $('#goBtn').textContent=tx('go');
+}
+function applyLang(){
+  document.documentElement.lang=S.lang; document.title=tx('title');
+  document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=tx(el.dataset.i18n));
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>el.innerHTML=tx(el.dataset.i18nHtml));
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>el.placeholder=tx(el.dataset.i18nPh));
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label',tx(el.dataset.i18nAria)));
+  document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.lang===S.lang));
+  $('#wxLabel').textContent=tx('wx_'+wxType);
+  $('#packRow').querySelectorAll('button').forEach(b=>b.setAttribute('aria-label',tx('packAria')));
+  const nm=$('#nm'); if(nm.value===I.ko.defaultName||nm.value===I.en.defaultName) nm.value=tx('defaultName');
+  if(!started){ renderFlagGrid(); renderResume(); }
+  if(started){ $('#pName').textContent=S.name; $('#hint').textContent = coarse ? tx('hintTouch') : tx('hintKey'); }
+  if(!$('#people').hidden) renderPeople();
+  if(!$('#mPass').hidden) renderPassport();
+}
+document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>{ S.lang=b.dataset.lang; applyLang(); store.save(S); }));
 function buildStart(){
   const grid=$('#flagGrid');
-  grid.innerHTML = COUNTRIES.map(([c,n])=>`<button data-c="${c}" aria-pressed="${c===S.country}"><img src="${flagDataURL(c)}" alt="">${n}</button>`).join('');
+  renderFlagGrid();
   grid.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; S.country=b.dataset.c; grid.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); rebuildPlayer(); });
   const row=$('#packRow');
-  row.innerHTML = PACKS.map(p=>`<button class="sw" data-p="${p}" style="background:#${p.toString(16).padStart(6,'0')}" aria-pressed="${p===S.pack}" aria-label="배낭 색"></button>`).join('');
+  row.innerHTML = PACKS.map(p=>`<button class="sw" data-p="${p}" style="background:#${p.toString(16).padStart(6,'0')}" aria-pressed="${p===S.pack}" aria-label="${tx('packAria')}"></button>`).join('');
   row.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; S.pack=+b.dataset.p; row.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); rebuildPlayer(); });
   const hb=$('#hatBtn'), fb=$('#flagShowBtn');
   hb.setAttribute('aria-pressed',S.hat); fb.setAttribute('aria-pressed',S.showFlag);
   hb.onclick=()=>{ S.hat=!S.hat; hb.setAttribute('aria-pressed',S.hat); rebuildPlayer(); };
   fb.onclick=()=>{ S.showFlag=!S.showFlag; fb.setAttribute('aria-pressed',S.showFlag); rebuildPlayer(); };
   $('#nm').value=S.name;
-  if(saved && saved.started && saved.progress>0.01){ const r=$('#resumeBtn'); r.hidden=false; r.textContent=`이어 걷기 · ${(saved.progress*7.8).toFixed(1)}km 지점`; $('#goBtn').textContent='처음부터 다시 출발하기'; }
+  renderResume();
 }
 buildStart();
 
 let started=false;
+applyLang();
 function begin(fresh){
-  S.name = ($('#nm').value||'').trim() || '순례자';
+  S.name = ($('#nm').value||'').trim() || tx('defaultName');
   if(fresh){ S.progress=0; S.x=0; S.z=74; S.stamps={}; S.met=[]; S.ep={}; S.water=1; S.gave=[]; S.shared=0; npcs.forEach(n=>{ n.thirsty=['Hans','Emma','Siobhán'].includes(n.def.name); }); renderWater(); }
   if(!S.stamps.sjpp) S.stamps.sjpp=todayStr();
   S.started=true;
@@ -1288,11 +1378,11 @@ function begin(fresh){
   $('#start').hidden=true;
   ['#tl','#tr','#bottom'].forEach(s=>$(s).hidden=false);
   if(coarse) joy.hidden=false;
-  $('#pName').textContent=S.name; $('#pFlag').src=flagDataURL(S.country);
-  $('#hint').hidden=false; $('#hint').textContent = coarse ? '왼쪽 조이스틱으로 걷기 · 화면을 끌어 둘러보기' : 'WASD·방향키로 걷기 · Shift 달리기 · 드래그로 둘러보기 · E 인사';
+  $('#pName').textContent=S.name; $('#pFlag').src=flagDataURL(S.country); applyLang();
+  $('#hint').hidden=false; $('#hint').textContent = coarse ? tx('hintTouch') : tx('hintKey');
   setTimeout(()=>{ $('#hint').style.opacity=0; setTimeout(()=>$('#hint').hidden=true,900); }, 9000);
   started=true; initAudio(); persist(); canvas.focus();
-  if(fresh || !saved) setTimeout(()=>toast('생장피에드포르 도장을 받았어요. 이제 피레네로 걸어가 볼까요?',3600), 600);
+  if(fresh || !saved) setTimeout(()=>toast(tx('welcome'),3600), 600);
 }
 $('#goBtn').onclick=()=>begin(true);
 $('#resumeBtn').onclick=()=>begin(false);
@@ -1301,15 +1391,17 @@ $('#resumeBtn').onclick=()=>begin(false);
 $('#bPass').onclick=()=>{ renderPassport(); openModal('#mPass'); };
 let resetArm=false;
 $('#resetBtn').onclick=()=>{
-  if(!resetArm){ resetArm=true; $('#resetBtn').textContent='정말 처음부터 걸을까요? 한 번 더 누르면 기록이 지워져요.'; return; }
+  if(!resetArm){ resetArm=true; $('#resetBtn').textContent=tx('resetConfirm'); return; }
   store.clear(); location.reload();
 };
 let resting=false, reflectIdx=0;
-const REFLECT=[['지금 내려놓고 싶은 마음이 있나요?','바람 소리를 잠시 들어 보세요.'],['여기까지 온 나에게 한마디 해준다면?','오늘 걸은 만큼이 오늘의 몫이에요.'],['걸으면서 떠오른 얼굴이 있나요?','그 사람에게 안부를 전해도 좋아요.'],['서두르지 않아도 괜찮아요.','길은 내일도 여기 있어요.']];
+const REFLECT={
+  ko:[['지금 내려놓고 싶은 마음이 있나요?','바람 소리를 잠시 들어 보세요.'],['여기까지 온 나에게 한마디 해준다면?','오늘 걸은 만큼이 오늘의 몫이에요.'],['걸으면서 떠오른 얼굴이 있나요?','그 사람에게 안부를 전해도 좋아요.'],['서두르지 않아도 괜찮아요.','길은 내일도 여기 있어요.']],
+  en:[['Is there something you’d like to set down right now?','Listen to the wind for a moment.'],['What would you say to yourself for getting this far?','What you walked today is enough for today.'],['Did a face come to mind while you walked?','Maybe send them a hello.'],['There’s no need to hurry.','The path will still be here tomorrow.']]};
 function setRest(on){
   resting=on; $('#bRest').setAttribute('aria-pressed',on);
   const r=$('#reflect');
-  if(on){ const q=REFLECT[reflectIdx++%REFLECT.length]; r.innerHTML=''; r.append(q[0]); const sm=document.createElement('small'); sm.textContent=q[1]; r.append(sm); r.hidden=false; r.style.opacity=0; requestAnimationFrame(()=>r.style.opacity=1); }
+  if(on){ const RL=REFLECT[S.lang]; const q=RL[reflectIdx++%RL.length]; r.innerHTML=''; r.append(q[0]); const sm=document.createElement('small'); sm.textContent=q[1]; r.append(sm); r.hidden=false; r.style.opacity=0; requestAnimationFrame(()=>r.style.opacity=1); }
   else { r.style.opacity=0; setTimeout(()=>{ if(!resting) r.hidden=true; },1200); }
 }
 $('#bRest').onclick=()=>setRest(!resting);
@@ -1320,7 +1412,7 @@ $('#leaveGo').onclick=()=>{
   const x=p.x+Math.cos(ry)*1.6, z=p.z-Math.sin(ry)*1.6;
   const note={text, who:S.name, c:S.country, x:+x.toFixed(2), z:+z.toFixed(2), date:todayStr()};
   S.notes.push(note); addCairn(x,z,note,true); persist();
-  $('#mLeave').hidden=true; toast('길가에 돌 하나를 얹었어요.');
+  $('#mLeave').hidden=true; toast(tx('leaveDone'));
 };
 $('#bSound').onclick=()=>{ soundOn=!soundOn; $('#bSound').setAttribute('aria-pressed',soundOn); initAudio(); if(master) master.gain.value=soundOn?0.9:0; if(AC&&AC.state==='suspended') AC.resume(); };
 
@@ -1329,31 +1421,31 @@ let target=null;
 function interact(){
   if(!started || !target || mode==='dinner') return;
   if(target.type==='fountain'){
-    if(S.water>=3){ toast('물병이 이미 가득해요.'); return; }
-    S.water=3; renderWater(); persist(); toast('물병을 가득 채웠어요. 오르막에서 목마른 순례자를 만나면 나눠 주세요.'); return;
+    if(S.water>=3){ toast(tx('bottleFull')); return; }
+    S.water=3; renderWater(); persist(); toast(tx('bottleFilled')); return;
   }
   if(target.type==='dinner'){ startDinner(); return; }
   if(target.type==='npc'){
     const n=target.obj; player.wave=1.6; n.P.wave=1.9; n.pause=3.6; n.bubbleT=3.6; n.btext=null; n.bko=null;
     if(n.thirsty && S.water>0){
       S.water--; renderWater(); n.thirsty=false; n.drop.visible=false; S.gave.push(n.def.name); S.shared=(S.shared||0)+1;
-      const th=THANKS[n.def.name]||['Gracias!','고마워요!']; n.btext=th[0]; n.bko=th[1]; player.wave=0; n.P.wave=0;
-      if(!S.stamps.water){ S.stamps.water=todayStr(); setTimeout(()=>toast('물을 나눴어요. 길 위의 작은 친절이 누군가의 하루를 버티게 해요. ‘물 한 모금’ 도장을 받았어요.',4200),400); }
-      else setTimeout(()=>toast(`${n.def.name}에게 물을 나눴어요.`),400);
+      const th=THANKS[n.def.name]||['Gracias!','고마워요!','Thank you!']; n.btext=th[0]; n.bko={ko:th[1], en:th[2]}; player.wave=0; n.P.wave=0;
+      if(!S.stamps.water){ S.stamps.water=todayStr(); setTimeout(()=>toast(tx('waterFirst'),4200),400); }
+      else setTimeout(()=>toast(tx('waterAgain',{n:n.def.name})),400);
     }
     const face=Math.atan2(n.P.outer.position.x-player.outer.position.x, n.P.outer.position.z-player.outer.position.z); player.outer.rotation.y=face;
     if(!S.met.includes(n.def.name)){
       S.met.push(n.def.name);
-      if(!S.stamps.firstmeet){ S.stamps.firstmeet=todayStr(); setTimeout(()=>toast(`${n.def.name}(${CNAME[n.def.c]})와 첫 인사를 나눴어요. ‘첫 인사’ 도장을 받았어요.`,3400),400); }
-      else setTimeout(()=>toast(`${CNAME[n.def.c]}에서 온 ${n.def.name}와 인사했어요.`),400);
+      if(!S.stamps.firstmeet){ S.stamps.firstmeet=todayStr(); setTimeout(()=>toast(tx('meetFirst',{n:n.def.name,c:cname(n.def.c)}),3400),400); }
+      else setTimeout(()=>toast(tx('meetAgain',{n:n.def.name,c:cname(n.def.c)})),400);
       persist(); if(!$('#people').hidden) renderPeople();
     }
   } else if(target.type==='cairn'){
     const c=target.obj, n=c.note;
     $('#noteText').textContent=n.text; $('#noteFlag').src=flagDataURL(n.c||'NONE');
-    $('#noteWho').textContent=`${n.who} · ${CNAME[n.c]||''}`;
-    $('#noteBadge').textContent = c.mine ? `내가 남긴 돌 · ${n.date||''}` : '예시 메모';
-    $('#noteKo').textContent = n.ko ? `“${n.ko}”` : ''; $('#noteKo').hidden=!n.ko;
+    $('#noteWho').textContent=`${n.who} · ${cname(n.c)||''}`;
+    $('#noteBadge').textContent = c.mine ? tx('noteMine',{d:n.date||''}) : tx('noteSample');
+    const ntr=c.mine?'':L(n); $('#noteKo').textContent = ntr ? `“${ntr}”` : ''; $('#noteKo').hidden=!ntr;
     const key=(n.who+n.text).slice(0,40), L=S.liked[key]||{};
     const lb=$('#likeBtn'), tb=$('#teaBtn');
     lb.setAttribute('aria-pressed',!!L.like); tb.setAttribute('aria-pressed',!!L.tea);
@@ -1368,11 +1460,11 @@ function renderPeople(){
   const ul=$('#peopleList'); ul.innerHTML='';
   S.met.forEach(name=>{ const d=NPC_DEF.find(x=>x.name===name); if(!d) return;
     const li=document.createElement('li'); const im=document.createElement('img'); im.src=flagDataURL(d.c); im.alt='';
-    const b=document.createElement('span'); b.textContent=d.name; const sm=document.createElement('small'); sm.textContent=CNAME[d.c];
+    const b=document.createElement('span'); b.textContent=d.name; const sm=document.createElement('small'); sm.textContent=cname(d.c);
     li.append(im,b,sm); ul.append(li); });
-  if(!ul.children.length){ const li=document.createElement('li'); li.textContent='아직 인사한 순례자가 없어요. 길 위의 사람에게 다가가 E를 눌러 보세요.'; ul.append(li); }
+  if(!ul.children.length){ const li=document.createElement('li'); li.textContent=tx('peopleNone'); ul.append(li); }
   const left=NPC_DEF.length-S.met.length;
-  $('#peopleMore').textContent = left>0 ? `이 구간에 ${left}명이 더 걷거나 쉬고 있어요.` : '이 구간의 순례자 모두와 인사했어요.';
+  $('#peopleMore').textContent = left>0 ? tx('peopleLeft',{n:left}) : tx('peopleAll');
 }
 $('#me').onclick=()=>{ const me=$('#me'), open=me.getAttribute('aria-expanded')!=='true'; me.setAttribute('aria-expanded',open); $('#people').hidden=!open; if(open) renderPeople(); };
 
@@ -1381,6 +1473,7 @@ function resize(){ const w=innerWidth, h=innerHeight; renderer.setSize(w,h,false
 addEventListener('resize',resize); resize();
 
 const clock=new THREE.Clock();
+let lastAutoG=-99; const shownAny=()=>npcs.some(x=>x.bubbleT>0);
 let saveT=0, lastStepSign=0, arrived=!!S.stamps.orisson;
 const bubble=$('#bubble'), prompt=$('#prompt'), promptText=$('#promptText');
 const camTarget=new THREE.Vector3(), lookAt=new THREE.Vector3(), proj=new THREE.Vector3();
@@ -1449,9 +1542,9 @@ function frame(){
     if(mode==='walk' && arrived && !S.stamps.supper && Math.hypot(END.x-pp.x,END.z-pp.z)<5) target={type:'dinner'};
     if(target && !anyModal){
       prompt.hidden=false;
-      promptText.textContent = target.type==='npc' ? (target.obj.thirsty&&S.water>0 ? `${target.obj.def.name}에게 물 건네기` : `${target.obj.def.name}에게 인사하기`)
-        : target.type==='fountain' ? (S.water<3?'샘터에서 물병 채우기':'물병이 가득해요')
-        : target.type==='dinner' ? '알베르게 저녁 식탁에 앉기' : '조약돌 메모 읽기';
+      promptText.textContent = target.type==='npc' ? (target.obj.thirsty&&S.water>0 ? tx('promptWater',{n:target.obj.def.name}) : tx('promptGreet',{n:target.obj.def.name}))
+        : target.type==='fountain' ? (S.water<3?tx('promptFill'):tx('promptFull'))
+        : target.type==='dinner' ? tx('promptDinner') : tx('promptNote');
       prompt.querySelector('kbd').hidden=coarse;
     }
     else prompt.hidden=true;
@@ -1478,6 +1571,9 @@ function frame(){
     updateNPC(n,dt,t);
     const d=n.P.outer.position.distanceTo(pp);
     n.label.visible = started && d<15 && mode!=='dinner';
+    if(started && mode!=='dinner' && !n.autoG && !n.leave && n.P.outer.visible && d<4.2 && !S.met.includes(n.def.name) && t-lastAutoG>7 && !shownAny()){
+      n.autoG=true; lastAutoG=t; n.P.wave=1.6; n.bubbleT=3.2; n.pause=n.fixed?3:2.2; n.btext=null; n.bko=null;
+    }
     n.drop.visible = n.thirsty && n.label.visible && n.P.outer.visible && S.water>=0;
   }
   updateSheep(dt,t);
@@ -1488,7 +1584,7 @@ function frame(){
   for(const n of npcs){ if(n.bubbleT>0){ n.bubbleT-=dt; shown=n; } }
   if(shown){
     proj.copy(shown.P.outer.position); proj.y+=2.6; proj.project(camera);
-    if(proj.z<1){ bubble.hidden=false; bubble.style.left=((proj.x+1)/2*innerWidth)+'px'; bubble.style.top=((1-proj.y)/2*innerHeight)+'px'; bubble.querySelector('b').textContent=shown.btext||shown.def.say; bubble.querySelector('small').textContent=shown.bko||shown.def.ko; }
+    if(proj.z<1){ bubble.hidden=false; bubble.style.left=((proj.x+1)/2*innerWidth)+'px'; bubble.style.top=((1-proj.y)/2*innerHeight)+'px'; bubble.querySelector('b').textContent=shown.btext||shown.def.say; const btr=shown.bko?L(shown.bko):L(shown.def); const bs=bubble.querySelector('small'); bs.textContent=btr; bs.hidden=!btr; }
     else bubble.hidden=true;
   } else bubble.hidden=true;
 
