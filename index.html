@@ -447,7 +447,7 @@ const store = {
   save(d){ try { localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){} },
   clear(){ try { localStorage.removeItem(KEY); } catch(e){} }
 };
-let wardOn=false, wardCat='hat', wardFrom='start', wardYaw=0, wardSnap=false;
+let wardOn=false, wardCat='hat', wardFrom='start', wardYaw=0, wardSnap=false, ACCOUNT_UI=false;
 const saved = store.load();
 const S = Object.assign({
   name:'순례자', country:'KR', pack:0xc0582f, hat:true, showFlag:true,
@@ -1868,7 +1868,7 @@ function applyLang(){
   if(!started){ renderFlagGrid(); renderResume(); }
   if(started){ $('#pName').textContent=S.name; $('#hint').textContent = coarse ? tx('hintTouch') : tx('hintKey'); }
   if(!$('#people').hidden) renderPeople();
-  if(typeof renderAccount==='function') renderAccount();
+  if(ACCOUNT_UI) renderAccount();
   if(!$('#mPass').hidden) renderPassport();
   if(!$('#mMap').hidden) renderMap();
   if(started) renderOnline();
@@ -2330,7 +2330,7 @@ function closeWardrobe(){
 }
 $('#wardDone').onclick=closeWardrobe;
 $('#bWard').onclick=()=>openWardrobe('game');
-authInit();
+ACCOUNT_UI=true; renderAccount(); authInit();
 
 /* ================= Interaction ================= */
 let target=null;
