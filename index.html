@@ -168,6 +168,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .acts button[aria-pressed="true"]{background:var(--arrow);border-color:var(--arrow-deep)}
 textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;border-radius:12px;border:1.5px solid var(--line);resize:vertical;min-height:90px;color:var(--ink);background:#fff}
 .arrive-km{font-family:var(--display);font-size:56px;line-height:1;color:var(--tile)}
+.acct{display:grid;gap:8px;padding:12px 14px;border-radius:12px;background:rgba(47,93,138,.08)}
+.acct p{margin:0;font-size:13.5px;line-height:1.55}
+.acct .acts button.pri{background:var(--tile);border-color:var(--tile);color:#fff}
 .link{border:0;background:none;color:var(--ink-soft);text-decoration:underline;font-size:13px;justify-self:start;padding:0}
 
 .clock{border:0;background:rgba(47,93,138,.1);color:var(--tile);border-radius:999px;padding:4px 8px;font-size:11.5px;font-family:var(--body);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -332,6 +335,7 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
       </div>
       <button class="go" id="goBtn">생장피에드포르에서 출발하기</button>
       <button class="go alt" id="resumeBtn" hidden>이어 걷기</button>
+      <button class="link" id="startLogin" data-i18n="loginGoogle">다른 기기에서 걷던 여정 불러오기</button>
       <p class="fine" data-i18n="startFine">프로토타입이에요. 걸은 기록은 이 브라우저에만 저장되고, 함께 걷는 순례자들은 아직 예시 캐릭터예요.</p>
     </div>
   </section>
@@ -350,6 +354,7 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
       </div>
       <div class="stamps" id="stampGrid"></div>
       <p class="sdetail" id="stampDetail"></p>
+      <div class="acct"></div>
       <p class="fine" data-i18n="passNote">흐린 도장은 앞으로 이어질 프랑스 길의 마을들이에요.</p>
       <button class="link" id="resetBtn" data-i18n="reset">처음부터 다시 걷기</button>
     </div>
@@ -365,6 +370,7 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
       <textarea id="dayText" maxlength="200" data-i18n-ph="dayPh"></textarea>
       <div class="acts"><button class="go" id="daySave" data-i18n="daySave">기록하고 잠들기</button><button id="daySkip" data-i18n="daySkip">그냥 잠들기</button></div>
       <p class="fine" data-i18n="dayFine"></p>
+      <div class="acct"></div>
     </div>
   </div>
 
@@ -457,7 +463,7 @@ ko:{
   progressAria:'진행 상황', alt:'해발', left:'남은', water:'물병', menu:'메뉴', bPass:'여권', bRest:'쉬어가기', bStone:'조약돌', bWxAria:'날씨 바꾸기', bSound:'소리',
   tagline:'언제든, 마음으로 걷는 산티아고 순례길.<br>생장피에드포르에서 첫 걸음을 떼어 볼까요?', nameLabel:'순례자 이름', defaultName:'순례자', from:'어디에서 왔나요?', pack:'배낭 색', packAria:'배낭 색', outfit:'차림', hat:'밀짚모자', flagShow:'배낭에 국기 달기',
   go:'생장피에드포르에서 출발하기', goAgain:'처음부터 다시 출발하기', resume:'이어 걷기 · {km}km 지점',
-  startFine:'프로토타입이에요. 걸은 기록은 이 브라우저에만 저장되고, 함께 걷는 순례자들은 아직 예시 캐릭터예요.',
+  startFine:'프로토타입이에요. 기록은 이 기기와 서버에 자동으로 저장되고, 구글 계정을 연결하면 다른 기기에서도 이어 걸을 수 있어요.',
   close:'닫기', passT:'순례 여권 · Credencial', psKmL:'걸은 거리', psMetL:'인사한 순례자', psStoneL:'남긴 조약돌', psWaterL:'나눈 물', cntPeople:'{n}명', cntStones:'{n}개', cntTimes:'{n}번',
   passNote:'흐린 도장은 앞으로 이어질 프랑스 길의 마을들이에요.', reset:'처음부터 다시 걷기', resetConfirm:'정말 처음부터 걸을까요? 한 번 더 누르면 기록이 지워져요.',
   stampAria:'{n} 도장', notYet:' (아직)',
@@ -481,6 +487,7 @@ ko:{
   ph_night:'밤', ph_dawn:'새벽', ph_morning:'아침', ph_day:'낮', ph_sunset:'노을', ph_dusk:'어스름', clockLive:'산티아고 {t} · {p}', clockPreview:'미리보기 · {p} (누르면 바뀌어요)',
   promptCamp:'오늘은 여기까지 (모닥불 옆에 텐트 치기)', restEnd:'오늘은 여기까지', dayT:'오늘도 수고했어요', dayStats:'오늘 순례길 {km}km를 걸었고, {n}명의 순례자와 인사했어요.', dayQ:'어떤 하루였나요? 기록하지 않고 그냥 잠들어도 괜찮아요.', dayPh:'오늘의 마음을 한 줄 남겨 보세요.', daySave:'기록하고 잠들기', daySkip:'그냥 잠들기', dayFine:'텐트는 지금 서 있는 자리에 쳐져요. 쉼터 근처라면 모닥불 옆에 쳐져요. 다음에 접속하면 텐트에서 다시 시작해요.',
   sleepT:'잘 자요. 내일도 이 길에서 만나요.', sleepSub:'텐트 안에서 쉬는 동안, 다른 순례자들에게는 당신의 텐트가 보여요.', wake:'다시 걷기', morning:'좋은 아침이에요. 배낭을 메고 오늘의 길을 시작해요.', resting:'쉬는 중',
+  acctGuest:'지금은 이 기기의 게스트 여정으로 저장되고 있어요. 구글 계정을 연결하면 기기를 바꿔도 같은 캐릭터와 여권으로 이어 걸을 수 있어요.', acctLinked:'구글 계정({e})으로 이 여정을 지키고 있어요. 다른 기기에서도 같은 계정으로 이어 걸을 수 있어요.', acctWait:'여정 저장을 준비하고 있어요…', acctErr:'지금은 이 기기에만 저장돼요. 잠시 후 다시 시도해 주세요.', linkGoogle:'구글로 이 여정 지키기', loginGoogle:'다른 기기에서 걷던 여정 불러오기', logout:'이 기기에서 로그아웃', googleNotReady:'구글 연결은 아직 준비 중이에요. 곧 열릴 거예요.', googleFail:'구글 연결에 실패했어요. 잠시 후 다시 시도해 주세요.', googleTaken:'이미 다른 여정에 연결된 구글 계정이에요. 그 여정으로 이어 걸으려면 ‘다른 기기에서 걷던 여정 불러오기’를 눌러 주세요.', cloudLoaded:'저장된 여정을 불러왔어요.', cloudNewer:'다른 기기에서 더 최근에 걸은 기록을 찾았어요. 새로고침하면 그 기록으로 이어져요.', authOff:'지금은 계정 기능을 쓸 수 없어요.',
   bWard:'꾸미기', wardT:'캐릭터 꾸미기', wardOpen:'캐릭터 꾸미기', wardDone:'완료', wardHint:'캐릭터를 드래그하면 돌려 볼 수 있어요. 액세서리는 여러 개를 함께 달 수 있어요.', wColor:'색상', rainTip:' 꾸미기에서 우비로 갈아입을 수도 있어요.', snowTip:' 꾸미기에서 패딩과 비니로 갈아입어도 좋아요.',
   bMap:'지도', mapT:'프랑스 길 전체 지도', mapTotal:'전체', mapWalked:'순례 거리', mapLeft:'남은 거리', mapPct:'진행률', mapTowns:'지나온 마을', mapStamps:'받은 도장', mapYou:'나',
   mapNote:'지금은 1구간(생장피에드포르 → 오리손)을 3D로 걸을 수 있어요. 다음 구간은 차례로 열려요. 거리는 실제 프랑스 길 기준 대략값이에요.', mapLocked:'아직 도착하지 않았어요 · 생장에서 약 {km}km', mapGot:'도장 받음 · {d}', mapPassed:'지나온 곳 · 생장에서 약 {km}km', mapTapHint:'마을을 누르면 정보를 볼 수 있어요.', mapStage:'걷는 중인 구간',
@@ -495,7 +502,7 @@ en:{
   progressAria:'Progress', alt:'Alt', left:'Left', water:'Water', menu:'Menu', bPass:'Passport', bRest:'Rest', bStone:'Stone', bWxAria:'Change weather', bSound:'Sound',
   tagline:'The Camino de Santiago, whenever your heart needs it.<br>Ready to take your first step in Saint-Jean-Pied-de-Port?', nameLabel:'Pilgrim name', defaultName:'Pilgrim', from:'Where are you from?', pack:'Backpack', packAria:'Backpack color', outfit:'Outfit', hat:'Straw hat', flagShow:'Flag on backpack',
   go:'Set off from Saint-Jean', goAgain:'Start over from Saint-Jean', resume:'Keep walking · from {km} km',
-  startFine:'This is a prototype. Your journey is saved only in this browser, and the pilgrims you meet are sample characters for now.',
+  startFine:'This is a prototype. Your journey saves automatically, and linking a Google account lets you continue on other devices.',
   close:'Close', passT:'Pilgrim Passport · Credencial', psKmL:'Walked', psMetL:'Pilgrims greeted', psStoneL:'Stones left', psWaterL:'Water shared', cntPeople:'{n}', cntStones:'{n}', cntTimes:'{n}×',
   passNote:'Faded stamps are the towns still ahead on the Camino Francés.', reset:'Start the walk over', resetConfirm:'Start over? Tap once more to erase your journey.',
   stampAria:'{n} stamp', notYet:' (not yet)',
@@ -519,6 +526,7 @@ en:{
   ph_night:'Night', ph_dawn:'Dawn', ph_morning:'Morning', ph_day:'Day', ph_sunset:'Sunset', ph_dusk:'Twilight', clockLive:'Santiago {t} · {p}', clockPreview:'Preview · {p} (tap to change)',
   promptCamp:'Call it a day (pitch a tent by the fire)', restEnd:'Call it a day', dayT:'You did well today', dayStats:'Today you walked {km} km of the Camino and said hello to {n} pilgrims.', dayQ:'How was your day? It’s fine to just go to sleep without writing.', dayPh:'Leave a line about how you feel today.', daySave:'Save and sleep', daySkip:'Just sleep', dayFine:'Your tent goes up where you stand, or by the fire if you’re near the camp. Next time you come back, you’ll wake up in it.',
   sleepT:'Sleep well. See you on the path tomorrow.', sleepSub:'While you rest, other pilgrims can see your tent.', wake:'Start walking again', morning:'Good morning. Shoulder your pack and begin today’s walk.', resting:'resting',
+  acctGuest:'Your journey is saved as a guest on this device. Link a Google account to continue with the same character and passport on any device.', acctLinked:'Your journey is protected with Google ({e}). Sign in with the same account to continue on other devices.', acctWait:'Getting your save ready…', acctErr:'Saving only on this device for now. Please try again later.', linkGoogle:'Protect this journey with Google', loginGoogle:'Continue a journey from another device', logout:'Sign out on this device', googleNotReady:'Google sign-in isn’t ready yet. It’s coming soon.', googleFail:'Couldn’t connect to Google. Please try again later.', googleTaken:'That Google account is already linked to another journey. Tap ‘Continue a journey from another device’ to switch to it.', cloudLoaded:'Your saved journey is back.', cloudNewer:'Found a newer walk from another device. Reload to continue from it.', authOff:'Accounts aren’t available right now.',
   bWard:'Style', wardT:'Customize', wardOpen:'Customize character', wardDone:'Done', wardHint:'Drag the character to turn it around. You can wear several extras at once.', wColor:'Color', rainTip:' You can switch to a raincoat in Style.', snowTip:' A puffer and beanie might help. Change in Style.',
   bMap:'Map', mapT:'The Camino Francés', mapTotal:'Total', mapWalked:'Walked', mapLeft:'To go', mapPct:'Progress', mapTowns:'Towns passed', mapStamps:'Stamps', mapYou:'You',
   mapNote:'For now you can walk Stage 1 (Saint-Jean → Orisson) in 3D. The next stages open one by one. Distances are approximate, based on the real Camino Francés.', mapLocked:'Not reached yet · about {km} km from Saint-Jean', mapGot:'Stamped · {d}', mapPassed:'Passed · about {km} km from Saint-Jean', mapTapHint:'Tap a town to see details.', mapStage:'Stage you’re walking',
@@ -916,15 +924,33 @@ function addBench(x,z,ry){
   const table=new THREE.Mesh(new THREE.CylinderGeometry(0.7,0.7,0.08,16), M.woodL); table.position.set(tx,groundAt(tx,tz)+0.75,tz); table.castShadow=true; scene.add(table);
   const leg=new THREE.Mesh(new THREE.CylinderGeometry(0.07,0.07,0.75,8), M.wood); leg.position.set(tx,groundAt(tx,tz)+0.37,tz); scene.add(leg);
 })();
-const DASH_MAT = new THREE.MeshBasicMaterial({color:0xf2c230, transparent:true, opacity:0.45, depthWrite:false, polygonOffset:true, polygonOffsetFactor:-4});
+const DASH_MAT = new THREE.MeshBasicMaterial({color:0xf2c230, transparent:true, opacity:0.45, depthWrite:false, side:THREE.DoubleSide, polygonOffset:true, polygonOffsetFactor:-4});
+const CHEVRON_GEO = (()=>{ const sh=new THREE.Shape(); sh.moveTo(-0.3,-0.14); sh.lineTo(0,0.12); sh.lineTo(0.3,-0.14); sh.lineTo(0.3,0.02); sh.lineTo(0,0.3); sh.lineTo(-0.3,0.02); sh.closePath(); const g=new THREE.ShapeGeometry(sh); g.rotateX(Math.PI/2); return g; })();
 (function guideDashes(){
-  const g=new THREE.PlaneGeometry(0.24,0.95); g.rotateX(-Math.PI/2);
+  const g=CHEVRON_GEO;
   const n=Math.floor(PATH_LEN/2.5), im=new THREE.InstancedMesh(g, DASH_MAT, n);
   for(let i=0;i<n;i++){
     const u=(i+0.5)/n, p=curve.getPointAt(u), tg=curve.getTangentAt(u);
     dummy.position.set(p.x, groundAt(p.x,p.z)+0.12, p.z); dummy.rotation.set(0, Math.atan2(tg.x,tg.z), 0); dummy.scale.set(1,1,1); dummy.updateMatrix(); im.setMatrixAt(i,dummy.matrix);
   }
   im.renderOrder=2; scene.add(im);
+})();
+(function nextStageTeaser(){
+  const T=curve.getTangentAt(1).setY(0).normalize(), S0=new THREE.Vector3(-T.z,0,T.x);
+  const pts=[0,9,18,27,34].map((d,i)=>{ const side=[0,1.5,-2.5,1.5,0][i]; return new THREE.Vector3(END.x+T.x*d+S0.x*side, 0, END.z+T.z*d+S0.z*side); }).filter(p=>p.z>-184);
+  const ext=new THREE.CatmullRomCurve3(pts), L=ext.getLength(), n=Math.floor(L/2.6);
+  const m=new THREE.MeshBasicMaterial({color:0xa69378, transparent:true, opacity:0.55, depthWrite:false, side:THREE.DoubleSide, polygonOffset:true, polygonOffsetFactor:-4});
+  const im=new THREE.InstancedMesh(CHEVRON_GEO,m,n);
+  for(let i=0;i<n;i++){ const u=(i+1)/(n+1), p=ext.getPointAt(u), tg=ext.getTangentAt(u); dummy.position.set(p.x,groundAt(p.x,p.z)+0.1,p.z); dummy.rotation.set(0,Math.atan2(tg.x,tg.z),0); dummy.scale.set(0.9,1,0.9); dummy.updateMatrix(); im.setMatrixAt(i,dummy.matrix); }
+  im.renderOrder=2; scene.add(im);
+  const at=ext.getPointAt(0.3), sideP=new THREE.Vector3(at.x+S0.x*2.4,0,at.z+S0.z*2.4), y=groundAt(sideP.x,sideP.z);
+  const tex=texFromCanvas(512,260,(c,w,h)=>{ c.fillStyle='#6b4630'; roundRect(c,0,0,w,h,20); c.fill(); c.strokeStyle='#f2c230'; c.lineWidth=6; roundRect(c,10,10,w-20,h-20,14); c.stroke();
+    c.fillStyle='#f2c230'; c.beginPath(); c.moveTo(40,96); c.lineTo(96,96); c.lineTo(96,72); c.lineTo(140,110); c.lineTo(96,148); c.lineTo(96,124); c.lineTo(40,124); c.fill();
+    c.fillStyle='#fff7ea'; c.font='bold 46px Georgia, serif'; c.fillText('Roncesvalles',160,100); c.font='bold 38px Georgia, serif'; c.fillText('≈ 17 km',160,148);
+    c.font='bold 30px "Apple SD Gothic Neo","Malgun Gothic",sans-serif'; c.fillStyle='#f6dfa0'; c.fillText('다음 구간 준비 중 · Next stage soon',40,215); });
+  const g=new THREE.Group(); const post=new THREE.Mesh(new THREE.CylinderGeometry(0.07,0.08,1.8,6),M.wood); post.position.y=0.9; g.add(post);
+  const board=new THREE.Mesh(new THREE.PlaneGeometry(2.2,1.12),new THREE.MeshLambertMaterial({map:tex, side:THREE.DoubleSide})); board.position.y=1.9; g.add(board);
+  g.position.set(sideP.x,y,sideP.z); g.lookAt(at.x-T.x*6, y, at.z-T.z*6); scene.add(g); colliders.push({x:sideP.x,z:sideP.z,r:0.4});
 })();
 const arriveRing = new THREE.Mesh(new THREE.RingGeometry(2.2,2.7,40), new THREE.MeshBasicMaterial({color:0xf2c230, transparent:true, opacity:0.7, side:THREE.DoubleSide, depthWrite:false}));
 arriveRing.rotation.x=-Math.PI/2; arriveRing.position.set(END.x, groundAt(END.x,END.z)+0.12, END.z); scene.add(arriveRing);
@@ -1771,7 +1797,7 @@ function openModal(id){ $(id).hidden=false; const b=$(id).querySelector('.x'); i
 document.querySelectorAll('.modal').forEach(m=>{
   m.addEventListener('click',e=>{ if(e.target===m || e.target.closest('[data-close]')) m.hidden=true; });
 });
-function persist(){ if(!player) return; S.x=+player.outer.position.x.toFixed(2); S.z=+player.outer.position.z.toFixed(2); store.save(S); }
+function persist(){ if(!player) return; S.x=+player.outer.position.x.toFixed(2); S.z=+player.outer.position.z.toFixed(2); S.savedAt=Date.now(); store.save(S); }
 function stamp(id){
   if(S.stamps[id]) return false;
   S.stamps[id]=todayStr(); if(!S.stampLog) S.stampLog={};
@@ -1826,7 +1852,7 @@ const REQ_ENTRY='entry.1745594292';
 function renderFlagGrid(){ const base=COUNTRIES.map(q=>q[0]); const list=base.includes(S.country)?base:[S.country].concat(base.slice(0,base.length-2), base.slice(-1)); $('#flagGrid').innerHTML = list.map(flagBtn).join(''); }
 function renderFlagGridOld(){ $('#flagGrid').innerHTML = COUNTRIES.map(([c])=>`<button data-c="${c}" aria-pressed="${c===S.country}"><img src="${flagDataURL(c)}" alt="">${cname(c)}</button>`).join(''); }
 function renderResume(){
-  if(saved && saved.started && saved.progress>0.01){ const r=$('#resumeBtn'); r.hidden=false; r.textContent=tx('resume',{km:(saved.progress*7.8).toFixed(1)}); $('#goBtn').textContent=tx('goAgain'); }
+  if(S.started && S.progress>0.01){ const r=$('#resumeBtn'); r.hidden=false; r.textContent=tx('resume',{km:(saved.progress*7.8).toFixed(1)}); $('#goBtn').textContent=tx('goAgain'); }
   else $('#goBtn').textContent=tx('go');
 }
 function applyLang(){
@@ -1842,6 +1868,7 @@ function applyLang(){
   if(!started){ renderFlagGrid(); renderResume(); }
   if(started){ $('#pName').textContent=S.name; $('#hint').textContent = coarse ? tx('hintTouch') : tx('hintKey'); }
   if(!$('#people').hidden) renderPeople();
+  if(typeof renderAccount==='function') renderAccount();
   if(!$('#mPass').hidden) renderPassport();
   if(!$('#mMap').hidden) renderMap();
   if(started) renderOnline();
@@ -1871,6 +1898,7 @@ function buildStart(){
   const fb=$('#flagShowBtn');
   fb.setAttribute('aria-pressed',S.showFlag);
   $('#wardOpen').onclick=()=>openWardrobe('start');
+  $('#startLogin').onclick=()=>loginGoogle();
   fb.onclick=()=>{ S.showFlag=!S.showFlag; fb.setAttribute('aria-pressed',S.showFlag); rebuildPlayer(); };
   $('#nm').value=S.name;
   renderResume();
@@ -1939,6 +1967,16 @@ function pointAtKm(km){
   for(let i=0;i<ROUTE.length-1;i++){ const a=ROUTE[i], b=ROUTE[i+1]; if(km<=b.km){ const t=(km-a.km)/(b.km-a.km||1); const A=mapXY(a), B=mapXY(b); return [A[0]+(B[0]-A[0])*t, A[1]+(B[1]-A[1])*t]; } }
   return mapXY(ROUTE[ROUTE.length-1]);
 }
+function mapArrows(km){
+  const out=[]; const step=46;
+  for(let i=0;i<ROUTE.length-1;i++){
+    const a=ROUTE[i], b=ROUTE[i+1]; if(b.km<=km) continue;
+    const A=mapXY(a), B=mapXY(b), dx=B[0]-A[0], dy=B[1]-A[1], len=Math.hypot(dx,dy), ang=Math.atan2(dy,dx)*180/Math.PI;
+    for(let d=step/2; d<len; d+=step){ const t=d/len, kmHere=a.km+(b.km-a.km)*t; if(kmHere<=km+1) continue;
+      out.push(`<path d="M-4 -4.5 L3 0 L-4 4.5" fill="none" stroke="#8f7c62" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" transform="translate(${(A[0]+dx*t).toFixed(1)} ${(A[1]+dy*t).toFixed(1)}) rotate(${ang.toFixed(1)})"/>`); }
+  }
+  return out.join('');
+}
 function renderMap(){
   const km=userKm(), passed=ROUTE.filter(r=>r.km<=km+0.05), stamps=Object.keys(S.stamps).length;
   const st=[[tx('mapTotal'),'≈ '+ROUTE_KM+' km'],[tx('mapWalked'),km.toFixed(1)+' km'],[tx('mapLeft'),(ROUTE_KM-km).toFixed(1)+' km'],[tx('mapPct'),(km/ROUTE_KM*100).toFixed(1)+'%'],[tx('mapTowns'),passed.length+' / '+ROUTE.length],[tx('mapStamps'),stamps+' / '+STAMPS.length]];
@@ -1964,6 +2002,7 @@ function renderMap(){
     <g transform="translate(950 50)" opacity=".75"><circle r="22" fill="none" stroke="#8a6a48" stroke-width="1.5"/><path d="M0 -20 L5 0 L0 20 L-5 0 Z" fill="#8a6a48"/><text y="-28" text-anchor="middle" font-size="12" fill="#8a6a48">N</text></g>
     <polyline points="${all}" fill="none" stroke="#a69378" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/>
     <polyline points="${done}" fill="none" stroke="#e0a91a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    ${mapArrows(km)}
     ${towns}
     <g transform="translate(${me[0]} ${me[1]})"><circle r="15" fill="#f2c230" opacity=".35"><animate attributeName="r" values="11;18;11" dur="2.4s" repeatCount="indefinite"/></circle><circle r="8" fill="#c0582f" stroke="#fff" stroke-width="3"/>
       <rect x="-24" y="-46" width="48" height="22" rx="11" fill="#3b2a1e"/><text y="-30" text-anchor="middle" font-size="13" fill="#fff7ea" font-family="Jua, sans-serif">${tx('mapYou')}</text></g>
@@ -2029,7 +2068,7 @@ const SUPA_URL = 'https://tctogguvgwvkxpymdsmn.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjdG9nZ3V2Z3d2a3hweW1kc21uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgwNzA0MzQsImV4cCI6MjA4MzY0NjQzNH0.sd54qY83b09GmsIKVWCB7IkjLrC1vePrhbhPHKnQazE';
 const NET = {on:false, db:null, ch:null, me:'', remotes:new Map(), sendT:0, beatT:0, last:{x:0,z:0,ry:0}, online:0, joined:false};
 try{ NET.me=localStorage.getItem('camino-on-id') || ''; if(!NET.me){ NET.me=(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now().toString(36)); localStorage.setItem('camino-on-id',NET.me); } }catch(e){ NET.me='g'+Math.random().toString(36).slice(2); }
-if(SUPA_URL && SUPA_KEY && window.supabase){ try{ NET.db=window.supabase.createClient(SUPA_URL, SUPA_KEY, {auth:{persistSession:false}, realtime:{params:{eventsPerSecond:12}}}); NET.on=true; }catch(e){ NET.on=false; } }
+if(SUPA_URL && SUPA_KEY && window.supabase){ try{ NET.db=window.supabase.createClient(SUPA_URL, SUPA_KEY, {auth:{persistSession:true, autoRefreshToken:true, detectSessionInUrl:true, storageKey:'camino-on-auth'}, realtime:{params:{eventsPerSecond:12}}}); NET.on=true; }catch(e){ NET.on=false; } }
 const cleanName = n => String(n||'').replace(/[\u0000-\u001f<>]/g,'').trim().slice(0,12) || 'Pilgrim';
 const hashN = s => { let h=0; for(const ch of String(s)) h=(h*31+ch.charCodeAt(0))|0; return Math.abs(h); };
 const SHIRTS=[0xf2e6cf,0xd96c4f,0x5b7fa6,0x6e8a5a,0xf4c34d,0x9a6fb0,0x4f9a8e,0xe8a5b5];
@@ -2130,6 +2169,97 @@ async function shareStone(note){
 }
 
 
+
+/* ================= Account & cloud save ================= */
+const AUTH = {user:null, linked:false, email:'', err:'', lastSave:0, busy:false};
+function authInfo(u){
+  AUTH.user=u||null;
+  const ids=(u&&u.identities)||[], g=ids.find(i=>i.provider==='google');
+  AUTH.linked = !!g; AUTH.email = (g&&g.identity_data&&g.identity_data.email) || (u&&u.email) || '';
+  renderAccount();
+}
+async function authInit(){
+  if(!NET.on) return;
+  const q=new URLSearchParams(location.search+'&'+location.hash.slice(1));
+  const oauthErr=q.get('error_code')||q.get('error_description');
+  try{
+    let {data:{session}} = await NET.db.auth.getSession();
+    if(!session){ const r=await NET.db.auth.signInAnonymously(); if(r.error) throw r.error; session=r.data.session; }
+    authInfo(session.user);
+    await cloudLoad();
+  }catch(e){ AUTH.err=String((e&&e.message)||e); renderAccount(); }
+  if(oauthErr){ toast(/already/i.test(oauthErr) ? tx('googleTaken') : tx('googleFail'),5200); history.replaceState(null,'',location.pathname); }
+  NET.db.auth.onAuthStateChange((ev,session)=>{ if(session && session.user){ const prev=AUTH.user&&AUTH.user.id; authInfo(session.user); if(prev!==session.user.id) cloudLoad(); } });
+}
+async function cloudLoad(){
+  if(!AUTH.user) return;
+  try{
+    const {data,error}=await NET.db.from('camino_journeys').select('data,updated_at').eq('user_id',AUTH.user.id).maybeSingle();
+    if(error) return;
+    const remote=data&&data.data;
+    if(remote && typeof remote==='object' && (remote.savedAt||0) > (S.savedAt||0)) applyCloud(remote);
+    else cloudSave();
+  }catch(e){}
+}
+function applyCloud(d){
+  const lang=S.lang;
+  for(const k of Object.keys(S)) if(!(k in d)) delete S[k];
+  Object.assign(S, d); S.lang=lang; S.look=cleanLook(S.look); if(!okCode(S.country)) S.country='NONE';
+  store.save(S);
+  if(!started){ $('#nm').value=S.name; renderFlagGrid(); renderResume(); $('#flagShowBtn').setAttribute('aria-pressed',S.showFlag); rebuildPlayer(); toast(tx('cloudLoaded'),3600); }
+  else toast(tx('cloudNewer'),5200);
+}
+async function cloudSave(){
+  if(!AUTH.user || AUTH.busy) return false;
+  AUTH.busy=true;
+  try{ S.savedAt=S.savedAt||Date.now(); const {error}=await NET.db.from('camino_journeys').upsert({user_id:AUTH.user.id, data:S, updated_at:new Date().toISOString()}); AUTH.lastSave=Date.now(); return !error; }
+  catch(e){ return false; } finally{ AUTH.busy=false; }
+}
+async function cloudSaveBeacon(){
+  if(!AUTH.user || !NET.on) return;
+  try{
+    const {data:{session}}=await NET.db.auth.getSession(); if(!session) return;
+    fetch(SUPA_URL+'/rest/v1/camino_journeys?on_conflict=user_id',{method:'POST', keepalive:true, headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+session.access_token,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'}, body:JSON.stringify({user_id:AUTH.user.id, data:S, updated_at:new Date().toISOString()})}).catch(()=>{});
+  }catch(e){}
+}
+setInterval(()=>{ if(started && AUTH.user && Date.now()-AUTH.lastSave>30000) cloudSave(); }, 10000);
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden' && started){ persist(); cloudSaveBeacon(); } });
+
+async function linkGoogle(){
+  if(!NET.on || !AUTH.user){ toast(tx('authOff')); return; }
+  persist(); await cloudSave();
+  const redirectTo=location.origin+location.pathname;
+  try{
+    const r = await NET.db.auth.linkIdentity({provider:'google', options:{redirectTo}});
+    if(r && r.error) toast(/not enabled|unsupported|provider/i.test(r.error.message) ? tx('googleNotReady') : tx('googleFail'),5200);
+  }catch(e){ toast(tx('googleFail')); }
+}
+async function loginGoogle(){
+  if(!NET.on){ toast(tx('authOff')); return; }
+  try{
+    const r = await NET.db.auth.signInWithOAuth({provider:'google', options:{redirectTo:location.origin+location.pathname}});
+    if(r && r.error) toast(/not enabled|unsupported|provider/i.test(r.error.message) ? tx('googleNotReady') : tx('googleFail'),5200);
+  }catch(e){ toast(tx('googleFail')); }
+}
+async function logoutGoogle(){
+  if(!NET.on) return;
+  persist(); await cloudSave();
+  try{ await NET.db.auth.signOut(); }catch(e){}
+  store.clear(); location.reload();
+}
+function renderAccount(){
+  document.querySelectorAll('.acct').forEach(box=>{
+    box.innerHTML=''; if(!NET.on) { box.hidden=true; return; } box.hidden=false;
+    const p=document.createElement('p');
+    const row=document.createElement('div'); row.className='acts';
+    const btn=(label,fn,pri)=>{ const b=document.createElement('button'); b.textContent=label; if(pri) b.className='pri'; b.onclick=fn; row.append(b); };
+    if(AUTH.linked){ p.textContent=tx('acctLinked',{e:AUTH.email||'Google'}); btn(tx('logout'),logoutGoogle); }
+    else if(AUTH.user){ p.textContent=tx('acctGuest'); btn(tx('linkGoogle'),linkGoogle,true); btn(tx('loginGoogle'),loginGoogle); }
+    else { p.textContent=AUTH.err?tx('acctErr'):tx('acctWait'); }
+    box.append(p,row);
+  });
+}
+
 /* ================= Wardrobe ================= */
 const THUMB_VIEW = {
   hair:()=>({y:1.45,d:1.55,a:0.6,h:0.1}), hat:()=>({y:1.62,d:1.6,a:0.45,h:0.3}), face:()=>({y:1.4,d:1.05,a:0.25,h:0}),
@@ -2200,6 +2330,7 @@ function closeWardrobe(){
 }
 $('#wardDone').onclick=closeWardrobe;
 $('#bWard').onclick=()=>openWardrobe('game');
+authInit();
 
 /* ================= Interaction ================= */
 let target=null;

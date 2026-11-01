@@ -46,3 +46,17 @@ drop policy if exists "camino tents add" on public.camino_tents;
 create policy "camino tents add" on public.camino_tents for insert to anon, authenticated with check (true);
 drop policy if exists "camino tents move" on public.camino_tents;
 create policy "camino tents move" on public.camino_tents for update to anon, authenticated using (true) with check (true);
+
+-- 계정별 여정 저장 (게스트=익명 로그인, 구글 연결 시 같은 user_id 유지)
+create table if not exists public.camino_journeys (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  data jsonb not null check (pg_column_size(data) < 300000),
+  updated_at timestamptz not null default now()
+);
+alter table public.camino_journeys enable row level security;
+drop policy if exists "own journey read" on public.camino_journeys;
+create policy "own journey read" on public.camino_journeys for select to authenticated using ((select auth.uid()) = user_id);
+drop policy if exists "own journey add" on public.camino_journeys;
+create policy "own journey add" on public.camino_journeys for insert to authenticated with check ((select auth.uid()) = user_id);
+drop policy if exists "own journey update" on public.camino_journeys;
+create policy "own journey update" on public.camino_journeys for update to authenticated using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
