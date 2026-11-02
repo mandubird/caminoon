@@ -186,7 +186,9 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
 #dinner .dh img{width:30px;height:20px;border-radius:2px;box-shadow:0 0 0 1px var(--line)}
 #dinner .dh b{font-family:var(--display);font-weight:400;font-size:18px}
 #dinner .dh small{color:var(--ink-soft);font-size:12px}
-#dLine{margin:0;font-size:18px;line-height:1.5}
+#dLine{margin:0;font-size:18px;line-height:1.5;min-height:1.5em}
+#dinner.me #dLine{color:#2f5d8a}
+#dKo{transition:opacity .25s}
 #dKo{margin:0;color:var(--ink-soft);font-size:14px;line-height:1.5}
 .dacts{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .dacts.col{flex-direction:column;align-items:stretch}
@@ -288,6 +290,7 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
       <div class="wcats" id="wCats" role="tablist"></div>
       <div class="witems" id="wItems"></div>
       <div class="wcolors" id="wColors"></div>
+      <p class="fine" id="wPeek" data-i18n="wardPeek" hidden>겉옷은 잠깐 벗겨서 보여 드려요.</p>
       <p class="fine" data-i18n="wardHint">캐릭터를 드래그하면 돌려 볼 수 있어요.</p>
     </div>
   </div>
@@ -483,7 +486,7 @@ ko:{
   waterFirst:'물을 나눴어요. 길 위의 작은 친절이 누군가의 하루를 버티게 해요. ‘물 한 모금’ 도장을 받았어요.', waterAgain:'{n}에게 물을 나눴어요.',
   meetFirst:'{c}에서 온 {n}와 첫 인사를 나눴어요. ‘첫 인사’ 도장을 받았어요.', meetAgain:'{c}에서 온 {n}와 인사했어요.',
   dinnerCap:'그날 저녁, 오리손 알베르게', dinnerSub:'창밖으로 피레네에 해가 넘어가요', ansPh:'직접 말하기', say:'말하기', sleep:'잠자리에 들기', next:'다음',
-  supperStamp:'‘순례자의 저녁’ 도장을 받았어요. 오늘 나눈 이야기는 여권에 남겨 둘게요.', journalQ:'왜 이 길에 왔나요?',
+  supperStamp:'‘순례자의 저녁’ 도장을 받았어요. 오늘 나눈 이야기는 여권에 남겨 둘게요.', journalQ:'왜 이 길에 왔나요?', wardPeek:'겉옷은 잠깐 벗겨서 보여 드려요.',
   ph_night:'밤', ph_dawn:'새벽', ph_morning:'아침', ph_day:'낮', ph_sunset:'노을', ph_dusk:'어스름', clockLive:'산티아고 {t} · {p}', clockPreview:'미리보기 · {p} (누르면 바뀌어요)',
   promptCamp:'오늘은 여기까지 (모닥불 옆에 텐트 치기)', restEnd:'오늘은 여기까지', dayT:'오늘도 수고했어요', dayStats:'오늘 순례길 {km}km를 걸었고, {n}명의 순례자와 인사했어요.', dayQ:'어떤 하루였나요? 기록하지 않고 그냥 잠들어도 괜찮아요.', dayPh:'오늘의 마음을 한 줄 남겨 보세요.', daySave:'기록하고 잠들기', daySkip:'그냥 잠들기', dayFine:'텐트는 지금 서 있는 자리에 쳐져요. 쉼터 근처라면 모닥불 옆에 쳐져요. 다음에 접속하면 텐트에서 다시 시작해요.',
   sleepT:'잘 자요. 내일도 이 길에서 만나요.', sleepSub:'텐트 안에서 쉬는 동안, 다른 순례자들에게는 당신의 텐트가 보여요.', wake:'다시 걷기', morning:'좋은 아침이에요. 배낭을 메고 오늘의 길을 시작해요.', resting:'쉬는 중',
@@ -522,7 +525,7 @@ en:{
   waterFirst:'You shared your water. Small kindnesses on the road keep someone going. You got the “Shared Water” stamp.', waterAgain:'You shared water with {n}.',
   meetFirst:'You said your first hello to {n} from {c}. You got the “First Hello” stamp.', meetAgain:'You said hello to {n} from {c}.',
   dinnerCap:'That evening, at the Orisson albergue', dinnerSub:'The sun sets over the Pyrenees outside the window', ansPh:'Say it in your own words', say:'Say', sleep:'Go to bed', next:'Next',
-  supperStamp:'You got the “Pilgrim’s Supper” stamp. What you shared tonight is kept in your passport.', journalQ:'Why are you on the Camino?',
+  supperStamp:'You got the “Pilgrim’s Supper” stamp. What you shared tonight is kept in your passport.', journalQ:'Why are you on the Camino?', wardPeek:'Your outerwear is hidden for a moment so you can see this.',
   ph_night:'Night', ph_dawn:'Dawn', ph_morning:'Morning', ph_day:'Day', ph_sunset:'Sunset', ph_dusk:'Twilight', clockLive:'Santiago {t} · {p}', clockPreview:'Preview · {p} (tap to change)',
   promptCamp:'Call it a day (pitch a tent by the fire)', restEnd:'Call it a day', dayT:'You did well today', dayStats:'Today you walked {km} km of the Camino and said hello to {n} pilgrims.', dayQ:'How was your day? It’s fine to just go to sleep without writing.', dayPh:'Leave a line about how you feel today.', daySave:'Save and sleep', daySkip:'Just sleep', dayFine:'Your tent goes up where you stand, or by the fire if you’re near the camp. Next time you come back, you’ll wake up in it.',
   sleepT:'Sleep well. See you on the path tomorrow.', sleepSub:'While you rest, other pilgrims can see your tent.', wake:'Start walking again', morning:'Good morning. Shoulder your pack and begin today’s walk.', resting:'resting',
@@ -1054,13 +1057,42 @@ function makePilgrim(o, noScene){
   }
   if(L.bottom==='skirt') addM(rig,cyl(0.2,0.3,0.36,7),botM,0,0.64,0);
 
-  // torso + top
-  const torsoM = L.top==='vest' ? cream : topM;
-  addM(rig,cyl(0.21,0.25,0.62,6),torsoM,0,1.06,0);
-  addM(rig,cyl(0.255,0.255,0.06,6),mat(0x6b4630),0,0.79,0);
-  if(L.top==='vest'){ addM(rig,cyl(0.225,0.262,0.5,6),topM,0,1.1,0); addM(rig,box(0.08,0.08,0.03),mat(shade(L.topC,-0.2)),0.11,0.98,0.235); addM(rig,box(0.08,0.08,0.03),mat(shade(L.topC,-0.2)),-0.11,0.98,0.235); }
-  if(L.top==='puffer') for(const [y,r] of [[0.92,0.27],[1.08,0.255],[1.24,0.24]]) addM(rig,tor(r,0.05),topM,0,y,0,Math.PI/2);
-  if(L.top==='rain' || L.top==='wind') addM(rig,box(0.02,0.56,0.02),dark,0,1.06,0.235);
+  // torso + top (flat front so details sit flush)
+  const TORSO=(y)=>(0.25-0.04*(y-0.75)/0.62)*0.866+0.003;   // front plane z at height y
+  const tcyl=(a,b,h)=>geo(`tc${a}|${b}|${h}`,()=>new THREE.CylinderGeometry(a,b,h,6,1,false,Math.PI/6));
+  const tD=mat(shade(L.topC,-0.22)), tL=mat(shade(L.topC,0.22));
+  const glossy = L.top==='rain' ? new THREE.MeshPhongMaterial({color:L.topC, shininess:70, specular:0x555555, flatShading:true}) : null;
+  const torsoM = L.top==='vest' ? cream : (glossy||topM);
+  addM(rig,tcyl(0.21,0.25,0.62),torsoM,0,1.06,0);
+  addM(rig,tcyl(0.256,0.256,0.06),mat(0x6b4630),0,0.79,0);
+  addM(rig,box(0.06,0.05,0.02),mat(0xc9a24a),0,0.79,TORSO(0.79)+0.01);
+  const zip=(c)=>addM(rig,box(0.018,0.56,0.012),c||dark,0,1.08,TORSO(1.08)+0.004,-0.064);
+  if(L.top==='shirt'){
+    addM(rig,box(0.045,0.52,0.012),tL,0,1.08,TORSO(1.08)+0.004,-0.064);
+    for(const y of [0.95,1.07,1.19,1.3]) addM(rig,box(0.022,0.022,0.012),mat(0xf2ead8),0,y,TORSO(y)+0.01,-0.064);
+    addM(rig,box(0.09,0.085,0.012),tD,0.085,1.2,TORSO(1.2)+0.004,-0.064); addM(rig,box(0.095,0.022,0.016),tD,0.085,1.245,TORSO(1.245)+0.008,-0.064);
+    for(const sd of [1,-1]) addM(rig,box(0.1,0.05,0.03),tL,0.06*sd,1.4,0.17,0.3,0,0.55*sd);
+  } else if(L.top==='tee'){
+    addM(rig,tor(0.115,0.022),tL,0,1.37,0.02,Math.PI/2);
+    const pr=new THREE.Mesh(geo('teeArrow',()=>new THREE.PlaneGeometry(0.14,0.07)),new THREE.MeshLambertMaterial({map:arrowTex,transparent:true}));
+    pr.position.set(0,1.15,TORSO(1.15)+0.004); pr.rotation.x=-0.064; rig.add(pr);
+  } else if(L.top==='vest'){
+    addM(rig,tcyl(0.225,0.262,0.5),topM,0,1.1,0); zip(mat(0x3a3a3a));
+    for(const sd of [1,-1]){ addM(rig,box(0.08,0.09,0.012),tD,0.095*sd,1.18,TORSO(1.18)+0.006,-0.064); addM(rig,box(0.09,0.08,0.012),tD,0.095*sd,0.96,TORSO(0.96)+0.012,-0.064); }
+    addM(rig,tor(0.16,0.03),tD,0,1.37,0,Math.PI/2);
+  } else if(L.top==='wind'){
+    addM(rig,tcyl(0.216,0.235,0.2),tD,0,1.27,0); zip(mat(0xe8e2d6));
+    addM(rig,box(0.42,0.03,0.012),mat(0xf2e6cf),0,1.16,TORSO(1.16)+0.004,-0.064);
+    addM(rig,tcyl(0.13,0.15,0.1),tD,0,1.42,0); addM(rig,tor(0.13,0.045),tD,0,1.38,-0.1,1.9);
+  } else if(L.top==='rain'){
+    addM(rig,geo('rainHem',()=>new THREE.CylinderGeometry(0.255,0.34,0.32,6,1,true,Math.PI/6)),new THREE.MeshPhongMaterial({color:L.topC,shininess:70,specular:0x555555,flatShading:true,side:THREE.DoubleSide}),0,0.62,0);
+    for(const y of [0.72,0.9,1.06,1.22]) addM(rig,box(0.03,0.03,0.014),mat(0x2a2a2a),0.05,y,TORSO(Math.max(y,0.76))+0.008,-0.064);
+    for(const sd of [1,-1]) addM(rig,box(0.1,0.03,0.04),glossy,0.13*sd,0.86,TORSO(0.86)+0.02,-0.064);
+    addM(rig,tcyl(0.14,0.16,0.1),glossy,0,1.42,0); addM(rig,halfS(0.2),glossy,0,1.43,-0.17,-2.0).scale.set(1.1,1,0.8);
+  } else if(L.top==='puffer'){
+    for(const [y,r] of [[0.9,0.268],[1.04,0.258],[1.18,0.248],[1.31,0.236]]) addM(rig,tor(r,0.045),topM,0,y,0,Math.PI/2);
+    zip(mat(0x2a2a2a)); addM(rig,tcyl(0.15,0.17,0.13),topM,0,1.42,0);
+  }
 
   // outerwear (signature silhouette)
   const oc=L.outerC, oM=matD(oc), trim=matD(shade(oc,-0.35));
@@ -1080,45 +1112,65 @@ function makePilgrim(o, noScene){
     backR=0.3; chestZ=0.27; chestY=1.3;
   }
 
-  // arms (shoulder → hand)
+  // arms (shoulder → hand), shoulders sit on the torso
+  const armM = glossy || topM;
   for(const s of [1,-1]){
-    const pv=new THREE.Group(); pv.position.set(0.31*s,1.34,0); pv.rotation.z=0.18*s;
-    if(L.top==='tee'){ addM(pv,cyl(0.08,0.074,0.18),topM,0,-0.09,0); addM(pv,cyl(0.06,0.055,0.32),skin,0,-0.34,0); }
+    const pv=new THREE.Group(); pv.position.set(0.265*s,1.33,0); pv.rotation.z=0.16*s;
+    addM(pv,dod(0.08),L.top==='vest'?cream:armM,0,0,0);
+    if(L.top==='tee'){ addM(pv,cyl(0.08,0.074,0.18),topM,0,-0.09,0); addM(pv,cyl(0.077,0.077,0.03),tL,0,-0.18,0); addM(pv,cyl(0.058,0.053,0.33),skin,0,-0.34,0); }
     else if(L.top==='vest'){ addM(pv,cyl(0.066,0.058,0.5),cream,0,-0.25,0); }
-    else if(L.top==='puffer'){ addM(pv,cyl(0.092,0.084,0.5),topM,0,-0.25,0); addM(pv,tor(0.085,0.02),mat(shade(L.topC,-0.2)),0,-0.25,0,Math.PI/2); }
-    else addM(pv,cyl(0.068,0.06,0.5),topM,0,-0.25,0);
-    addM(pv,dod(0.068),skin,0,-0.55,0);
+    else if(L.top==='puffer'){ addM(pv,cyl(0.092,0.084,0.5),topM,0,-0.25,0); for(const y of [-0.16,-0.33]) addM(pv,tor(0.088,0.02),tD,0,y,0,Math.PI/2); addM(pv,cyl(0.07,0.07,0.05),dark,0,-0.48,0); }
+    else {
+      addM(pv,cyl(0.07,0.062,0.5),armM,0,-0.25,0);
+      if(L.top==='shirt') addM(pv,cyl(0.068,0.068,0.07),tL,0,-0.44,0);
+      if(L.top==='wind'){ addM(pv,cyl(0.074,0.074,0.035),mat(0xf2e6cf),0,-0.22,0); addM(pv,cyl(0.066,0.066,0.05),tD,0,-0.47,0); }
+      if(L.top==='rain') addM(pv,cyl(0.072,0.072,0.05),tD,0,-0.47,0);
+    }
+    addM(pv,dod(0.066),skin,0,-0.55,0);
     if(L.outer==='poncho'){ addM(pv,cyl(0.1,0.12,0.2,6),oM,0,-0.06,0); }
     rig.add(pv); if(s>0) P.armL=pv; else P.armR=pv;
   }
 
-  // head
+  // head: hexagonal, flat face toward +z so eyes/brows sit flush at every angle
   const head=new THREE.Group(); head.position.y=1.74; rig.add(head); P.head=head;
-  addM(head,cyl(0.075,0.085,0.14,6),skin,0,-0.2,0);
-  const hm=addM(head,ico(0.23),skin); hm.scale.set(0.95,1.08,1);
+  const hcyl=(a,b,h)=>geo(`hc${a}|${b}|${h}`,()=>new THREE.CylinderGeometry(a,b,h,6,1,false,Math.PI/6));
+  const FZ=y=>(0.172+0.04*(y+0.17)/0.34)*0.866;            // face plane z at height y
+  const FT=-Math.atan(0.04/0.34)*0.866;                    // face tilt
+  addM(head,cyl(0.075,0.085,0.14,6),skin,0,-0.22,0);
+  addM(head,hcyl(0.212,0.172,0.34),skin);
+  addM(head,hcyl(0.13,0.212,0.07),skin,0,0.205,0);
+  addM(head,hcyl(0.172,0.1,0.06),skin,0,-0.2,0);
+  const onFace=(w,h,m,x,y,dz)=>addM(head,box(w,h,0.012),m,x,y,FZ(y)+(dz||0.004),FT);
   const hairM=mat(L.hairC);
   if(L.hair!=='bald'){
-    const cap=addM(head,dod(0.235),hairM,0,0.085,-0.05); cap.scale.set(1.02,L.hair==='buzz'?0.6:0.76,1);
-    if(L.hair==='long'){ const b=addM(head,dod(0.21),hairM,0,-0.12,-0.1); b.scale.set(1.06,1.5,0.7); }
-    if(L.hair==='pony'){ addM(head,dod(0.08),hairM,0,0.06,-0.25); addM(head,cyl(0.05,0.025,0.3,5),hairM,0,-0.12,-0.29,0.25); }
-    if(L.hair==='braid'){ for(let k=0;k<4;k++) addM(head,dod(0.055-k*0.006),hairM,0,-0.05-k*0.09,-0.22-k*0.02); }
-    if(L.hair==='curly'){ for(let k=0;k<9;k++){ const a=k/9*TAU; addM(head,dod(0.075),hairM,Math.cos(a)*0.2,0.13+Math.sin(k*1.7)*0.03,Math.sin(a)*0.2-0.06); } addM(head,dod(0.12),hairM,0,0.24,-0.03); }
-  } else { addM(head,dod(0.13),mat(shade(skinC,-0.08)),0,0.14,0).scale.set(1.4,0.5,1.4); }
-  for(const s of [1,-1]){
-    addM(head,box(0.04,0.052,0.02),dark,0.08*s,0.0,0.216);
-    addM(head,box(0.055,0.012,0.02),mat(shade(L.hairC,0.05)),0.08*s,0.085,0.21,0,0,-0.12*s);
-    if(L.face==='blush') addM(head,box(0.06,0.03,0.015),mat(0xeea0a0),0.135*s,-0.06,0.2);
-    if(L.face==='freckles') for(const [dx,dy] of [[0.11,-0.05],[0.14,-0.07],[0.16,-0.04]]) addM(head,box(0.012,0.012,0.01),mat(0x9a6040),dx*s,dy,0.215);
-    if(L.face==='glasses') addM(head,tor(0.05,0.009),dark,0.085*s,0.01,0.235);
+    const thick = L.hair==='buzz'?0.008:0.02;
+    addM(head,hcyl(0.135+thick,0.214+thick,0.08),hairM,0,0.21,0);
+    addM(head,hcyl(0.214+thick,0.214+thick,0.1),hairM,0,0.13,-0.01);
+    if(L.hair!=='buzz') addM(head,box(0.38,0.22,0.16),hairM,0,0.02,-0.12);
+    if(L.hair==='short') addM(head,box(0.23,0.055,0.03),hairM,0.01,0.15,FZ(0.15)+0.012,FT,0,-0.14);
+    if(['long','pony','braid'].includes(L.hair)) for(const sd of [1,-1]) addM(head,box(0.12,0.05,0.03),hairM,0.06*sd,0.15,FZ(0.15)+0.012,FT,0,-0.38*sd);
+    if(L.hair==='long') for(const sd of [1,-1]) addM(head,box(0.05,0.3,0.12),hairM,0.19*sd,-0.04,0.06);
+    if(L.hair==='long'){ addM(head,hcyl(0.2,0.17,0.42),hairM,0,-0.12,-0.08).scale.set(1.08,1,0.7); }
+    if(L.hair==='pony'){ addM(head,dod(0.08),hairM,0,0.06,-0.24); addM(head,cyl(0.05,0.025,0.3,5),hairM,0,-0.12,-0.28,0.25); }
+    if(L.hair==='braid'){ for(let k=0;k<4;k++) addM(head,dod(0.055-k*0.006),hairM,0,-0.05-k*0.09,-0.21-k*0.02); }
+    if(L.hair==='curly'){ for(let k=0;k<9;k++){ const a=k/9*TAU; addM(head,dod(0.07),hairM,Math.sin(a)*0.2,0.16+Math.sin(k*1.7)*0.03,Math.cos(a)*0.2-0.04).visible = Math.cos(a)<0.75; } addM(head,dod(0.12),hairM,0,0.27,-0.03); }
   }
-  addM(head,box(0.06,0.012,0.015),mat(shade(skinC,-0.35)),0,-0.09,0.22);
-  if(L.face==='glasses') addM(head,box(0.07,0.01,0.01),dark,0,0.015,0.24);
-  if(L.face==='beard'){ const bd=addM(head,dod(0.17),hairM,0,-0.11,0.07); bd.scale.set(1.05,0.8,0.85); addM(head,box(0.07,0.012,0.02),mat(shade(skinC,-0.35)),0,-0.09,0.235); }
-  if(L.face==='moustache') addM(head,box(0.12,0.03,0.03),hairM,0,-0.06,0.225);
+  for(const s of [1,-1]){
+    onFace(0.034,0.05,dark,0.058*s,0.0);
+    onFace(0.012,0.012,mat(0xffffff),0.052*s,0.012,0.012);
+    onFace(0.05,0.012,mat(shade(L.hairC,0.05)),0.06*s,0.07).rotation.z=-0.12*s;
+    if(L.face==='blush') onFace(0.04,0.022,mat(0xeea0a0),0.07*s,-0.055);
+    if(L.face==='freckles') for(const [dx,dy] of [[0.05,-0.045],[0.065,-0.06],[0.08,-0.04]]) onFace(0.01,0.01,mat(0x9a6040),dx*s,dy);
+    if(L.face==='glasses'){ const g=addM(head,tor(0.035,0.007),dark,0.058*s,0.0,FZ(0)+0.012); g.rotation.x=FT; }
+  }
+  onFace(0.05,0.012,mat(shade(skinC,-0.35)),0,-0.09);
+  if(L.face==='glasses') onFace(0.04,0.008,dark,0,0.006,0.012);
+  if(L.face==='beard'){ addM(head,hcyl(0.18,0.12,0.16),hairM,0,-0.15,0.012); onFace(0.05,0.012,mat(shade(skinC,-0.35)),0,-0.09,0.02); }
+  if(L.face==='moustache') onFace(0.11,0.028,hairM,0,-0.06,0.008);
 
   // hats
   const hatM=mat(L.hatC);
-  if(L.hat==='hoodup'){ const hd=addM(head,dod(0.27),matD(oc),0,0.07,-0.09); hd.scale.set(1.0,1.02,1.0); addM(head,tor(0.21,0.04),matD(shade(oc,-0.3)),0,0.03,0.09).scale.set(1,1.15,1); }
+  if(L.hat==='hoodup'){ addM(head,geo('hoodSh',()=>new THREE.CylinderGeometry(0.255,0.235,0.42,6,1,true,Math.PI/6,Math.PI*5/3)),matD(oc),0,0.02,-0.02); addM(head,hcyl(0.16,0.256,0.12),matD(oc),0,0.29,-0.02); }
   if(L.hat==='cap'){ const d=addM(head,halfS(0.245),hatM,0,0.1,-0.01); d.scale.set(1,0.8,1); addM(head,box(0.24,0.025,0.17),hatM,0,0.13,0.24,-0.12); }
   if(L.hat==='hiking'){ addM(head,cyl(0.38,0.38,0.025,8),hatM,0,0.15,0); addM(head,cyl(0.19,0.22,0.18,8),hatM,0,0.24,0); addM(head,cyl(0.225,0.225,0.035,8),mat(shade(L.hatC,-0.4)),0,0.17,0); }
   if(L.hat==='bucket'){ addM(head,cyl(0.21,0.25,0.18,8),hatM,0,0.2,0); addM(head,cyl(0.25,0.34,0.06,8),mat(shade(L.hatC,-0.06)),0,0.11,0); }
@@ -1143,16 +1195,16 @@ function makePilgrim(o, noScene){
     for(const a of [P.armR,P.armL]) addM(a,cyl(0.014,0.014,1.25,5),mat(0x8a8f96),0,-0.5,0.12,0.15);
   } else if(L.stick!=='none'){
     const sm=mat(L.stickC), long=L.stick==='staff';
-    const st=addM(P.armR, long?cyl(0.026,0.032,2.0,5):cyl(0.022,0.026,1.6,5), sm, 0, long?-0.15:-0.25, 0.09);
-    if(long){ const g1=addM(st,dod(0.075),mat(0xc98a3e),0.05,0.55,0.04); g1.scale.set(1,1.3,1); addM(st,dod(0.045),mat(0xc98a3e),0.05,0.68,0.04); }
+    const st=addM(P.armR, long?cyl(0.026,0.032,2.15,5):cyl(0.022,0.026,1.95,5), sm, 0, long?-0.08:-0.1, 0.09);
+    if(long){ const g1=addM(st,dod(0.075),mat(0xc98a3e),0.05,0.62,0.04); g1.scale.set(1,1.3,1); addM(st,dod(0.045),mat(0xc98a3e),0.05,0.75,0.04); }
     const pen=new THREE.Mesh(geo('pennant',()=>new THREE.PlaneGeometry(0.26,0.17)),new THREE.MeshLambertMaterial({map:flagTex(country), side:THREE.DoubleSide}));
-    pen.position.set(0,long?0.86:0.68,-0.14); pen.rotation.y=Math.PI/2; st.add(pen); pen.visible=showFlag; P.pennant=pen;
+    pen.position.set(0,long?0.95:0.86,-0.14); pen.rotation.y=Math.PI/2; st.add(pen); pen.visible=showFlag; P.pennant=pen;
   }
 
   // accessories
   const A=new Set(L.acc), accM=mat(L.accC);
   if(A.has('shell')) addShell(rig,0.1,0,chestY,chestZ+0.01);
-  if(A.has('sunglasses')){ for(const s of [1,-1]) addM(head,box(0.09,0.055,0.02),mat(0x1d1d22),0.085*s,0.015,0.235); addM(head,box(0.06,0.012,0.012),mat(0xc9a24a),0,0.03,0.24); }
+  if(A.has('sunglasses')){ const fz=(0.172+0.04*0.17/0.34)*0.866; for(const s of [1,-1]) addM(head,box(0.07,0.05,0.014),mat(0x1d1d22),0.058*s,0.004,fz+0.016); addM(head,box(0.05,0.012,0.012),mat(0xc9a24a),0,0.02,fz+0.016); }
   if(A.has('scarf')){ addM(rig,tor(0.17,0.055),accM,0,1.5,0,Math.PI/2); addM(rig,box(0.08,0.24,0.04),accM,0.07,1.36,chestZ-0.02,0.15,0,0.1); }
   if(A.has('arrow')){ const a=new THREE.Mesh(geo('arrowPin',()=>new THREE.PlaneGeometry(0.11,0.055)),new THREE.MeshLambertMaterial({map:arrowTex,transparent:true})); a.position.set(-0.13,chestY-0.12,chestZ+0.005); rig.add(a); }
   if(A.has('flagpin')){ const f=new THREE.Mesh(geo('flagPin',()=>new THREE.PlaneGeometry(0.1,0.066)),new THREE.MeshLambertMaterial({map:flagTex(country)})); f.position.set(0.13,chestY-0.12,chestZ+0.005); rig.add(f); }
@@ -1168,7 +1220,7 @@ function makePilgrim(o, noScene){
   const lamp=new THREE.Group(); addM(lamp,box(0.1,0.07,0.05),M.black);
   addM(lamp,sph(0.035,8,6),new THREE.MeshBasicMaterial({color:0xfff6cf}),0,0,0.03);
   const halo=new THREE.Sprite(GLOW_MAT); halo.scale.set(0.7,0.7,1); halo.position.z=0.08; lamp.add(halo);
-  lamp.position.set(0,0.12,0.24); lamp.visible=false; head.add(lamp); P.lamp=lamp;
+  lamp.position.set(0,0.13,0.2); lamp.visible=false; head.add(lamp); P.lamp=lamp;
   rig.traverse(m=>{ if(m.isMesh) m.castShadow=true; });
   if(!noScene) scene.add(outer);
   return P;
@@ -1204,10 +1256,12 @@ function animatePilgrim(P, dt, t, amt){
 /* ================= Player ================= */
 let player = null;
 function rebuildPlayer(){
-  if(player){ scene.remove(player.outer); }
-  player = makePilgrim({look:S.look, poncho:0xf2c230, country:S.country, showFlag:S.showFlag});
-  player.outer.position.set(S.x, groundAt(S.x,S.z), S.z);
-  player.outer.rotation.y = Math.PI;
+  const prev=player; if(player){ scene.remove(player.outer); }
+  const peek = wardOn && ['top','bottom'].includes(wardCat) && S.look.outer!=='none';
+  player = makePilgrim({look:peek?Object.assign({},S.look,{outer:'none'}):S.look, poncho:0xf2c230, country:S.country, showFlag:S.showFlag});
+  const wp=document.getElementById('wPeek'); if(wp) wp.hidden=!peek;
+  if(prev){ player.outer.position.copy(prev.outer.position); player.outer.rotation.y=prev.outer.rotation.y; player.poncho.visible=prev.poncho.visible&&!player.noPoncho; player.lamp.visible=prev.lamp.visible; player.sit=prev.sit; player.sitY=prev.sitY; }
+  else { player.outer.position.set(S.x, groundAt(S.x,S.z), S.z); player.outer.rotation.y = Math.PI; }
 }
 rebuildPlayer();
 
@@ -1268,7 +1322,10 @@ const npcs = NPC_DEF.map((d,i)=>{
 const _v=new THREE.Vector3(), _t=new THREE.Vector3();
 function updateNPC(n, dt, t){
   const P=n.P;
-  if(n.dinner){ P.outer.position.set(n.seat.x, tableY, n.seat.z); P.outer.rotation.y=n.seat.ry; P.sit=1; P.sitY=-0.08; animatePilgrim(P,dt,t,0); return; }
+  if(n.dinner){ P.outer.position.set(n.seat.x, tableY, n.seat.z); P.outer.rotation.y=n.seat.ry; P.sit=1; P.sitY=-0.08; animatePilgrim(P,dt,t,0);
+    let tgt=null; if(talkSpeaker && talkSpeaker!==n.def.name){ const sp=talkSpeaker==='__me'?player:(npcByName(talkSpeaker)||{}).P; if(sp) tgt=sp.outer.position; } else if(talkSpeaker===n.def.name) tgt=player.outer.position;
+    let want=0; if(tgt){ want=Math.atan2(tgt.x-P.outer.position.x, tgt.z-P.outer.position.z)-P.outer.rotation.y; want=Math.atan2(Math.sin(want),Math.cos(want)); want=Math.max(-1.1,Math.min(1.1,want)); }
+    P.head.rotation.y += (want-P.head.rotation.y)*Math.min(1,dt*6); return; }
   if(n.leave){
     const L=n.leave; if(L.wait>0){ L.wait-=dt; animatePilgrim(P,dt,t,0); return; }
     const p=P.outer.position; let tx,tz;
@@ -1479,15 +1536,176 @@ const dinnerCam=new THREE.Vector3(TABLE.x-7.6, tableY+3.7, TABLE.z+1.4), dinnerL
 
 /* ================= Supper & dawn scenes ================= */
 let mode='walk', dSteps=[], dIdx=0;
-const DINNER_LINES=[
-  {n:'Jean',  t:'Bon appétit ! Ce soir, on mange tous ensemble.', ko:'맛있게 드세요! 오늘 저녁은 다 같이 먹어요.', en:'Enjoy your meal! Tonight we all eat together.'},
-  {n:'Hans',  t:'Im Nebel habe ich jedem gelben Pfeil vertraut.', ko:'안개 속에선 노란 화살표 하나하나를 믿고 걸었어요.', en:'In the fog, I trusted every single yellow arrow.'},
-  {n:'Yuki',  t:'雨の中で、知らない人がポンチョを直してくれました。', ko:'빗속에서 모르는 분이 제 판초를 고쳐 줬어요.', en:'In the rain, a stranger fixed my poncho for me.'},
-  {n:'Ana',   t:'No Brasil dizemos: devagar se vai ao longe.', ko:'브라질에선 "천천히 가야 멀리 간다"고 해요.', en:'In Brazil we say: go slowly and you’ll go far.'},
-  {n:'Emma',  t:'I came here to think. Mostly I just walked. Somehow that helped.', ko:'생각하러 왔는데 그냥 걷기만 했어요. 그런데 그게 도움이 됐어요.', en:''},
-  {n:'Pierre',t:'Et toi ? Pourquoi es-tu sur le Chemin ?', ko:'당신은요? 왜 이 길에 왔어요?', en:'And you? Why are you on the Camino?', ask:true}
+/* ---- Supper talk: 매일 밤 다른 이야기 + 내 대답에 반응하는 대화 ----
+   step: {n, t(원어), ko, en}  |  ask: {..., ask:'key', opts:[{ko,en,tag}], free:true}  |  end:true
+   {name}=내 이름, {c}=내 나라 이름(언어별), {x}=내가 직접 한 말 */
+const l=(n,t,ko,en,x)=>Object.assign({n,t,ko,en:en||''},x||{});
+const SUPPER_OPEN=[
+  l('Jean','Bon appétit ! Ce soir, on mange tous ensemble.','맛있게 드세요! 오늘 저녁은 다 같이 먹어요.','Enjoy your meal! Tonight we all eat together.'),
+  l('Jean','À table, les pèlerins ! La soupe est encore chaude.','순례자 여러분, 식탁으로! 수프가 아직 따뜻해요.','To the table, pilgrims! The soup is still hot.'),
+  l('Jean','Asseyez-vous, asseyez-vous. Ici, personne ne mange seul.','앉아요, 앉아요. 여기선 아무도 혼자 먹지 않아요.','Sit, sit. Here, nobody eats alone.')
 ];
-const ANSWERS={ko:['잠깐 멈추고 싶었어요.','새로운 시작이 필요했어요.','아직 잘 모르겠어요. 걸으면서 찾아보려고요.'], en:['I needed to pause for a while.','I needed a new beginning.','I’m not sure yet. I hope to find out as I walk.']};
+const SUPPER_TOPICS={
+  rain:[
+    l('Yuki','雨の中で、知らない人がポンチョを直してくれました。','빗속에서 모르는 분이 제 판초를 고쳐 줬어요.','In the rain, a stranger fixed my poncho for me.'),
+    l('Ana','Aqui os estranhos viram família rapidinho.','여기선 모르는 사람이 금방 가족이 돼요.','Here, strangers become family very quickly.'),
+    l('Jean','On dit : « le Chemin pourvoit ». Le Chemin donne ce qu’il faut.','이런 말이 있어요. "길이 채워 준다." 필요한 건 길이 내어 줘요.','We say: “the Camino provides.” The Way gives what you need.'),
+    l('Yuki','{name}さんは、今日だれかに助けてもらいましたか？','{name} 님은 오늘 누군가에게 도움을 받았어요?','{name}, did anyone help you today?',{ask:'helped',opts:[
+      {ko:'네, 길에서 따뜻한 말을 들었어요.',en:'Yes, someone said something kind.',tag:'kind'},
+      {ko:'제가 누군가를 도왔어요.',en:'Actually, I helped someone.',tag:'gave'},
+      {ko:'오늘은 혼자 꿋꿋이 걸었어요.',en:'I walked on my own today.',tag:'alone'}],free:true}),
+  ],
+  fog:[
+    l('Hans','Im Nebel habe ich jedem gelben Pfeil vertraut.','안개 속에선 노란 화살표 하나하나를 믿고 걸었어요.','In the fog, I trusted every single yellow arrow.'),
+    l('Emma','Honestly? I just followed Hans.','솔직히요? 저는 그냥 한스 아저씨를 따라갔어요.',''),
+    l('Hans','Und ich folgte den Pfeilen. Also war alles gut.','그리고 나는 화살표를 따라갔죠. 그러니 다 괜찮았던 거예요.','And I followed the arrows. So everything was fine.'),
+    l('Pierre','Et toi, qu’est-ce qui t’a guidé aujourd’hui ?','당신은 오늘 무엇을 따라 걸었어요?','And you, what guided you today?',{ask:'guide',opts:[
+      {ko:'노란 화살표만 보고 걸었어요.',en:'Just the yellow arrows.',tag:'arrow'},
+      {ko:'앞서 걷는 사람의 뒷모습이요.',en:'The back of the person ahead of me.',tag:'people'},
+      {ko:'그냥 제 마음이 가는 대로요.',en:'Just my own heart.',tag:'heart'}],free:true}),
+  ],
+  slow:[
+    l('Ana','No Brasil dizemos: devagar se vai ao longe.','브라질에선 "천천히 가야 멀리 간다"고 해요.','In Brazil we say: go slowly and you’ll go far.'),
+    l('Pierre','Mes genoux sont tout à fait d’accord.','제 무릎도 완전히 동의한대요.','My knees fully agree.'),
+    l('Ana','E você, {name}? Como foi o seu ritmo hoje?','{name} 님은요? 오늘 걸음은 어땠어요?','And you, {name}? How was your pace today?',{ask:'pace',opts:[
+      {ko:'천천히, 풍경 보면서 걸었어요.',en:'Slowly, looking at the view.',tag:'slow'},
+      {ko:'생각보다 빨리 왔어요.',en:'Faster than I expected.',tag:'fast'},
+      {ko:'자주 쉬었어요. 오르막이 힘들었어요.',en:'I rested a lot. The climb was hard.',tag:'rest'}],free:true}),
+  ],
+  feet:[
+    l('Emma','Okay, real talk. Who else has blisters?','자, 솔직히 말해 봐요. 물집 잡힌 사람 또 누구예요?',''),
+    l('Hans','Wollsocken. Immer Wollsocken.','양모 양말이에요. 무조건 양모 양말.','Wool socks. Always wool socks.'),
+    l('Jean','Et les pieds au sec, toujours. Le Chemin se fait avec les pieds… et le cœur.','그리고 발은 늘 보송하게. 순례길은 발로 걷는 거예요… 그리고 마음으로.','And keep your feet dry. The Camino is walked with the feet… and the heart.'),
+    l('Emma','How are your feet holding up, {name}?','{name} 님 발은 괜찮아요?','',{ask:'feet',opts:[
+      {ko:'멀쩡해요! 아직 쌩쌩해요.',en:'All good! Still fresh.',tag:'ok'},
+      {ko:'물집이 잡힐 것 같아요.',en:'I think a blister is coming.',tag:'blister'},
+      {ko:'다리가 돌덩이 같아요.',en:'My legs feel like stone.',tag:'heavy'}],free:true}),
+  ],
+  food:[
+    l('Jean','Cette soupe, c’est la recette de ma grand-mère.','이 수프는 우리 할머니 요리법이에요.','This soup is my grandmother’s recipe.'),
+    l('Pierre','Alors demain, on marchera avec la force de ta grand-mère.','그럼 내일은 할머니 힘으로 걷겠네요.','Then tomorrow we’ll walk on your grandmother’s strength.'),
+    l('Yuki','{name}さん、ふるさとで恋しい料理はありますか？','{name} 님, 고향에서 그리운 음식 있어요?','{name}, is there a dish from home you miss?',{ask:'food',opts:[
+      {ko:'엄마가 해 주던 밥이요.',en:'My mum’s home cooking.',tag:'home'},
+      {ko:'뜨끈한 국물 요리요.',en:'Something with warm broth.',tag:'soup'},
+      {ko:'솔직히 지금 이 수프가 최고예요.',en:'Honestly, this soup is the best right now.',tag:'this'}],free:true}),
+  ],
+  stars:[
+    l('Emma','Has anyone looked up tonight? The sky out here is unreal.','오늘 밤 하늘 본 사람? 여기 하늘은 말도 안 돼요.',''),
+    l('Hans','In Berlin sieht man fast keine Sterne.','베를린에선 별이 거의 안 보여요.','In Berlin you can hardly see any stars.'),
+    l('Ana','Dizem que “Compostela” vem de “campo de estrelas”.','"콤포스텔라"가 "별들의 들판"에서 왔다는 말도 있대요.','They say “Compostela” may come from “field of stars”.'),
+    l('Emma','When did you last really look at the stars, {name}?','{name} 님은 마지막으로 별을 제대로 본 게 언제예요?','',{ask:'stars',opts:[
+      {ko:'기억도 안 날 만큼 오래됐어요.',en:'So long ago I can’t remember.',tag:'long'},
+      {ko:'어릴 때 시골에서요.',en:'As a kid, in the countryside.',tag:'child'},
+      {ko:'오늘 밤 보러 나가 볼래요.',en:'I’ll go out and look tonight.',tag:'tonight'}],free:true}),
+  ],
+  far:[
+    l('Pierre','Moi, je suis parti du Puy-en-Velay il y a trois semaines.','저는 3주 전에 르퓌앙블레에서 출발했어요.','I set off from Le Puy-en-Velay three weeks ago.'),
+    l('Yuki','三週間も！すごいです。','3주나요! 대단해요.','Three weeks! Amazing.'),
+    l('Pierre','Pas si fort. Un pas, puis un autre. C’est tout le secret.','대단할 것 없어요. 한 걸음, 그리고 또 한 걸음. 그게 비밀의 전부예요.','Not really. One step, then another. That’s the whole secret.'),
+    l('Hans','{c} – das ist weit! Wie fühlt es sich an, so weit weg zu sein?','{c}에서 왔다고요? 멀리서 왔네요! 집에서 이렇게 멀리 와 보니 어때요?','{c} – that’s far! How does it feel to be so far from home?',{ask:'far',opts:[
+      {ko:'홀가분해요.',en:'I feel lighter.',tag:'light'},
+      {ko:'조금 그리워요.',en:'I miss home a little.',tag:'miss'},
+      {ko:'아직 실감이 안 나요.',en:'It still doesn’t feel real.',tag:'unreal'}],free:true}),
+  ]
+};
+// 내 대답에 대한 반응
+const SUPPER_REACT={
+  helped:{kind:[l('Ana','Uma palavra boa vale por um dia inteiro.','좋은 말 한마디가 하루를 버티게 해 줘요.','One kind word can carry a whole day.')],
+          gave:[l('Yuki','わあ、{name}さんは今日の「カミーノの天使」ですね。','와, {name} 님이 오늘의 "카미노 천사"네요.','Wow, {name}, you were today’s Camino angel.')],
+          alone:[l('Jean','Seul aujourd’hui, mais pas ce soir.','오늘은 혼자 걸었어도, 오늘 밤은 혼자가 아니에요.','Alone today, but not tonight.')]},
+  guide:{arrow:[l('Hans','Gut! Die Pfeile lügen nie.','좋아요! 화살표는 거짓말을 안 하죠.','Good! The arrows never lie.')],
+         people:[l('Emma','Same as me! We’re all somebody’s arrow, I guess.','저랑 똑같네요! 우리 모두 누군가의 화살표인가 봐요.','')],
+         heart:[l('Pierre','Le meilleur guide, parfois. Mais garde un œil sur les flèches.','가장 좋은 길잡이일 때도 있죠. 그래도 화살표는 꼭 봐요.','Sometimes the best guide. But keep an eye on the arrows.')]},
+  pace:{slow:[l('Ana','Isso! Quem anda devagar vê mais flores.','그렇죠! 천천히 걷는 사람이 꽃을 더 많이 봐요.','Yes! Those who walk slowly see more flowers.')],
+        fast:[l('Hans','Langsam, langsam. Der Berg läuft nicht weg.','천천히, 천천히요. 산은 도망 안 가요.','Slowly, slowly. The mountain isn’t going anywhere.')],
+        rest:[l('Jean','Se reposer, c’est aussi marcher.','쉬는 것도 걷는 거예요.','Resting is part of walking too.')]},
+  feet:{ok:[l('Emma','Lucky you. Teach me your ways.','부럽다. 비법 좀 알려 줘요.','')],
+        blister:[l('Jean','Après le dîner, je te donne de la crème et un pansement.','저녁 먹고 나면 크림이랑 반창고 줄게요.','After dinner, I’ll give you some cream and a plaster.')],
+        heavy:[l('Hans','Beine hoch an die Wand, zehn Minuten. Wunder!','벽에 다리 올리고 10분이요. 기적이 일어나요!','Legs up against the wall, ten minutes. Miracles!')]},
+  food:{home:[l('Ana','Comida de mãe… não tem receita que copie.','엄마 밥은… 어떤 요리법도 못 따라 해요.','A mother’s cooking… no recipe can copy it.')],
+        soup:[l('Jean','Alors tu es au bon endroit. Encore un bol ?','그럼 제대로 찾아왔네요. 한 그릇 더 줄까요?','Then you’re in the right place. Another bowl?')],
+        this:[l('Jean','Ha ! Ma grand-mère serait fière.','하! 우리 할머니가 들으면 뿌듯해하시겠어요.','Ha! My grandmother would be proud.')],
+        _free:[l('Yuki','「{x}」…いつか食べてみたいです。','"{x}"… 언젠가 먹어 보고 싶어요.','“{x}”… I’d love to try it someday.')]},
+  stars:{long:[l('Emma','Then tonight’s your night. Bring your headlamp.','그럼 오늘이 그날이에요. 헤드랜턴 챙겨요.','')],
+         child:[l('Hans','Die Sterne sind noch dieselben. Nur wir sind gewachsen.','별은 그대로예요. 우리만 자랐을 뿐.','The stars are the same. Only we have grown.')],
+         tonight:[l('Ana','Me chama! Eu vou junto.','나도 불러요! 같이 갈래요.','Call me! I’ll come along.')]},
+  far:{light:[l('Pierre','C’est ça, le Chemin. On pose un peu du sac à chaque pas.','그게 순례길이에요. 걸음마다 배낭을 조금씩 내려놓죠.','That’s the Camino. You set down a little of your pack with every step.')],
+       miss:[l('Ana','Saudade… a gente leva a casa no peito.','사우다지(그리움)… 집은 가슴에 품고 다니는 거예요.','Saudade… we carry home in our chest.')],
+       unreal:[l('Yuki','わかります。私もまだ夢みたいです。','알 것 같아요. 저도 아직 꿈같아요.','I know. It still feels like a dream to me too.')]}
+};
+const FREE_ECHO=[
+  l('Pierre','« {x} »… Merci de nous le dire.','"{x}"… 말해 줘서 고마워요.','“{x}”… Thank you for telling us.'),
+  l('Ana','“{x}” — gostei disso.','"{x}"… 그 말 좋네요.','“{x}” — I like that.'),
+  l('Emma','“{x}.” Yeah. I get that.','"{x}". 응, 무슨 말인지 알아요.','')
+];
+// 왜 이 길에 왔나요? — 선택지와 직접 말하기 키워드별 반응
+const WHY_Q=l('Pierre','Et toi ? Pourquoi es-tu sur le Chemin ?','당신은요? 왜 이 길에 왔어요?','And you? Why are you on the Camino?',{ask:'why',opts:[
+  {ko:'잠깐 멈추고 싶었어요.',en:'I needed to pause for a while.',tag:'pause'},
+  {ko:'새로운 시작이 필요했어요.',en:'I needed a new beginning.',tag:'new'},
+  {ko:'누군가를 생각하며 걷고 있어요.',en:'I’m walking with someone in my heart.',tag:'someone'},
+  {ko:'아직 잘 모르겠어요. 걸으면서 찾아보려고요.',en:'I’m not sure yet. I hope to find out as I walk.',tag:'unsure'}],free:true,why:true});
+const WHY_KEYS=[
+  ['pause',/쉬|멈추|지쳤|지친|피곤|번아웃|휴식|숨|tired|rest|pause|break|burn/i],
+  ['new',/시작|새로|퇴사|이직|졸업|이별|헤어|바꾸|변화|start|new|change|quit|after/i],
+  ['someone',/그리|돌아가|떠나보|잃|보고 싶|아버지|어머니|엄마|아빠|할머니|할아버지|miss|lost|passed|memory|mother|father|grand/i],
+  ['faith',/기도|신앙|하나님|하느님|예수|주님|성당|교회|믿음|god|pray|faith|church|jesus|spirit/i],
+  ['health',/건강|운동|살|체력|다이어트|health|fit|exercise|walk more/i],
+  ['people',/친구|가족|사람|만나|아이|남편|아내|friend|family|people|meet|kids|husband|wife/i],
+  ['unsure',/모르|몰라|글쎄|그냥|딱히|not sure|don.?t know|no idea|just/i]
+];
+const WHY_REACT={
+  pause:[l('Jean','Alors dors bien ce soir. La montagne attendra.','그럼 오늘 밤은 푹 자요. 산은 기다려 줄 거예요.','Then sleep well tonight. The mountain will wait.'),
+         l('Yuki','私もです。東京では一度も止まれませんでした。','저도요. 도쿄에선 한 번도 멈출 수가 없었어요.','Me too. In Tokyo I could never stop.')],
+  new:[l('Hans','Ich habe mit sechzig neu angefangen. Es ist nie zu spät.','저는 예순에 다시 시작했어요. 늦은 때란 없어요.','I started over at sixty. It’s never too late.'),
+       l('Ana','Começo novo tem gosto de sopa quente.','새로운 시작은 따뜻한 수프 맛이 나요.','A new beginning tastes like warm soup.')],
+  someone:[l('Jean','Alors on marche un peu pour cette personne aussi, ce soir.','그럼 오늘 밤엔 우리도 그분을 위해 조금 같이 걸을게요.','Then tonight, we walk a little for them too.'),
+           l('Yuki','私も祖母の写真を持って歩いています。','저도 할머니 사진을 품고 걷고 있어요.','I’m carrying a photo of my grandmother, too.')],
+  faith:[l('Pierre','Beaucoup marchent avec une prière. Tu es en bonne compagnie.','많은 사람이 기도를 품고 걸어요. 좋은 동행들과 함께인 거예요.','Many walk with a prayer. You’re in good company.')],
+  health:[l('Hans','Gute Beine, gutes Herz. Das passt.','튼튼한 다리, 건강한 마음. 잘 어울리네요.','Good legs, good heart. That fits.')],
+  people:[l('Ana','Então manda uma foto pra eles hoje à noite!','그럼 오늘 밤 그 사람들한테 사진 한 장 보내요!','Then send them a photo tonight!')],
+  unsure:[l('Pierre','Bien. Ceux qui savent se trompent souvent.','좋아요. 다 안다는 사람이 오히려 자주 틀리거든요.','Good. Those who are sure are often wrong.'),
+          l('Emma','Honestly? Same. I think that’s allowed here.','솔직히요? 저도요. 여기선 그래도 괜찮은 것 같아요.','')]
+};
+const MOOD_KEYS=[
+  ['hard',/힘들|아파|아프|지쳐|지친|무거|고생|죽겠|hard|pain|hurt|tired|exhaust|heavy/i, l('Jean','Courage. Ce soir, on se repose ensemble.','힘내요. 오늘 밤은 다 같이 쉬어요.','Courage. Tonight, we rest together.')],
+  ['good',/좋|행복|즐거|신나|최고|예뻤|아름|감사|고마|good|great|happy|love|beautiful|thank/i, l('Ana','Que bom! Dá pra ver no seu sorriso.','좋다! 얼굴에 다 쓰여 있어요.','How lovely! I can see it in your smile.')],
+  ['miss',/그립|그리워|보고 싶|집|가족|miss|home|family/i, l('Yuki','わかります。遠くにいても、つながっていますよ。','알아요. 멀리 있어도 다 이어져 있어요.','I understand. Even far away, we stay connected.')]
+];
+function moodLine(text){ for(const [,re,line] of MOOD_KEYS) if(re.test(text)) return line; return null; }
+const TOMORROW_Q=l('Yuki','明日は、何を楽しみに歩きますか？','내일은 무엇을 기대하며 걸을 거예요?','What will you look forward to tomorrow?',{ask:'tomorrow',opts:[
+  {ko:'피레네를 넘는 풍경이요.',en:'The view crossing the Pyrenees.',tag:'view'},
+  {ko:'또 새로운 사람을 만나는 거요.',en:'Meeting new people again.',tag:'people'},
+  {ko:'아무 생각 없이 걷는 시간이요.',en:'Walking without thinking at all.',tag:'quiet'}],free:true});
+SUPPER_REACT.tomorrow={view:[l('Pierre','Au col de Lepoeder, regarde derrière toi. Tu verras tout le chemin parcouru.','레푀데르 고개에서 뒤를 돌아봐요. 걸어온 길이 다 보일 거예요.','At the Lepoeder pass, look back. You’ll see the whole way you came.')],
+  people:[l('Emma','Then I’ll save you a seat at breakfast.','그럼 아침 식탁에 자리 맡아 둘게요.','')],
+  quiet:[l('Hans','Die beste Art zu gehen. Kein Ziel im Kopf, nur der nächste Pfeil.','제일 좋은 걷기죠. 머릿속엔 목적지 말고 다음 화살표만.','The best way to walk. No goal in your head, just the next arrow.')]};
+const SUPPER_CLOSE=[
+  l('Jean',"Ici, personne n'a besoin d'une raison parfaite.",'여기선 아무도 완벽한 이유가 필요 없어요.','Here, nobody needs a perfect reason.'),
+  l('Ana','À nossa caminhada! Saúde!','우리의 순례를 위하여! 건배!','To our walk! Cheers!'),
+  l('Jean','Extinction des feux à dix heures. Demain, Roncevaux !','10시엔 불 꺼요. 내일은 론세스바예스예요!','Lights out at ten. Tomorrow, Roncesvalles!',{end:true})
+];
+function supperMemories(){
+  const out=[];
+  if((S.gave||[]).includes('Hans')) out.push(l('Hans','Und {name} – danke nochmal für das Wasser heute.','그리고 {name} 님, 오늘 물 나눠 줘서 다시 한번 고마워요.','And {name} – thanks again for the water today.'));
+  else if((S.gave||[]).includes('Emma')) out.push(l('Emma','By the way, {name}, you saved me with that water today.','그나저나 {name} 님, 오늘 그 물 덕분에 살았어요.',''));
+  if((S.notes||[]).length) out.push(l('Yuki','道ばたの小石のメモ、{name}さんのですか？読みましたよ。','길가 조약돌 위 쪽지, {name} 님이 남긴 거예요? 읽었어요.','Was that note on the stone by the path yours, {name}? I read it.'));
+  if((S.journal||[]).length) out.push(l('Pierre','Content de te revoir à cette table, {name}.','이 식탁에서 다시 보니 반가워요, {name} 님.','Good to see you at this table again, {name}.'));
+  return out.slice(0,2);
+}
+function buildSupper(){
+  if(!S.talk) S.talk={seen:[]};
+  const keys=Object.keys(SUPPER_TOPICS), fresh=keys.filter(k=>!S.talk.seen.includes(k));
+  const pool=(fresh.length>=2?fresh:keys).slice().sort(()=>Math.random()-0.5), pick=pool.slice(0,2);
+  S.talk.seen=[...S.talk.seen.filter(k=>!pick.includes(k)),...pick].slice(-5);
+  const steps=[SUPPER_OPEN[Math.floor(Math.random()*SUPPER_OPEN.length)], ...supperMemories()];
+  pick.forEach(k=>steps.push(...SUPPER_TOPICS[k]));
+  steps.push(WHY_Q);
+  return steps;
+}
+function fillTalk(s, x){ return String(s||'').replace(/\{name\}/g,S.name).replace(/\{c\}/g,cname(S.country)||(S.lang==='ko'?'먼 곳':'far away')).replace(/\{x\}/g,x||''); }
+function fillTalkT(st,x){ // 원어 문장 속 {c}는 영어 나라 이름으로
+  return String(st.t||'').replace(/\{name\}/g,S.name).replace(/\{c\}/g,(CNAME_EN&&CNAME_EN[S.country])||S.country||'').replace(/\{x\}/g,x||'');
+}
 function npcByName(nm){ return npcs.find(n=>n.def.name===nm); }
 function fadeTo(fn, caption, sub){
   const f=$('#fade'); f.innerHTML=''; f.append(caption||''); if(sub){ const sm=document.createElement('small'); sm.textContent=sub; f.append(sm); }
@@ -1502,43 +1720,80 @@ function startDinner(){
     npcs.forEach(n=>{ n.bubbleT=0; n.pause=0; if(DINERS.includes(n.def.name)){ n.dinner=true; n.seat=SEATS[DINERS.indexOf(n.def.name)]; n.P.outer.visible=true; } else if(!n.fixed){ n.P.outer.visible=false; } });
     ['#bottom','#joy','#prompt','#people','#hint','#tr'].forEach(q=>$(q).hidden=true); $('#me').setAttribute('aria-expanded',false);
     camera.position.copy(dinnerCam);
-    dSteps=DINNER_LINES.slice(); dIdx=0; $('#dinner').hidden=false; showStep();
+    dSteps=buildSupper(); dIdx=0; $('#dinner').hidden=false; showStep();
   }, tx('dinnerCap'), tx('dinnerSub'));
 }
 function speakerInfo(nm){ if(nm==='__me') return {name:S.name, c:S.country}; const n=npcByName(nm); return {name:n.def.name, c:n.def.c}; }
+const VOICE={Jean:220,Pierre:180,Yuki:420,Hans:150,Ana:330,Emma:370,__me:290};
+let typeT=null, talkSpeaker=null;
+function blip(n){
+  if(!AC||!soundOn||!master) return;
+  const o=AC.createOscillator(), g=AC.createGain(), t=AC.currentTime, f=(VOICE[n]||260)*(0.9+Math.random()*0.25);
+  o.type='triangle'; o.frequency.setValueAtTime(f,t); o.frequency.exponentialRampToValueAtTime(f*1.12,t+0.05);
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.035,t+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t+0.07);
+  o.connect(g); g.connect(master); o.start(t); o.stop(t+0.08);
+}
 function showStep(){
   const st=dSteps[dIdx], sp=speakerInfo(st.n);
-  if(st.n!=='__me'){ const n=npcByName(st.n); if(n) n.P.wave=1.3; } else player.wave=1.3;
+  talkSpeaker=st.n;
+  if(st.n!=='__me'){ const n=npcByName(st.n); if(n) n.P.wave=st.ask?0.9:1.3; } else player.wave=1.3;
   $('#dFlag').src=flagDataURL(sp.c); $('#dName').textContent=sp.name; $('#dCountry').textContent=cname(sp.c)||'';
-  const tr=L(st); $('#dLine').textContent=st.t; $('#dKo').textContent=tr; $('#dKo').hidden=!tr;
-  const acts=$('#dActs'); acts.innerHTML=''; acts.className='dacts';
-  const btn=(label,fn,cls)=>{ const b=document.createElement('button'); b.textContent=label; if(cls) b.className=cls; b.onclick=fn; acts.append(b); return b; };
+  const full = st.n==='__me' ? st.t : fillTalkT(st, st.x);
+  const trRaw=L(st), tr=trRaw?fillTalk(trRaw, st.x):'';
+  const line=$('#dLine'), ko=$('#dKo'), acts=$('#dActs');
+  ko.textContent=tr; ko.hidden=!tr; ko.style.opacity=0; acts.innerHTML=''; acts.className='dacts';
+  $('#dinner').classList.toggle('me', st.n==='__me');
+  clearInterval(typeT); let i=0; const chars=[...full]; line.textContent='';
+  const done=()=>{ clearInterval(typeT); typeT=null; line.textContent=full; ko.style.opacity=1; renderActs(st); };
+  const reduce=window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce || st.n==='__me'){ done(); return; }
+  typeT=setInterval(()=>{ i+=1; line.textContent=chars.slice(0,i).join(''); if(i%2===1 && !/\s/.test(chars[i-1]||'')) blip(st.n); if(i>=chars.length) done(); }, 32);
+  $('#dinner').onclick=e=>{ if(typeT && !e.target.closest('input')){ done(); } };
+}
+function renderActs(st){
+  const acts=$('#dActs');
+  const btn=(label,fn,cls)=>{ const b=document.createElement('button'); b.textContent=label; if(cls) b.className=cls; b.onclick=e=>{ e.stopPropagation(); fn(); }; acts.append(b); return b; };
   if(st.ask){
     acts.className='dacts col';
-    ANSWERS[S.lang].forEach(a=>btn(a,()=>answer(a)));
-    const row=document.createElement('div'); row.className='row2';
-    const inp=document.createElement('input'); inp.id='dAnswer'; inp.maxLength=60; inp.placeholder=tx('ansPh');
-    const go=document.createElement('button'); go.textContent=tx('say'); go.className='pri';
-    go.onclick=()=>{ const v=inp.value.trim(); if(v) answer(v); else inp.focus(); };
-    inp.addEventListener('keydown',e=>{ if(e.key==='Enter') go.click(); });
-    row.append(inp,go); acts.append(row);
+    st.opts.forEach(o=>btn(S.lang==='ko'?o.ko:o.en,()=>answer(st,o.tag,S.lang==='ko'?o.ko:o.en)));
+    if(st.free){
+      const row=document.createElement('div'); row.className='row2';
+      const inp=document.createElement('input'); inp.id='dAnswer'; inp.maxLength=80; inp.placeholder=tx('ansPh');
+      const go=document.createElement('button'); go.textContent=tx('say'); go.className='pri';
+      go.onclick=e=>{ e.stopPropagation(); const v=inp.value.trim().replace(/[\u0000-\u001f<>]/g,''); if(v) answer(st,null,v); else inp.focus(); };
+      inp.addEventListener('keydown',e=>{ if(e.key==='Enter' && !e.isComposing) go.click(); });
+      row.append(inp,go); acts.append(row);
+    }
   } else if(st.end){
-    btn(tx('sleep'),startDawn,'pri');
+    btn(tx('sleep'),startDawn,'pri').focus();
   } else {
     btn(tx('next'),()=>{ dIdx++; showStep(); },'pri').focus();
   }
 }
-function answer(text){
-  S.journal.push({date:todayStr(), q:tx('journalQ'), a:text});
-  dSteps.push({n:'__me', t:text});
-  dSteps.push({n:'Jean', t:"Ici, personne n'a besoin d'une raison parfaite.", ko:'여기선 아무도 완벽한 이유가 필요 없어요.', en:'Here, nobody needs a perfect reason.'});
-  dSteps.push({n:'Ana', t:'À nossa caminhada! Saúde!', ko:'우리의 순례를 위하여! 건배!', en:'To our walk! Cheers!', end:true});
-  if(!S.stamps.supper){ stamp('supper'); setTimeout(()=>toast(tx('supperStamp'),3600),300); }
+function whyTag(text){ for(const [tag,re] of WHY_KEYS) if(re.test(text)) return tag; return null; }
+function answer(st, tag, text){
+  const isFree = !tag;
+  const add=[{n:'__me', t:text}];
+  if(st.why){
+    const t2 = tag || whyTag(text);
+    S.journal.push({date:todayStr(), q:tx('journalQ'), a:text});
+    if(isFree && !t2) add.push(Object.assign({}, FREE_ECHO[Math.floor(Math.random()*FREE_ECHO.length)], {x:text.slice(0,30)}));
+    if(t2 && WHY_REACT[t2]) add.push(...WHY_REACT[t2]);
+    add.push(TOMORROW_Q);
+    if(!S.stamps.supper){ stamp('supper'); setTimeout(()=>toast(tx('supperStamp'),3600),300); }
+  } else {
+    const R=SUPPER_REACT[st.ask]||{};
+    if(isFree){ const m=moodLine(text); add.push(...(m?[m]:(R._free||[FREE_ECHO[Math.floor(Math.random()*FREE_ECHO.length)]]).map(s=>Object.assign({},s,{x:text.slice(0,30)})))); }
+    else if(R[tag]) add.push(...R[tag]);
+    if(st.ask==='tomorrow') add.push(...SUPPER_CLOSE);
+  }
+  track('talk',{q:st.ask, tag:tag||'free'});
+  dSteps.splice(dIdx+1,0,...add);
   persist(); dIdx++; showStep();
 }
 function startDawn(){
   fadeTo(()=>{
-    mode='dawn'; setTime('dawn'); overrideUntil=performance.now()+150000;
+    mode='dawn'; talkSpeaker=null; clearInterval(typeT); npcs.forEach(n=>{ n.P.head.rotation.y=0; }); setTime('dawn'); overrideUntil=performance.now()+150000;
     dinnerLights.forEach(l=>l.intensity=0.7);
     $('#dinner').hidden=true; $('#bottom').hidden=false; $('#tr').hidden=false; if(coarse) $('#joy').hidden=false;
     pp_set(TABLE.x+0.5, TABLE.z-2.6); player.sit=0; player.outer.rotation.y=Math.atan2(END_T.x,END_T.z); camYaw=player.outer.rotation.y+Math.PI;
@@ -2345,6 +2600,7 @@ const THUMB_VIEW = {
 let TR=null; const thumbCache={};
 function thumbFor(cat, it){
   const L=cleanLook(S.look);
+  if(cat==='top'||cat==='bottom') L.outer='none';
   if(cat==='acc') L.acc=[it.id]; else { L[cat]=it.id; if(it.c!==undefined && S.look[cat]!==it.id) L[cat+'C']=it.c; }
   const key=cat+'|'+it.id+'|'+S.country+'|'+JSON.stringify(L);
   if(thumbCache[key]) return thumbCache[key];
@@ -2367,7 +2623,7 @@ function thumbFor(cat, it){
 }
 function renderWardrobe(){
   const cats=$('#wCats'); cats.innerHTML='';
-  CAT_ORDER.forEach(k=>{ const b=document.createElement('button'); b.textContent=catName(k); b.setAttribute('role','tab'); b.setAttribute('aria-selected',k===wardCat); b.onclick=()=>{ wardCat=k; renderWardrobe(); }; cats.append(b); });
+  CAT_ORDER.forEach(k=>{ const b=document.createElement('button'); b.textContent=catName(k); b.setAttribute('role','tab'); b.setAttribute('aria-selected',k===wardCat); b.onclick=()=>{ const was=['top','bottom'].includes(wardCat); wardCat=k; if(was!==['top','bottom'].includes(k)) rebuildPlayer(); renderWardrobe(); }; cats.append(b); });
   const C=CAT[wardCat], grid=$('#wItems'); grid.innerHTML='';
   C.items.forEach(it=>{
     const on = C.multi ? S.look.acc.includes(it.id) : S.look[wardCat]===it.id;
@@ -2391,14 +2647,14 @@ function renderWardrobe(){
   }
 }
 function openWardrobe(from){
-  wardOn=true; wardSnap=true; wardFrom=from; wardYaw=camYaw; camYaw=0;
+  wardOn=true; wardSnap=true; wardFrom=from; wardYaw=camYaw; camYaw=0; rebuildPlayer();
   if(resting) setRest(false);
   $('#start').hidden=true; ['#tl','#tr','#bottom','#joy','#prompt','#hint'].forEach(q=>$(q).hidden=true);
   document.querySelectorAll('.modal').forEach(m=>m.hidden=true);
   $('#wardrobe').hidden=false; renderWardrobe();
 }
 function closeWardrobe(){
-  wardOn=false; $('#wardrobe').hidden=true; camYaw=wardYaw;
+  wardOn=false; $('#wardrobe').hidden=true; camYaw=wardYaw; rebuildPlayer();
   if(wardFrom==='start'){ $('#start').hidden=false; }
   else { ['#tl','#tr','#bottom'].forEach(q=>$(q).hidden=false); if(coarse) $('#joy').hidden=false; }
   store.save(S); if(NET.ch && started) NET.ch.track(myMeta());
