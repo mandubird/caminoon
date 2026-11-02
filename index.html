@@ -181,6 +181,15 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
 .drops{display:flex;gap:4px}
 .drops i{display:block;width:8px;height:11px;border-radius:50% 50% 50% 50%/62% 62% 38% 38%;background:#2f7fbf}
 .drops i.e{background:rgba(47,127,191,.2)}
+.wbtn{border:0;width:100%;background:rgba(47,127,191,.08);border-radius:10px;padding:5px 8px 7px;display:grid!important;grid-template-columns:1fr auto;gap:4px 6px;font:inherit;font-size:11.5px;color:var(--ink-soft);text-align:left;cursor:pointer}
+.wbtn:hover{background:rgba(47,127,191,.15)}
+.wbtn small{font-size:10.5px;opacity:.85}
+.wbtn .thirst{grid-column:1/-1;height:4px;border-radius:2px;background:rgba(47,127,191,.15);overflow:hidden}
+.wbtn .thirst i{display:block;height:100%;width:0;background:#e0a03a;transition:width .4s,background .4s}
+.wbtn.dry{animation:dryPulse 1.6s ease-in-out infinite}
+.wbtn.dry .thirst i{background:#d0572f}
+@keyframes dryPulse{50%{background:rgba(224,160,58,.28)}}
+@media (prefers-reduced-motion: reduce){.wbtn.dry{animation:none;background:rgba(224,160,58,.25)}}
 #dinner{left:50%;transform:translateX(-50%);bottom:var(--bot);width:min(560px,calc(100vw - 32px));padding:16px 18px;display:grid;gap:8px}
 #dinner .dh{display:flex;align-items:center;gap:8px}
 #dinner .dh img{width:30px;height:20px;border-radius:2px;box-shadow:0 0 0 1px var(--line)}
@@ -273,7 +282,7 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
     <div class="st"><b id="pKm">0.0</b><span>/ 7.8 km</span></div>
     <div class="bar"><i id="pBar"></i></div>
     <div class="st2"><span><span data-i18n="alt">해발</span> <b id="pAlt">170</b>m</span><span><span data-i18n="left">남은</span> <b id="pLeft">7.8</b>km</span></div>
-    <div class="st3"><span data-i18n="water">물병</span><span class="drops" id="pWater"></span></div>
+    <button class="st3 wbtn" id="bDrink"><span class="wl"><span data-i18n="water">물병</span> <small id="pThirstTxt"></small></span><span class="drops" id="pWater"></span><span class="thirst" aria-hidden="true"><i id="pThirst"></i></span></button>
     <button class="clock" id="clock"><span id="clockTxt"></span></button>
   </div>
 
@@ -454,7 +463,7 @@ let wardOn=false, wardCat='outer', wardFrom='start', wardYaw=0, wardSnap=false, 
 const saved = store.load();
 const S = Object.assign({
   name:'순례자', country:'KR', pack:0xc0582f, hat:true, showFlag:true,
-  progress:0, x:0, z:74, met:[], stamps:{}, notes:[], liked:{}, started:false, water:1, gave:[], shared:0, journal:[]
+  progress:0, x:0, z:74, met:[], stamps:{}, notes:[], liked:{}, started:false, water:1, gave:[], shared:0, journal:[], thirst:0, favor:[]
 }, saved || {});
 
 
@@ -486,7 +495,7 @@ ko:{
   waterFirst:'물을 나눴어요. 길 위의 작은 친절이 누군가의 하루를 버티게 해요. ‘물 한 모금’ 도장을 받았어요.', waterAgain:'{n}에게 물을 나눴어요.',
   meetFirst:'{c}에서 온 {n}와 첫 인사를 나눴어요. ‘첫 인사’ 도장을 받았어요.', meetAgain:'{c}에서 온 {n}와 인사했어요.',
   dinnerCap:'그날 저녁, 오리손 알베르게', dinnerSub:'창밖으로 피레네에 해가 넘어가요', ansPh:'직접 말하기', say:'말하기', sleep:'잠자리에 들기', next:'다음',
-  supperStamp:'‘순례자의 저녁’ 도장을 받았어요. 오늘 나눈 이야기는 여권에 남겨 둘게요.', journalQ:'왜 이 길에 왔나요?', wardPeek:'겉옷은 잠깐 벗겨서 보여 드려요.',
+  supperStamp:'‘순례자의 저녁’ 도장을 받았어요. 오늘 나눈 이야기는 여권에 남겨 둘게요.', journalQ:'왜 이 길에 왔나요?', drinkHint:'눌러서 마시기', drinkHintKey:'Q 마시기', thirst0:'', thirst1:'목말라요', thirst2:'많이 목말라요', drank:'꿀꺽꿀꺽. 시원하다!', noWater:'물병이 비었어요. 마을 샘터에서 채우거나, 함께 걷는 순례자에게 도움을 받아 봐요.', thirstHint:'목이 말라요. 물병을 눌러 한 모금 마셔요.', thirstSlow:'목이 너무 말라서 걸음이 느려졌어요.', favor:'{n}님이 다가와 {g}을(를) 건넸어요. 아까 물 고마웠다고요.', promptWaterReal:'{n}님에게 물 건네기', waterSentReal:'{n}님에게 물을 나눠 줬어요.', waterGot:'{c}에서 온 {n}님이 물을 나눠 줬어요! 물병이 한 칸 찼어요.', wardPeek:'겉옷은 잠깐 벗겨서 보여 드려요.',
   ph_night:'밤', ph_dawn:'새벽', ph_morning:'아침', ph_day:'낮', ph_sunset:'노을', ph_dusk:'어스름', clockLive:'산티아고 {t} · {p}', clockPreview:'미리보기 · {p} (누르면 바뀌어요)',
   promptCamp:'오늘은 여기까지 (모닥불 옆에 텐트 치기)', restEnd:'오늘은 여기까지', dayT:'오늘도 수고했어요', dayStats:'오늘 순례길 {km}km를 걸었고, {n}명의 순례자와 인사했어요.', dayQ:'어떤 하루였나요? 기록하지 않고 그냥 잠들어도 괜찮아요.', dayPh:'오늘의 마음을 한 줄 남겨 보세요.', daySave:'기록하고 잠들기', daySkip:'그냥 잠들기', dayFine:'텐트는 지금 서 있는 자리에 쳐져요. 쉼터 근처라면 모닥불 옆에 쳐져요. 다음에 접속하면 텐트에서 다시 시작해요.',
   sleepT:'잘 자요. 내일도 이 길에서 만나요.', sleepSub:'텐트 안에서 쉬는 동안, 다른 순례자들에게는 당신의 텐트가 보여요.', wake:'다시 걷기', morning:'좋은 아침이에요. 배낭을 메고 오늘의 길을 시작해요.', resting:'쉬는 중',
@@ -525,7 +534,7 @@ en:{
   waterFirst:'You shared your water. Small kindnesses on the road keep someone going. You got the “Shared Water” stamp.', waterAgain:'You shared water with {n}.',
   meetFirst:'You said your first hello to {n} from {c}. You got the “First Hello” stamp.', meetAgain:'You said hello to {n} from {c}.',
   dinnerCap:'That evening, at the Orisson albergue', dinnerSub:'The sun sets over the Pyrenees outside the window', ansPh:'Say it in your own words', say:'Say', sleep:'Go to bed', next:'Next',
-  supperStamp:'You got the “Pilgrim’s Supper” stamp. What you shared tonight is kept in your passport.', journalQ:'Why are you on the Camino?', wardPeek:'Your outerwear is hidden for a moment so you can see this.',
+  supperStamp:'You got the “Pilgrim’s Supper” stamp. What you shared tonight is kept in your passport.', journalQ:'Why are you on the Camino?', drinkHint:'tap to drink', drinkHintKey:'Q to drink', thirst0:'', thirst1:'thirsty', thirst2:'very thirsty', drank:'Gulp, gulp. That’s better!', noWater:'Your bottle is empty. Refill at the village fountain, or a fellow pilgrim may help you.', thirstHint:'You’re getting thirsty. Tap your bottle to take a sip.', thirstSlow:'You’re so thirsty your steps have slowed.', favor:'{n} comes over and hands you {g} – thanks for the water earlier.', promptWaterReal:'Share water with {n}', waterSentReal:'You shared water with {n}.', waterGot:'{n} from {c} shared water with you! Your bottle has one more sip.', wardPeek:'Your outerwear is hidden for a moment so you can see this.',
   ph_night:'Night', ph_dawn:'Dawn', ph_morning:'Morning', ph_day:'Day', ph_sunset:'Sunset', ph_dusk:'Twilight', clockLive:'Santiago {t} · {p}', clockPreview:'Preview · {p} (tap to change)',
   promptCamp:'Call it a day (pitch a tent by the fire)', restEnd:'Call it a day', dayT:'You did well today', dayStats:'Today you walked {km} km of the Camino and said hello to {n} pilgrims.', dayQ:'How was your day? It’s fine to just go to sleep without writing.', dayPh:'Leave a line about how you feel today.', daySave:'Save and sleep', daySkip:'Just sleep', dayFine:'Your tent goes up where you stand, or by the fire if you’re near the camp. Next time you come back, you’ll wake up in it.',
   sleepT:'Sleep well. See you on the path tomorrow.', sleepSub:'While you rest, other pilgrims can see your tent.', wake:'Start walking again', morning:'Good morning. Shoulder your pack and begin today’s walk.', resting:'resting',
@@ -1146,7 +1155,7 @@ function makePilgrim(o, noScene){
     const thick = L.hair==='buzz'?0.008:0.02;
     addM(head,hcyl(0.135+thick,0.214+thick,0.08),hairM,0,0.21,0);
     addM(head,hcyl(0.214+thick,0.214+thick,0.1),hairM,0,0.13,-0.01);
-    if(L.hair!=='buzz') addM(head,box(0.38,0.22,0.16),hairM,0,0.02,-0.12);
+    if(L.hair!=='buzz') addM(head,box(0.34,0.22,0.14),hairM,0,0.02,-0.11);
     if(L.hair==='short') addM(head,box(0.23,0.055,0.03),hairM,0.01,0.15,FZ(0.15)+0.012,FT,0,-0.14);
     if(['long','pony','braid'].includes(L.hair)) for(const sd of [1,-1]) addM(head,box(0.12,0.05,0.03),hairM,0.06*sd,0.15,FZ(0.15)+0.012,FT,0,-0.38*sd);
     if(L.hair==='long') for(const sd of [1,-1]) addM(head,box(0.05,0.3,0.12),hairM,0.19*sd,-0.04,0.06);
@@ -1171,11 +1180,12 @@ function makePilgrim(o, noScene){
   // hats
   const hatM=mat(L.hatC);
   if(L.hat==='hoodup'){ addM(head,geo('hoodSh',()=>new THREE.CylinderGeometry(0.255,0.235,0.42,6,1,true,Math.PI/6,Math.PI*5/3)),matD(oc),0,0.02,-0.02); addM(head,hcyl(0.16,0.256,0.12),matD(oc),0,0.29,-0.02); }
-  if(L.hat==='cap'){ const d=addM(head,halfS(0.245),hatM,0,0.1,-0.01); d.scale.set(1,0.8,1); addM(head,box(0.24,0.025,0.17),hatM,0,0.13,0.24,-0.12); }
-  if(L.hat==='hiking'){ addM(head,cyl(0.38,0.38,0.025,8),hatM,0,0.15,0); addM(head,cyl(0.19,0.22,0.18,8),hatM,0,0.24,0); addM(head,cyl(0.225,0.225,0.035,8),mat(shade(L.hatC,-0.4)),0,0.17,0); }
-  if(L.hat==='bucket'){ addM(head,cyl(0.21,0.25,0.18,8),hatM,0,0.2,0); addM(head,cyl(0.25,0.34,0.06,8),mat(shade(L.hatC,-0.06)),0,0.11,0); }
-  if(L.hat==='beanie'){ const d=addM(head,halfS(0.255),hatM,0,0.06,-0.01); d.scale.set(1,1.1,1); addM(head,cyl(0.262,0.262,0.08,8),mat(shade(L.hatC,-0.15)),0,0.08,-0.01); addM(head,dod(0.06),mat(shade(L.hatC,0.25)),0,0.35,0); }
-  if(L.hat==='bandana'){ const d=addM(head,halfS(0.25),hatM,0,0.07,-0.01); d.scale.set(1,0.85,1); addM(head,box(0.05,0.12,0.02),hatM,0.03,0.0,-0.26,0,0,0.3); }
+  // hats are hexagonal like the head so no corner pokes through
+  if(L.hat==='cap'){ addM(head,hcyl(0.17,0.25,0.15),hatM,0,0.24,0); addM(head,hcyl(0.07,0.17,0.04),hatM,0,0.335,0); addM(head,box(0.26,0.022,0.17),mat(shade(L.hatC,-0.12)),0,0.175,0.27,-0.1); addM(head,dod(0.025),mat(shade(L.hatC,0.3)),0,0.36,0); }
+  if(L.hat==='hiking'){ addM(head,hcyl(0.4,0.4,0.024),mat(shade(L.hatC,-0.05)),0,0.17,0); addM(head,hcyl(0.19,0.24,0.18),hatM,0,0.27,0); addM(head,hcyl(0.245,0.245,0.04),mat(shade(L.hatC,-0.4)),0,0.2,0); }
+  if(L.hat==='bucket'){ addM(head,hcyl(0.2,0.25,0.19),hatM,0,0.25,0); addM(head,hcyl(0.25,0.34,0.06),mat(shade(L.hatC,-0.08)),0,0.15,0); }
+  if(L.hat==='beanie'){ addM(head,hcyl(0.15,0.248,0.2),hatM,0,0.27,0); addM(head,hcyl(0.07,0.15,0.05),hatM,0,0.395,0); addM(head,hcyl(0.255,0.255,0.08),mat(shade(L.hatC,-0.15)),0,0.15,0); addM(head,dod(0.06),mat(shade(L.hatC,0.25)),0,0.45,0); }
+  if(L.hat==='bandana'){ addM(head,hcyl(0.16,0.244,0.16),hatM,0,0.23,0); addM(head,hcyl(0.07,0.16,0.04),hatM,0,0.33,0); addM(head,dod(0.05),hatM,0,0.14,-0.24); addM(head,box(0.05,0.13,0.02),hatM,0.03,0.04,-0.25,0.2,0,0.3); addM(head,box(0.05,0.11,0.02),hatM,-0.03,0.05,-0.25,0.2,0,-0.3); }
 
   // backpack (rides over the cloak)
   const PK={small:[0.34,0.38,0.18,1.12],pilgrim:[0.42,0.5,0.23,1.1],large:[0.46,0.68,0.27,1.12]}[L.pack];
@@ -1214,6 +1224,9 @@ function makePilgrim(o, noScene){
   if(A.has('camera')){ addM(rig,box(0.14,0.1,0.07),mat(0x7fc8b0),0,camY,chestZ+0.04); addM(rig,cyl(0.035,0.035,0.05),dark,0,camY,chestZ+0.09,Math.PI/2); }
   if(A.has('binoculars')){ const by=A.has('camera')?camY+0.13:camY; for(const s of [1,-1]) addM(rig,cyl(0.035,0.035,0.11),mat(0xe8a5b5),0.045*s,by,chestZ+0.04,Math.PI/2); }
 
+  // water bottles held in hand for drinking / giving
+  const mkBottle=arm=>{ const g=new THREE.Group(); addM(g,cyl(0.045,0.045,0.2,6),mat(0x5f9fc7)); addM(g,cyl(0.03,0.03,0.05,6),mat(0x2f3a4a),0,0.12,0); g.position.set(0,-0.6,0.06); g.visible=false; arm.add(g); return g; };
+  P.bottleL=mkBottle(P.armL); P.bottleR=mkBottle(P.armR); P.drink=0; P.give=0;
   // rain poncho (auto in rain) + headlamp
   const poncho=new THREE.Mesh(PONCHO_GEO, new THREE.MeshLambertMaterial({color:o.poncho||0x2f7fbf, side:THREE.DoubleSide, transparent:true, opacity:0.93}));
   poncho.position.set(0,1.0,-0.06); poncho.scale.set(1,1,1.2); poncho.visible=false; rig.add(poncho); P.poncho=poncho; P.noPoncho = (L.top==='rain' || L.outer==='poncho');
@@ -1251,6 +1264,13 @@ function animatePilgrim(P, dt, t, amt){
     P.armR.rotation.z = -2.5 + Math.sin(t*14)*0.3; P.armR.rotation.x = 0;
   } else P.armR.rotation.z = -0.18;
   P.head.rotation.z = Math.sin(t*1.3+P.outer.id)*0.03;
+  if(P.bottleL){
+    if(P.drink>0){ P.drink-=dt; const k=Math.min(1,(1.5-P.drink)*5, P.drink*5);
+      P.armL.rotation.x = -2.75*k; P.armL.rotation.z = 0.16-0.55*k; P.head.rotation.x = -0.32*k; P.bottleL.visible=true; P.bottleL.rotation.x = -0.6*k; }
+    else { P.bottleL.visible=false; P.head.rotation.x=0; P.armL.rotation.z=0.16; }
+    if(P.give>0){ P.give-=dt; const k=Math.min(1,(1.2-P.give)*5, P.give*5); P.armR.rotation.x = -1.35*k; P.armR.rotation.z = -0.18+0.2*k; P.bottleR.visible=true; P.bottleR.rotation.x = 1.3*k; }
+    else P.bottleR.visible=false;
+  }
 }
 
 /* ================= Player ================= */
@@ -1812,7 +1832,52 @@ function startDawn(){
 }
 function pp_set(x,z){ player.outer.position.set(x,groundAt(x,z),z); }
 const THANKS={Hans:['Danke! Du bist ein Engel.','고마워요! 천사가 따로 없네요.','Thank you! You’re an angel.'], Emma:['Oh, thank you so much!','정말 고마워요!',''], 'Siobhán':['Go raibh maith agat!','고마워요! (아일랜드어로)','Thank you! (in Irish)']};
-function renderWater(){ $('#pWater').innerHTML=[0,1,2].map(i=>`<i class="${i<S.water?'':'e'}"></i>`).join(''); }
+function renderWater(){
+  $('#pWater').innerHTML=[0,1,2].map(i=>`<i class="${i<S.water?'':'e'}"></i>`).join('');
+  const th=Math.max(0,Math.min(1,S.thirst||0));
+  $('#pThirst').style.width=(th*100).toFixed(0)+'%';
+  $('#pThirstTxt').textContent = th>=1 ? tx('thirst2') : th>=0.7 ? tx('thirst1') : ((window.matchMedia&&matchMedia('(pointer: coarse)').matches)?tx('drinkHint'):tx('drinkHintKey'));
+  $('#bDrink').classList.toggle('dry', th>=0.7);
+}
+const WATER={warned:0, slowWarned:false, km:7.8/PATH_LEN};
+function gulp(){ if(!AC||!soundOn||!master) return; for(let k=0;k<3;k++){ const o=AC.createOscillator(), g=AC.createGain(), t=AC.currentTime+k*0.22; o.type='sine'; o.frequency.setValueAtTime(200,t); o.frequency.exponentialRampToValueAtTime(90,t+0.12); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.12,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+0.14); o.connect(g); g.connect(master); o.start(t); o.stop(t+0.16); } }
+function drink(){
+  if(!started || wardOn || mode==='dinner' || mode==='sleep') return;
+  if(player.drink>0) return;
+  if(S.water<=0){ toast(tx('noWater'),4200); return; }
+  S.water--; S.thirst=0; WATER.warned=0; WATER.slowWarned=false; player.drink=1.5; if(resting) setRest(false);
+  initAudio(); setTimeout(gulp,350); renderWater(); persist(); track('drink',{left:S.water});
+  setTimeout(()=>toast(tx('drank')),900);
+}
+// little hearts that float up from someone who was helped
+const HEART_MAT=new THREE.SpriteMaterial({map:texFromCanvas(64,64,(x)=>{ x.fillStyle='#e8556a'; x.beginPath(); x.moveTo(32,54); x.bezierCurveTo(4,34,8,10,24,12); x.bezierCurveTo(30,12,32,18,32,20); x.bezierCurveTo(32,18,34,12,40,12); x.bezierCurveTo(56,10,60,34,32,54); x.fill(); }), transparent:true, depthWrite:false});
+const hearts=[];
+function heartsAt(obj){ for(let k=0;k<4;k++){ const sp=new THREE.Sprite(HEART_MAT); sp.scale.setScalar(0.32); sp.position.set((Math.random()-0.5)*0.6, 2.1+k*0.12, (Math.random()-0.5)*0.4); sp.userData={t:-k*0.18, vx:(Math.random()-0.5)*0.3}; obj.add(sp); hearts.push(sp); } }
+function updateHearts(dt){ for(let i=hearts.length-1;i>=0;i--){ const h=hearts[i], u=h.userData; u.t+=dt; if(u.t<0){ h.visible=false; continue; } h.visible=true; h.position.y+=dt*0.7; h.position.x+=u.vx*dt; h.material.opacity=1; h.scale.setScalar(0.32*(1-Math.max(0,u.t-1.2)/0.6)); if(u.t>1.8){ h.parent&&h.parent.remove(h); hearts.splice(i,1); } } }
+const FAVOR={Hans:{g:{ko:'오렌지 한 조각',en:'an orange slice'}, t:'Für vorhin! Iss das.'}, Emma:{g:{ko:'자기 물 한 모금',en:'a sip of her water'}, t:'Your turn! Drink up.'}, 'Siobhán':{g:{ko:'사과 반쪽',en:'half an apple'}, t:'Here – for the hill!'}};
+function checkFavor(){
+  if(mode!=='walk' || S.water>0 || (S.thirst||0)<0.8) return;
+  if(!S.favor) S.favor=[];
+  const pp=player.outer.position;
+  for(const n of npcs){
+    const nm=n.def.name; if(!FAVOR[nm] || !(S.gave||[]).includes(nm) || S.favor.includes(nm) || !n.P.outer.visible || n.fixed) continue;
+    if(n.P.outer.position.distanceTo(pp)>14) continue;
+    S.favor.push(nm); S.thirst=0.2; WATER.warned=0; WATER.slowWarned=false;
+    n.P.wave=1.6; n.pause=3.6; n.bubbleT=3.6; n.btext=FAVOR[nm].t; n.bko=null; player.drink=1.5; heartsAt(player.outer);
+    toast(tx('favor',{n:nm, g:L(FAVOR[nm].g)}),5200); renderWater(); persist(); track('favor',{n:nm});
+    return;
+  }
+}
+function thirstTick(distWorld, run){
+  if(mode!=='walk') return;
+  const before=S.thirst||0;
+  S.thirst=Math.min(1.05, before + distWorld*WATER.km/3.0*(run?1.35:1)*(1+0.15*(wxCur.sun||0)));
+  if(S.thirst>=0.7 && WATER.warned===0){ WATER.warned=1; toast(tx('thirstHint'),4200); }
+  if(S.thirst>=1 && !WATER.slowWarned){ WATER.slowWarned=true; toast(tx('thirstSlow'),4200); }
+  if(Math.floor(before*20)!==Math.floor(S.thirst*20)) renderWater();
+  checkFavor();
+}
+$('#bDrink').onclick=drink;
 renderWater();
 
 
@@ -2025,6 +2090,7 @@ addEventListener('keydown',e=>{
   if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
   keys[e.code]=true;
   if(e.code==='KeyE'){ interact(); }
+  if(e.code==='KeyQ'){ drink(); }
   if(e.code==='KeyM' && started && !wardOn){ const m=$('#mMap'); if(m.hidden) openMap(); else m.hidden=true; }
   if(e.code==='Escape'){ document.querySelectorAll('.modal').forEach(m=>m.hidden=true); if(wardOn) closeWardrobe(); }
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code) && started) e.preventDefault();
@@ -2165,6 +2231,7 @@ function applyLang(){
   if(wardOn) renderWardrobe();
   const nm=$('#nm'); if(nm.value===I.ko.defaultName||nm.value===I.en.defaultName) nm.value=tx('defaultName');
   if(!started){ renderFlagGrid(); renderResume(); }
+  renderWater();
   if(started){ $('#pName').textContent=S.name; $('#hint').textContent = coarse ? tx('hintTouch') : tx('hintKey'); }
   if(!$('#people').hidden) renderPeople();
   if(ACCOUNT_UI) renderAccount();
@@ -2209,7 +2276,7 @@ let started=false;
 applyLang();
 function begin(fresh){
   S.name = ($('#nm').value||'').trim() || tx('defaultName');
-  if(fresh){ S.sleep=null; S.today=null; S.progress=0; S.x=0; S.z=74; S.stamps={}; S.stampLog={}; S.met=[]; S.ep={}; S.water=1; S.gave=[]; S.shared=0; npcs.forEach(n=>{ n.thirsty=['Hans','Emma','Siobhán'].includes(n.def.name); }); renderWater(); }
+  if(fresh){ S.sleep=null; S.today=null; S.progress=0; S.x=0; S.z=74; S.stamps={}; S.stampLog={}; S.met=[]; S.ep={}; S.water=1; S.gave=[]; S.shared=0; S.thirst=0; S.favor=[]; npcs.forEach(n=>{ n.thirsty=['Hans','Emma','Siobhán'].includes(n.def.name); }); renderWater(); }
   if(!S.stamps.sjpp) stamp('sjpp');
   S.started=true;
   rebuildPlayer();
@@ -2408,7 +2475,8 @@ function ensureRemote(id, m){
   const P=makePilgrim({look:m.look, country:c, pack, hat:!!m.hat, showFlag:m.flag!==false, shirt:SHIRTS[h%SHIRTS.length], hair:[0x2b1a10,0x5a3a24,0xb7793d,0x15100c][h%4], skin:SKIN[h%4], poncho:0x3e8a5a});
   P.outer.visible=false;
   const label=labelSprite(name,c,true); P.outer.add(label);
-  NET.remotes.set(id,{id, name, c, P, label, lookKey:JSON.stringify(m.look||null), tx:0, tz:0, ry:0, moving:false, sit:false, seen:0, have:false, bubbleT:0, btext:null, bko:null, def:{say:'Buen Camino!', ko:'', en:''}});
+  const drop=new THREE.Sprite(DROP_MAT); drop.scale.set(0.42,0.52,1); drop.position.y=3.15; drop.visible=false; P.outer.add(drop);
+  NET.remotes.set(id,{id, name, c, P, label, drop, thirsty:false, lookKey:JSON.stringify(m.look||null), tx:0, tz:0, ry:0, moving:false, sit:false, seen:0, have:false, bubbleT:0, btext:null, bko:null, def:{say:'Buen Camino!', ko:'', en:''}});
 }
 function removeRemote(id){ const r=NET.remotes.get(id); if(!r) return; scene.remove(r.P.outer); if(r.tent) scene.remove(r.tent); NET.remotes.delete(id); }
 function renderOnline(){
@@ -2433,12 +2501,19 @@ function netJoin(){
     if(r.sleeping && !r.tent){ r.tent=makeTent(Number.isInteger(r.P.look&&r.P.look.packC)?r.P.look.packC:0xc0582f); scene.add(r.tent); }
     if(!r.have){ r.have=true; r.P.outer.position.set(r.tx,groundAt(r.tx,r.tz),r.tz); }
     if(p.w) r.P.wave=1.6;
+    r.thirsty=!!p.th;
   });
   ch.on('broadcast',{event:'hello'},({payload:p})=>{
     if(!p || p.to!==NET.me) return; const r=NET.remotes.get(p.from); if(!r) return;
     r.P.wave=1.8; r.bubbleT=3.6; r.btext='¡Buen Camino!'; r.bko={ko:tx('helloBubble',{n:r.name}), en:tx('helloBubble',{n:r.name})};
     if(S.lang==='ko') r.bko.ko=I.ko.helloBubble.split('{n}').join(r.name); else r.bko.en=I.en.helloBubble.split('{n}').join(r.name);
     toast(tx('helloGot',{n:r.name, c:cname(r.c)}));
+  });
+  ch.on('broadcast',{event:'water'},({payload:p})=>{
+    if(!p || p.to!==NET.me) return; const r=NET.remotes.get(p.from); if(!r) return;
+    r.P.give=1.2; S.water=Math.min(3,S.water+1); S.thirst=Math.max(0,(S.thirst||0)-0.3); WATER.warned=0; WATER.slowWarned=false;
+    setTimeout(()=>heartsAt(player.outer),600); renderWater(); persist();
+    toast(tx('waterGot',{n:r.name, c:cname(r.c)}),5200);
   });
   ch.subscribe(status=>{ if(status==='SUBSCRIBED'){ ch.track(myMeta()); sendPos(true); } });
   NET.ch=ch;
@@ -2450,7 +2525,7 @@ function sendPos(force){
   const moved=Math.hypot(p.x-L0.x,p.z-L0.z)>0.05 || Math.abs(ry-L0.ry)>0.05;
   if(!force && !moved) return;
   L0.x=p.x; L0.z=p.z; L0.ry=ry;
-  NET.ch.send({type:'broadcast', event:'pos', payload:{id:NET.me, x:+p.x.toFixed(2), z:+p.z.toFixed(2), ry:+ry.toFixed(2), m:moved, s:resting, sl:mode==='sleep', w:player.wave>1.4}});
+  NET.ch.send({type:'broadcast', event:'pos', payload:{id:NET.me, x:+p.x.toFixed(2), z:+p.z.toFixed(2), ry:+ry.toFixed(2), m:moved, s:resting, sl:mode==='sleep', w:player.wave>1.4, th:(S.thirst||0)>=0.7}});
 }
 function netUpdate(dt,t){
   if(!NET.on || !NET.ch) return;
@@ -2468,7 +2543,16 @@ function netUpdate(dt,t){
     P.sit += ((r.sit?1:0)-P.sit)*Math.min(1,dt*5); P.sitY=-0.4;
     animatePilgrim(P,dt,t,moving?1:0);
     r.label.visible = P.outer.position.distanceTo(player.outer.position)<22;
+    r.drop.visible = r.thirsty && r.label.visible;
   });
+}
+function giveWaterRemote(r){
+  if(!NET.ch || S.water<=0) return;
+  S.water--; S.shared=(S.shared||0)+1; renderWater(); player.give=1.2; r.thirsty=false; r.drop.visible=false;
+  NET.ch.send({type:'broadcast', event:'water', payload:{from:NET.me, to:r.id}});
+  setTimeout(()=>{ r.P.drink=1.5; heartsAt(r.P.outer); },650);
+  if(!S.stamps.water){ stamp('water'); setTimeout(()=>toast(tx('waterFirst'),4200),400); } else toast(tx('waterSentReal',{n:r.name}));
+  track('water',{real:true}); persist();
 }
 function greetRemote(r){
   if(!NET.ch) return;
@@ -2674,11 +2758,12 @@ function interact(){
   }
   if(target.type==='dinner'){ startDinner(); return; }
   if(target.type==='camp'){ openDayCard(); return; }
-  if(target.type==='remote'){ greetRemote(target.obj); return; }
+  if(target.type==='remote'){ if(target.obj.thirsty && S.water>0) giveWaterRemote(target.obj); else greetRemote(target.obj); return; }
   if(target.type==='npc'){
     const n=target.obj; track('greet',{real:false, npc:n.def.name}); player.wave=1.6; n.P.wave=1.9; n.pause=3.6; n.bubbleT=3.6; n.btext=null; n.bko=null;
     if(n.thirsty && S.water>0){
       S.water--; renderWater(); n.thirsty=false; n.drop.visible=false; S.gave.push(n.def.name); S.shared=(S.shared||0)+1; track('water',{});
+      player.give=1.2; setTimeout(()=>{ n.P.drink=1.5; initAudio(); setTimeout(gulp,350); heartsAt(n.P.outer); },650);
       const th=THANKS[n.def.name]||['Gracias!','고마워요!','Thank you!']; n.btext=th[0]; n.bko={ko:th[1], en:th[2]}; player.wave=0; n.P.wave=0;
       if(!S.stamps.water){ stamp('water'); setTimeout(()=>toast(tx('waterFirst'),4200),400); }
       else setTimeout(()=>toast(tx('waterAgain',{n:n.def.name})),400);
@@ -2767,13 +2852,13 @@ function frame(){
     if(mag>0.08 && !anyModal){
       if(resting) setRest(false);
       const run = keys.ShiftLeft||keys.ShiftRight||mag>0.98&&joyV.id!==null&&Math.hypot(joyV.x,joyV.y)>0.98;
-      const speed=(run?6.4:3.4)*mag*(1-0.15*Math.max(wxCur.rain,wxCur.snow));
+      const speed=(run?6.4:3.4)*mag*(1-0.15*Math.max(wxCur.rain,wxCur.snow))*((S.thirst||0)>=1?0.85:1)*(player.drink>0?0.4:1);
       const fx=-Math.sin(camYaw), fz=-Math.cos(camYaw), rx=-fz, rz=fx;
       let mx=fx*iy+rx*ix, mz=fz*iy+rz*ix; const ml=Math.hypot(mx,mz)||1; mx/=ml; mz/=ml;
       let nx=pp.x+mx*speed*dt, nz=pp.z+mz*speed*dt;
       for(const c of colliders){ const dx=nx-c.x, dz=nz-c.z, d=Math.hypot(dx,dz); if(d<c.r){ nx=c.x+dx/d*c.r; nz=c.z+dz/d*c.r; } }
       nx=clamp(nx,-140,150); nz=clamp(nz,-185,96);
-      if(groundAt(nx,nz)>-0.45){ pp.x=nx; pp.z=nz; }
+      if(groundAt(nx,nz)>-0.45){ thirstTick(Math.hypot(nx-pp.x,nz-pp.z), run); pp.x=nx; pp.z=nz; }
       player.outer.rotation.y=lerpAngle(player.outer.rotation.y,Math.atan2(mx,mz),dt*10);
       amt=run?1.25:1*mag;
       if(iy>0.3 && performance.now()-dragTouched>1500) camYaw=lerpAngle(camYaw, player.outer.rotation.y+Math.PI, dt*0.9);
@@ -2815,7 +2900,7 @@ function frame(){
       prompt.hidden=false;
       promptText.textContent = target.type==='npc' ? (target.obj.thirsty&&S.water>0 ? tx('promptWater',{n:target.obj.def.name}) : tx('promptGreet',{n:target.obj.def.name}))
         : target.type==='fountain' ? (S.water<3?tx('promptFill'):tx('promptFull'))
-        : target.type==='camp' ? tx('promptCamp') : target.type==='dinner' ? tx('promptDinner') : target.type==='remote' ? tx('promptGreetReal',{n:target.obj.name}) : tx('promptNote');
+        : target.type==='camp' ? tx('promptCamp') : target.type==='dinner' ? tx('promptDinner') : target.type==='remote' ? (target.obj.thirsty&&S.water>0 ? tx('promptWaterReal',{n:target.obj.name}) : tx('promptGreetReal',{n:target.obj.name})) : tx('promptNote');
       prompt.querySelector('kbd').hidden=coarse;
     }
     else prompt.hidden=true;
@@ -2848,7 +2933,7 @@ function frame(){
     n.drop.visible = n.thirsty && n.label.visible && n.P.outer.visible && S.water>=0;
   }
   updateSheep(dt,t);
-  netUpdate(dt,t);
+  netUpdate(dt,t); updateHearts(dt);
   updateWeather(dt,t);
   updateClock(dt,t);
   updateTents(dt);
