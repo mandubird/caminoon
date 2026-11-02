@@ -2138,9 +2138,8 @@ function checkFavor(){
 function thirstTick(distWorld, run){
   if(mode!=='walk') return;
   const before=S.thirst||0;
-  S.thirst=Math.min(1.05, before + distWorld*WATER.km/3.0*(run?1.35:1)*(1+0.15*(wxCur.sun||0)));
+  S.thirst=Math.min(1, before + distWorld*WATER.km/8.0*(run?1.2:1)*(1+0.15*(wxCur.sun||0)));
   if(S.thirst>=0.7 && WATER.warned===0){ WATER.warned=1; toast(tx('thirstHint'),4200); }
-  if(S.thirst>=1 && !WATER.slowWarned){ WATER.slowWarned=true; toast(tx('thirstSlow'),4200); }
   if(Math.floor(before*20)!==Math.floor(S.thirst*20)) renderWater();
   checkFavor();
 }
@@ -3136,7 +3135,7 @@ function frame(){
     if(mag>0.08 && !anyModal){
       if(resting) setRest(false);
       const run = keys.ShiftLeft||keys.ShiftRight||mag>0.98&&joyV.id!==null&&Math.hypot(joyV.x,joyV.y)>0.98;
-      const speed=(run?6.4:3.4)*mag*(1-0.15*Math.max(wxCur.rain,wxCur.snow))*((S.thirst||0)>=1?0.85:1)*(player.drink>0?0.4:1);
+      const speed=(run?6.4:3.4)*mag*(1-0.15*Math.max(wxCur.rain,wxCur.snow))*(player.drink>0?0.4:1);
       const fx=-Math.sin(camYaw), fz=-Math.cos(camYaw), rx=-fz, rz=fx;
       let mx=fx*iy+rx*ix, mz=fz*iy+rz*ix; const ml=Math.hypot(mx,mz)||1; mx/=ml; mz/=ml;
       let nx=pp.x+mx*speed*dt, nz=pp.z+mz*speed*dt;
