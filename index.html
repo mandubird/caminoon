@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>카미노 온 · Camino On</title>
+<title>Caminosphere · 카미노스피어</title>
 <meta name="description" content="언제든, 마음으로 걷는 산티아고 순례길. 생장피에드포르에서 피레네를 넘어 오리손 알베르게까지, 전 세계 순례자들과 함께 걸어요.">
 <meta name="theme-color" content="#2f5d8a">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="카미노 온">
-<meta property="og:title" content="카미노 온 · Camino On">
+<meta property="og:site_name" content="Caminosphere">
+<meta property="og:title" content="Caminosphere · 카미노스피어">
 <meta property="og:description" content="언제든, 마음으로 걷는 산티아고 순례길.">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:locale:alternate" content="en_US">
-<meta property="og:url" content="https://caminoon.vercel.app/">
-<meta property="og:image" content="https://caminoon.vercel.app/og.jpg">
+<meta property="og:url" content="https://caminosphere.vercel.app/">
+<meta property="og:image" content="https://caminosphere.vercel.app/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="카미노 온 · Camino On — 국기를 단 순례자가 피레네 순례길을 걷는 3D 장면">
+<meta property="og:image:alt" content="Caminosphere — 국기를 단 순례자가 피레네 순례길을 걷는 3D 장면">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="카미노 온 · Camino On">
+<meta name="twitter:title" content="Caminosphere · 카미노스피어">
 <meta name="twitter:description" content="언제든, 마음으로 걷는 산티아고 순례길. The Camino de Santiago, whenever your heart needs it.">
-<meta name="twitter:image" content="https://caminoon.vercel.app/og.jpg">
+<meta name="twitter:image" content="https://caminosphere.vercel.app/og.jpg">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -250,11 +250,11 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
 
 
 <div id="app">
-  <canvas id="c" tabindex="0" data-i18n-aria="canvasAria" aria-label="카미노 온 3D 순례길"></canvas>
+  <canvas id="c" tabindex="0" data-i18n-aria="canvasAria" aria-label="Caminosphere 3D 순례길"></canvas>
   <div id="wx" aria-hidden="true"></div>
 
   <div class="hud" id="tl" hidden>
-    <div id="brand" class="pill"><i class="mk"></i><div><b>Camino On</b><small data-i18n="stage">프랑스 길 · 1구간</small></div></div>
+    <div id="brand" class="pill"><i class="mk"></i><div><b>Caminosphere</b><small data-i18n="stage">프랑스 길 · 1구간</small></div></div>
     <button id="me" class="pill" aria-expanded="false" aria-controls="people"><img id="pFlag" alt=""><b id="pName">순례자</b><span class="met"><span id="pMet">0</span><span data-i18n="met">명 만남</span></span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
     <div id="online" class="pill" hidden><i></i><span id="onlineTxt"></span></div>
     <div id="people" class="pill" hidden>
@@ -311,7 +311,7 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
   <!-- Start -->
   <section id="start">
     <div class="sheet">
-      <h1><i></i>Camino On</h1>
+      <h1><i></i>Caminosphere</h1>
       <div class="langs" role="group" aria-label="Language"><button class="chip" data-lang="ko">한국어</button><button class="chip" data-lang="en">English</button></div>
       <p class="tag" data-i18n-html="tagline">언제든, 마음으로 걷는 산티아고 순례길.<br>생장피에드포르에서 첫 걸음을 떼어 볼까요?</p>
       <div class="field">
@@ -447,7 +447,7 @@ const store = {
   save(d){ try { localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){} },
   clear(){ try { localStorage.removeItem(KEY); } catch(e){} }
 };
-let wardOn=false, wardCat='hat', wardFrom='start', wardYaw=0, wardSnap=false, ACCOUNT_UI=false;
+let wardOn=false, wardCat='outer', wardFrom='start', wardYaw=0, wardSnap=false, ACCOUNT_UI=false;
 const saved = store.load();
 const S = Object.assign({
   name:'순례자', country:'KR', pack:0xc0582f, hat:true, showFlag:true,
@@ -458,7 +458,7 @@ const S = Object.assign({
 /* ================= i18n ================= */
 const I = {
 ko:{
-  title:'카미노 온 · Camino On', canvasAria:'카미노 온 3D 순례길', stage:'프랑스 길 · 1구간', met:'명 만남', peopleH:'길에서 인사한 순례자',
+  title:'Caminosphere · 카미노스피어', canvasAria:'Caminosphere 3D 순례길', stage:'프랑스 길 · 1구간', met:'명 만남', peopleH:'길에서 인사한 순례자',
   peopleNone:'아직 인사한 순례자가 없어요. 길 위의 사람에게 다가가 인사해 보세요.', peopleLeft:'이 구간에 {n}명이 더 걷거나 쉬고 있어요.', peopleAll:'이 구간의 순례자 모두와 인사했어요.',
   progressAria:'진행 상황', alt:'해발', left:'남은', water:'물병', menu:'메뉴', bPass:'여권', bRest:'쉬어가기', bStone:'조약돌', bWxAria:'날씨 바꾸기', bSound:'소리',
   tagline:'언제든, 마음으로 걷는 산티아고 순례길.<br>생장피에드포르에서 첫 걸음을 떼어 볼까요?', nameLabel:'순례자 이름', defaultName:'순례자', from:'어디에서 왔나요?', pack:'배낭 색', packAria:'배낭 색', outfit:'차림', hat:'밀짚모자', flagShow:'배낭에 국기 달기',
@@ -497,7 +497,7 @@ ko:{
   dawnCap:'다음 날 새벽 6시', dawnSub:'알베르게에 하나둘 불이 켜져요', dawn1:'순례자들은 해가 뜨기 전, 헤드랜턴을 켜고 조용히 길을 나서요.', dawn2:'다음 구간 오리손 → 론세스바예스(약 17km)는 곧 열려요. ‘새벽 출발’ 도장을 받았어요.'
 },
 en:{
-  title:'Camino On · Walk the Camino Online', canvasAria:'Camino On 3D pilgrim path', stage:'Camino Francés · Stage 1', met:' met', peopleH:'Pilgrims you greeted',
+  title:'Caminosphere · Walk the Camino together', canvasAria:'Caminosphere 3D pilgrim path', stage:'Camino Francés · Stage 1', met:' met', peopleH:'Pilgrims you greeted',
   peopleNone:'You haven’t greeted anyone yet. Walk up to a pilgrim and say hello.', peopleLeft:'{n} more pilgrims are walking or resting on this stage.', peopleAll:'You’ve greeted every pilgrim on this stage.',
   progressAria:'Progress', alt:'Alt', left:'Left', water:'Water', menu:'Menu', bPass:'Passport', bRest:'Rest', bStone:'Stone', bWxAria:'Change weather', bSound:'Sound',
   tagline:'The Camino de Santiago, whenever your heart needs it.<br>Ready to take your first step in Saint-Jean-Pied-de-Port?', nameLabel:'Pilgrim name', defaultName:'Pilgrim', from:'Where are you from?', pack:'Backpack', packAria:'Backpack color', outfit:'Outfit', hat:'Straw hat', flagShow:'Flag on backpack',
@@ -956,201 +956,243 @@ const arriveRing = new THREE.Mesh(new THREE.RingGeometry(2.2,2.7,40), new THREE.
 arriveRing.rotation.x=-Math.PI/2; arriveRing.position.set(END.x, groundAt(END.x,END.z)+0.12, END.z); scene.add(arriveRing);
 
 /* ================= Pilgrim model ================= */
-const PILG_GEO = {
-  leg: (()=>{const g=new THREE.CylinderGeometry(0.09,0.1,0.42,8); g.translate(0,-0.21,0); return g;})(),
-  shoe: new THREE.BoxGeometry(0.17,0.1,0.26),
-  body: new THREE.CylinderGeometry(0.23,0.3,0.56,14),
-  arm: (()=>{const g=new THREE.CylinderGeometry(0.07,0.065,0.4,8); g.translate(0,-0.2,0); return g;})(),
-  hand: new THREE.SphereGeometry(0.075,8,6),
-  head: new THREE.SphereGeometry(0.38,22,16),
-  hair: new THREE.SphereGeometry(0.405,22,16,0,TAU,0,Math.PI*0.52),
-  eye: new THREE.SphereGeometry(0.048,8,6),
-  cheek: new THREE.SphereGeometry(0.055,8,6),
-  pack: new THREE.BoxGeometry(0.46,0.52,0.26),
-  roll: (()=>{const g=new THREE.CylinderGeometry(0.1,0.1,0.52,10); g.rotateZ(Math.PI/2); return g;})(),
-  flag: new THREE.PlaneGeometry(0.3,0.2),
-  shellG: (()=>{const g=new THREE.SphereGeometry(0.075,10,6,0,TAU,0,Math.PI/2); g.scale(1,0.4,1.1); g.rotateX(Math.PI/2); return g;})(),
-  brim: new THREE.CylinderGeometry(0.56,0.56,0.035,22),
-  crown: new THREE.CylinderGeometry(0.29,0.34,0.24,18),
-  band: new THREE.CylinderGeometry(0.345,0.345,0.06,18),
-  stick: new THREE.CylinderGeometry(0.022,0.026,1.45,6),
-  pennant: new THREE.PlaneGeometry(0.24,0.16)
-};
 const GLOW_MAT = new THREE.SpriteMaterial({map:texFromCanvas(64,64,(x,w,h)=>{const g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,246,200,1)');g.addColorStop(0.35,'rgba(255,236,170,.5)');g.addColorStop(1,'rgba(255,236,170,0)');x.fillStyle=g;x.fillRect(0,0,w,h);}), transparent:true, depthWrite:false, blending:THREE.AdditiveBlending});
-const PONCHO_GEO = (()=>{ const g=new THREE.ConeGeometry(0.56,1.02,14,1,true); g.scale(1,1,1.25); return g; })();
 const SKIN = [0xf6d3b3, 0xe7b48f, 0xc98b62, 0x8d5a3b];
 /* ================= Wardrobe catalog (data only) ================= */
 const CAT = {
-  hair:  {ko:'헤어', en:'Hair', colors:[0x2b1a10,0x4a2f1d,0x7a4a2a,0xb7793d,0xd9b36a,0xa8452a,0x9a9a9a],
-          items:[{id:'short',ko:'짧은 머리',en:'Short'},{id:'long',ko:'긴 머리',en:'Long'},{id:'pony',ko:'포니테일',en:'Ponytail'},{id:'curly',ko:'곱슬머리',en:'Curly'},{id:'buzz',ko:'짧게 민 머리',en:'Buzz cut'}]},
-  hat:   {ko:'모자', en:'Hat', colors:[0xe6cc8a,0x5aa9e6,0x8a6a48,0xd9c19a,0x6a8fc7,0xe0662f,0x3e6a4a],
-          items:[{id:'none',ko:'없음',en:'None'},{id:'straw',ko:'밀짚모자',en:'Straw hat',c:0xe6cc8a},{id:'cap',ko:'야구모자',en:'Baseball cap',c:0x5aa9e6},{id:'hiking',ko:'등산 모자',en:'Hiking hat',c:0x8a6a48},{id:'bucket',ko:'버킷햇',en:'Bucket hat',c:0xd9c19a},{id:'beanie',ko:'비니',en:'Beanie',c:0x6a8fc7},{id:'bandana',ko:'두건',en:'Bandana',c:0xe0662f}]},
-  top:   {ko:'상의', en:'Top', colors:[0xf3e7cf,0x6fcf9f,0xd9c7a8,0xe07a2f,0xf2c230,0x2f5d8a,0x5a8a3e,0xd96c4f],
-          items:[{id:'tee',ko:'반팔 티셔츠',en:'T-shirt',c:0x6fcf9f},{id:'shirt',ko:'긴팔 셔츠',en:'Long-sleeve shirt',c:0xd9c7a8},{id:'vest',ko:'등산 조끼',en:'Hiking vest',c:0xe07a2f},{id:'wind',ko:'바람막이',en:'Windbreaker',c:0x2f5d8a},{id:'rain',ko:'우비',en:'Raincoat',c:0xf2c230},{id:'puffer',ko:'겨울 패딩',en:'Puffer jacket',c:0x5a8a3e}]},
-  bottom:{ko:'하의', en:'Bottoms', colors:[0x5a5f3a,0x56657a,0x3e6a4a,0x6b5a48,0x2b2b2b,0xc9b48a],
-          items:[{id:'shorts',ko:'반바지',en:'Shorts',c:0x5a5f3a},{id:'hike',ko:'등산 바지',en:'Hiking pants',c:0x56657a},{id:'cargo',ko:'카고 바지',en:'Cargo pants',c:0x6b5a48},{id:'leggings',ko:'레깅스',en:'Leggings',c:0x3e6a4a}]},
-  shoes: {ko:'신발', en:'Shoes', colors:[0x9a7048,0x2f5a4a,0xf2f2f2,0xc98b4a,0x3b3b3b,0xd96c4f],
-          items:[{id:'boots',ko:'등산화',en:'Hiking boots',c:0x9a7048},{id:'trek',ko:'트레킹화',en:'Trail shoes',c:0x2f5a4a},{id:'sneakers',ko:'운동화',en:'Sneakers',c:0xf2f2f2},{id:'sandals',ko:'샌들',en:'Sandals',c:0xc98b4a}]},
-  pack:  {ko:'배낭', en:'Backpack', colors:[0xc0582f,0x2f5d8a,0x5f8a3e,0xd9a514,0x7a4a7a,0x3b3b3b],
+  outer: {ko:'겉옷', en:'Outerwear', colors:[0x2f5d8a,0xc0453a,0x3e8a52,0xe0a03a,0x3a3a3a,0x7a5a44,0x8a3a5a,0xe9dcc3],
+          items:[{id:'poncho',ko:'판초',en:'Poncho',c:0x2f5d8a},{id:'cape',ko:'어깨 망토',en:'Shoulder cape',c:0x7a5a44},{id:'hood',ko:'후드 망토',en:'Hooded cape',c:0xd9b45a},{id:'none',ko:'없음',en:'None'}]},
+  hair:  {ko:'헤어', en:'Hair', colors:[0x2b1a10,0x4a2f1d,0x7a4a2a,0xb7793d,0xd9b36a,0xa8452a,0x9a9a9a,0xe8e4dc],
+          items:[{id:'short',ko:'짧은 머리',en:'Short'},{id:'long',ko:'긴 머리',en:'Long'},{id:'pony',ko:'묶은 머리',en:'Ponytail'},{id:'braid',ko:'땋은 머리',en:'Braid'},{id:'curly',ko:'곱슬머리',en:'Curly'},{id:'buzz',ko:'짧게 민 머리',en:'Buzz cut'},{id:'bald',ko:'민머리',en:'Bald'}]},
+  hat:   {ko:'모자', en:'Hat', colors:[0x8a6a48,0x5aa9e6,0xd9c19a,0x6a8fc7,0xe0662f,0x3e6a4a,0x3a3a3a,0xd9b45a],
+          items:[{id:'none',ko:'없음',en:'None'},{id:'hoodup',ko:'후드 쓰기',en:'Hood up'},{id:'cap',ko:'야구모자',en:'Baseball cap',c:0x5aa9e6},{id:'hiking',ko:'등산 모자',en:'Hiking hat',c:0x8a6a48},{id:'bucket',ko:'버킷햇',en:'Bucket hat',c:0xd9c19a},{id:'beanie',ko:'비니',en:'Beanie',c:0x6a8fc7},{id:'bandana',ko:'두건',en:'Bandana',c:0xe0662f}]},
+  top:   {ko:'상의', en:'Top', colors:[0xe9dcc3,0x6fcf9f,0xd9c7a8,0xe07a2f,0xf2c230,0x2f5d8a,0x5a8a3e,0xd96c4f],
+          items:[{id:'shirt',ko:'긴팔 셔츠',en:'Long-sleeve shirt',c:0xe9dcc3},{id:'tee',ko:'반팔 티셔츠',en:'T-shirt',c:0x6fcf9f},{id:'vest',ko:'등산 조끼',en:'Hiking vest',c:0xe07a2f},{id:'wind',ko:'바람막이',en:'Windbreaker',c:0x2f5d8a},{id:'rain',ko:'우비',en:'Raincoat',c:0xf2c230},{id:'puffer',ko:'겨울 패딩',en:'Puffer jacket',c:0x5a8a3e}]},
+  bottom:{ko:'하의', en:'Bottoms', colors:[0x5a5040,0x56657a,0x3e6a4a,0x6b5a48,0x2b2b2b,0xc9b48a,0x7a3a2e],
+          items:[{id:'hike',ko:'등산 바지',en:'Hiking pants',c:0x5a5040},{id:'shorts',ko:'반바지',en:'Shorts',c:0x5a5f3a},{id:'cargo',ko:'카고 바지',en:'Cargo pants',c:0x6b5a48},{id:'leggings',ko:'레깅스',en:'Leggings',c:0x3e6a4a},{id:'skirt',ko:'트레킹 치마',en:'Trek skirt',c:0x7a3a2e}]},
+  shoes: {ko:'신발', en:'Shoes', colors:[0x6b4630,0x2f5a4a,0xf2f2f2,0xc98b4a,0x3b3b3b,0xd96c4f],
+          items:[{id:'boots',ko:'등산화',en:'Hiking boots',c:0x6b4630},{id:'trek',ko:'트레킹화',en:'Trail shoes',c:0x2f5a4a},{id:'sneakers',ko:'운동화',en:'Sneakers',c:0xf2f2f2},{id:'sandals',ko:'샌들',en:'Sandals',c:0xc98b4a}]},
+  pack:  {ko:'배낭', en:'Backpack', colors:[0x8a6a48,0x2f5d8a,0x5f8a3e,0xd9a514,0x7a4a7a,0x3b3b3b,0xc0582f],
           items:[{id:'small',ko:'작은 배낭',en:'Daypack'},{id:'pilgrim',ko:'순례 배낭',en:'Pilgrim pack'},{id:'large',ko:'대형 배낭',en:'Big trekking pack'}]},
-  stick: {ko:'지팡이', en:'Staff', colors:[0x9a6b45,0x6b4630,0xc9a26a],
-          items:[{id:'none',ko:'없음',en:'None'},{id:'wood',ko:'나무 지팡이',en:'Walking stick'},{id:'staff',ko:'호리병 지팡이',en:'Staff & gourd'}]},
+  stick: {ko:'지팡이', en:'Staff', colors:[0x8a5a35,0x5a3a24,0xc9a26a],
+          items:[{id:'none',ko:'없음',en:'None'},{id:'wood',ko:'나무 지팡이',en:'Walking stick'},{id:'staff',ko:'호리병 지팡이',en:'Staff & gourd'},{id:'poles',ko:'트레킹 폴',en:'Trekking poles'}]},
   acc:   {ko:'액세서리', en:'Extras', multi:true, colors:[0xd9534f,0xe86fa0,0x2f5d8a,0xf2c230,0x5f8a3e,0xf3e7cf],
           items:[{id:'shell',ko:'가리비 조개',en:'Scallop shell'},{id:'sunglasses',ko:'선글라스',en:'Sunglasses'},{id:'scarf',ko:'목도리',en:'Scarf'},{id:'arrow',ko:'노란 화살표 배지',en:'Yellow arrow pin'},{id:'flagpin',ko:'국기 배지',en:'Flag pin'},{id:'doll',ko:'배낭 인형',en:'Pack buddy'},{id:'bottle',ko:'물통',en:'Water bottle'},{id:'camera',ko:'카메라',en:'Camera'},{id:'binoculars',ko:'쌍안경',en:'Binoculars'}]},
-  face:  {ko:'얼굴', en:'Face',
-          items:[{id:'blush',ko:'발그레',en:'Rosy cheeks'},{id:'freckles',ko:'주근깨',en:'Freckles'},{id:'glasses',ko:'동그란 안경',en:'Round glasses'},{id:'none',ko:'없음',en:'None'}]}
+  face:  {ko:'얼굴', en:'Face', colors:[0xf2d3b8,0xe9c2a0,0xe0ac85,0xc98b62,0xa8714a,0x7a4a2e,0x5a3420],
+          items:[{id:'none',ko:'기본',en:'Plain'},{id:'blush',ko:'발그레',en:'Rosy cheeks'},{id:'freckles',ko:'주근깨',en:'Freckles'},{id:'glasses',ko:'동그란 안경',en:'Round glasses'},{id:'beard',ko:'수염',en:'Beard'},{id:'moustache',ko:'콧수염',en:'Moustache'}]},
+  body:  {ko:'체형', en:'Build',
+          items:[{id:'mid',ko:'보통',en:'Average'},{id:'tall',ko:'키 큰',en:'Tall'},{id:'small',ko:'아담한',en:'Petite'},{id:'sturdy',ko:'듬직한',en:'Sturdy'}]}
 };
-const CAT_ORDER=['hat','top','bottom','shoes','pack','stick','acc','hair','face'];
-const DEFAULT_LOOK = {hair:'short',hairC:0x4a2f1d,hat:'straw',hatC:0xe6cc8a,top:'tee',topC:0xf3e7cf,bottom:'hike',bottomC:0x56657a,shoes:'boots',shoesC:0x9a7048,pack:'pilgrim',packC:0xc0582f,stick:'wood',stickC:0x9a6b45,acc:['shell'],accC:0xd9534f,face:'blush'};
+const CAT_ORDER=['outer','hat','top','bottom','shoes','pack','stick','acc','hair','face','body'];
+const LOOK_KEYS=['outer','hair','hat','top','bottom','shoes','pack','stick','face','body'];
+const LOOK_CKEYS=['outerC','hairC','hatC','topC','bottomC','shoesC','packC','stickC','accC','faceC'];
+const DEFAULT_LOOK = {outer:'poncho',outerC:0x2f5d8a,hair:'short',hairC:0x3a2618,hat:'none',hatC:0x8a6a48,top:'shirt',topC:0xe9dcc3,bottom:'hike',bottomC:0x5a5040,shoes:'boots',shoesC:0x6b4630,pack:'pilgrim',packC:0x8a6a48,stick:'wood',stickC:0x8a5a35,acc:['shell'],accC:0xc0453a,face:'none',faceC:0xe0ac85,body:'mid'};
 function cleanLook(l){
   const o=Object.assign({},DEFAULT_LOOK); o.acc=DEFAULT_LOOK.acc.slice();
   if(!l || typeof l!=='object') return o;
-  for(const k of ['hair','hat','top','bottom','shoes','pack','stick','face']) if(CAT[k].items.some(i=>i.id===l[k])) o[k]=l[k];
-  for(const k of ['hairC','hatC','topC','bottomC','shoesC','packC','stickC','accC']) if(Number.isInteger(l[k]) && l[k]>=0 && l[k]<=0xffffff) o[k]=l[k];
+  for(const k of LOOK_KEYS) if(CAT[k].items.some(i=>i.id===l[k])) o[k]=l[k];
+  for(const k of LOOK_CKEYS) if(Number.isInteger(l[k]) && l[k]>=0 && l[k]<=0xffffff) o[k]=l[k];
   if(Array.isArray(l.acc)) o.acc=[...new Set(l.acc.filter(a=>CAT.acc.items.some(i=>i.id===a)))].slice(0,6);
   return o;
 }
-function legacyLook(o){ return {hat:o.hat?'straw':'none', topC:o.shirt||0xf3e7cf, bottomC:o.pants||0x56657a, packC:o.pack||0xc0582f, hairC:o.hair||0x4a2f1d, shoesC:0x6b4630}; }
-if(!S.look) S.look = cleanLook(Object.assign({}, DEFAULT_LOOK, {hat:S.hat===false?'none':'straw', packC:Number.isInteger(S.pack)?S.pack:DEFAULT_LOOK.packC}));
+function legacyLook(o){ return {topC:o.shirt||0xe9dcc3, packC:o.pack||0x8a6a48, hairC:o.hair||0x3a2618, shoesC:0x6b4630}; }
+if(!S.look) S.look = cleanLook(Object.assign({}, DEFAULT_LOOK, {packC:Number.isInteger(S.pack)?S.pack:DEFAULT_LOOK.packC}));
 else S.look = cleanLook(S.look);
 const catName = k => S.lang==='ko' ? CAT[k].ko : CAT[k].en;
 const itemName = it => S.lang==='ko' ? it.ko : it.en;
 
-/* ================= Pilgrim builder ================= */
-const MC={}; const mat = c => MC[c] || (MC[c]=lam(c));
+/* ================= Pilgrim builder (Caminosphere faceted style) ================= */
+// 각진 로우폴리 순례자: 판초/망토 실루엣, 무릎 관절, 체형 4종. 배경과 같은 flat-shading.
+const MC={}; const mat = c => MC[c] || (MC[c]=new THREE.MeshPhongMaterial({color:c, shininess:0, specular:0, flatShading:true}));
+const MCD={}; const matD = c => MCD[c] || (MCD[c]=new THREE.MeshPhongMaterial({color:c, shininess:0, specular:0, flatShading:true, side:THREE.DoubleSide}));
 const GC={}; const geo = (k,f) => GC[k] || (GC[k]=f());
 const shade = (c,k) => { const r=(c>>16)&255, g=(c>>8)&255, b=c&255, f=v=>Math.max(0,Math.min(255,Math.round(v*(1+k)))); return (f(r)<<16)|(f(g)<<8)|f(b); };
 function addM(parent, g, m, x, y, z, rx, ry, rz){ const o=new THREE.Mesh(g,m); o.position.set(x||0,y||0,z||0); if(rx||ry||rz) o.rotation.set(rx||0,ry||0,rz||0); parent.add(o); return o; }
-const cyl = (a,b,h,n) => geo(`c${a}|${b}|${h}|${n||10}`, ()=>new THREE.CylinderGeometry(a,b,h,n||10));
+const cyl = (a,b,h,n,open) => geo(`c${a}|${b}|${h}|${n||6}|${open?1:0}`, ()=>new THREE.CylinderGeometry(a,b,h,n||6,1,!!open));
 const box = (w,h,d) => geo(`b${w}|${h}|${d}`, ()=>new THREE.BoxGeometry(w,h,d));
-const sph = (r,a,b) => geo(`s${r}|${a||12}|${b||8}`, ()=>new THREE.SphereGeometry(r,a||12,b||8));
-const halfS = r => geo(`h${r}`, ()=>new THREE.SphereGeometry(r,20,12,0,TAU,0,Math.PI/2));
-const tor = (r,t) => geo(`t${r}|${t}`, ()=>new THREE.TorusGeometry(r,t,8,20));
+const sph = (r,a,b) => geo(`s${r}|${a||8}|${b||6}`, ()=>new THREE.SphereGeometry(r,a||8,b||6));
+const halfS = r => geo(`h${r}`, ()=>new THREE.SphereGeometry(r,8,4,0,TAU,0,Math.PI/2));
+const tor = (r,t) => geo(`t${r}|${t}`, ()=>new THREE.TorusGeometry(r,t,4,8));
+const ico = r => geo(`i${r}`, ()=>new THREE.IcosahedronGeometry(r,0));
+const dod = r => geo(`d${r}`, ()=>new THREE.DodecahedronGeometry(r,0));
+const PONCHO_GEO = geo('rainPoncho', ()=>new THREE.CylinderGeometry(0.2,0.66,1.0,7,1,true));
+const SHELL_GEO = geo('shellFan', ()=>{ const A=Math.PI*1.22; const g=new THREE.CylinderGeometry(1,1,0.16,11,1,false,-A/2,A); g.rotateX(-Math.PI/2); g.translate(0,0.25,0); return g; });
+function addShell(parent, r, x, y, z, ry){
+  const g=new THREE.Group(); g.position.set(x,y,z); if(ry) g.rotation.y=ry; parent.add(g);
+  const f=addM(g,SHELL_GEO,mat(0xf6e6cf)); f.scale.setScalar(r);
+  const A=Math.PI*1.22; for(let i=0;i<11;i++){ const a=-A/2+(i+0.5)/11*A; addM(g,box(0.07,0.95,0.06),mat(0xd9a77a),Math.sin(a)*r*0.48,Math.cos(a)*r*0.48+r*0.25,r*0.09,0,0,-a).scale.set(r,r,r); }
+  addM(g,box(0.5,0.16,0.18),mat(0xd9a77a),0,r*0.22,0.01).scale.set(r,r,r);
+  return g;
+}
+const BUILD = {mid:[1,1,1], tall:[0.96,1.08,0.96], small:[0.94,0.86,0.94], sturdy:[1.16,0.98,1.12]};
+const HIP=0.78;
 
 function makePilgrim(o, noScene){
   const L = cleanLook(o.look || legacyLook(o));
   const outer=new THREE.Group(), rig=new THREE.Group(); outer.add(rig);
-  const skinC=o.skin||SKIN[0], skin=mat(skinC);
-  const P = {outer, rig, phase:0, wave:0, sit:0, sitY:-0.1, look:L};
-  const topM=mat(L.topC), botM=mat(L.bottomC), shoeM=mat(L.shoesC), dark=mat(0x2b2622), cream=mat(0xf3e7cf);
+  const hasSkin = o.look && Number.isInteger(o.look.faceC);
+  const skinC = hasSkin ? L.faceC : (o.skin || L.faceC), skin=mat(skinC);
+  const bs = BUILD[L.body]||BUILD.mid; rig.scale.set(bs[0],bs[1],bs[2]);
+  const P = {outer, rig, phase:0, wave:0, sit:0, sitY:-0.1, look:L, hipK:HIP*bs[1]-0.47};
+  const topM=mat(L.topC), botM=mat(L.bottomC), shoeM=mat(L.shoesC), dark=mat(0x2a241f), cream=mat(0xf2e6cf);
   const country = o.country||'NONE', showFlag = o.showFlag!==false;
+  const longTop = ['wind','rain','puffer','shirt'].includes(L.top);
 
-  // legs, bottoms, shoes
+  // legs: hip → knee → foot
   for(const s of [1,-1]){
-    const pv=new THREE.Group(); pv.position.set(0.11*s,0.47,0);
-    if(L.bottom==='shorts'){ addM(pv,cyl(0.105,0.112,0.2),botM,0,-0.1,0); addM(pv,cyl(0.072,0.078,0.25),skin,0,-0.32,0); }
-    else if(L.bottom==='leggings'){ addM(pv,cyl(0.08,0.086,0.42),botM,0,-0.21,0); }
-    else { addM(pv,PILG_GEO.leg,botM); if(L.bottom==='cargo') addM(pv,box(0.05,0.11,0.12),mat(shade(L.bottomC,-0.18)),s*0.1,-0.2,0); }
-    if(L.shoes==='boots'){ addM(pv,box(0.18,0.16,0.27),shoeM,0,-0.4,0.04); addM(pv,box(0.19,0.04,0.29),dark,0,-0.475,0.04); }
-    else if(L.shoes==='trek'){ addM(pv,box(0.17,0.09,0.27),shoeM,0,-0.43,0.045); addM(pv,box(0.18,0.035,0.29),cream,0,-0.475,0.045); }
-    else if(L.shoes==='sneakers'){ const sh=addM(pv,sph(0.1),shoeM,0,-0.43,0.05); sh.scale.set(0.95,0.65,1.45); addM(pv,box(0.18,0.03,0.29),mat(0xe8e2d6),0,-0.475,0.05); }
-    else { addM(pv,box(0.13,0.06,0.22),skin,0,-0.44,0.04); addM(pv,box(0.17,0.035,0.27),shoeM,0,-0.48,0.04); addM(pv,box(0.175,0.03,0.04),shoeM,0,-0.43,0.08); addM(pv,box(0.175,0.03,0.04),shoeM,0,-0.43,-0.02); }
-    rig.add(pv); if(s>0) P.legL=pv; else P.legR=pv;
+    const hip=new THREE.Group(); hip.position.set(0.12*s,HIP,0);
+    const knee=new THREE.Group(); knee.position.y=-0.38; hip.add(knee);
+    if(L.bottom==='shorts'){ addM(hip,cyl(0.1,0.09,0.26),botM,0,-0.13,0); addM(hip,cyl(0.072,0.066,0.14),skin,0,-0.32,0); addM(knee,cyl(0.066,0.058,0.36),skin,0,-0.18,0); }
+    else if(L.bottom==='leggings'){ addM(hip,cyl(0.078,0.068,0.4),botM,0,-0.2,0); addM(knee,cyl(0.066,0.056,0.36),botM,0,-0.18,0); }
+    else if(L.bottom==='skirt'){ addM(hip,cyl(0.07,0.064,0.4),skin,0,-0.2,0); addM(knee,cyl(0.062,0.055,0.36),mat(0x3b3f4a),0,-0.18,0); }
+    else { addM(hip,cyl(0.09,0.08,0.4),botM,0,-0.2,0); addM(knee,cyl(0.078,0.068,0.36),botM,0,-0.18,0); if(L.bottom==='cargo') addM(hip,box(0.05,0.12,0.13),mat(shade(L.bottomC,-0.2)),s*0.09,-0.24,0); }
+    if(L.shoes==='boots'){ addM(knee,box(0.17,0.15,0.28),shoeM,0,-0.37,0.04); addM(knee,box(0.18,0.04,0.3),dark,0,-0.45,0.04); }
+    else if(L.shoes==='trek'){ addM(knee,box(0.16,0.1,0.28),shoeM,0,-0.4,0.045); addM(knee,box(0.17,0.035,0.3),cream,0,-0.455,0.045); }
+    else if(L.shoes==='sneakers'){ addM(knee,box(0.16,0.1,0.29),shoeM,0,-0.4,0.05); addM(knee,box(0.17,0.035,0.3),mat(0xe8e2d6),0,-0.455,0.05); }
+    else { addM(knee,box(0.13,0.06,0.23),skin,0,-0.42,0.04); addM(knee,box(0.16,0.035,0.27),shoeM,0,-0.46,0.04); addM(knee,box(0.165,0.03,0.04),shoeM,0,-0.41,0.09); }
+    rig.add(hip); if(s>0){ P.legL=hip; P.kneeL=knee; } else { P.legR=hip; P.kneeR=knee; }
+  }
+  if(L.bottom==='skirt') addM(rig,cyl(0.2,0.3,0.36,7),botM,0,0.64,0);
+
+  // torso + top
+  const torsoM = L.top==='vest' ? cream : topM;
+  addM(rig,cyl(0.21,0.25,0.62,6),torsoM,0,1.06,0);
+  addM(rig,cyl(0.255,0.255,0.06,6),mat(0x6b4630),0,0.79,0);
+  if(L.top==='vest'){ addM(rig,cyl(0.225,0.262,0.5,6),topM,0,1.1,0); addM(rig,box(0.08,0.08,0.03),mat(shade(L.topC,-0.2)),0.11,0.98,0.235); addM(rig,box(0.08,0.08,0.03),mat(shade(L.topC,-0.2)),-0.11,0.98,0.235); }
+  if(L.top==='puffer') for(const [y,r] of [[0.92,0.27],[1.08,0.255],[1.24,0.24]]) addM(rig,tor(r,0.05),topM,0,y,0,Math.PI/2);
+  if(L.top==='rain' || L.top==='wind') addM(rig,box(0.02,0.56,0.02),dark,0,1.06,0.235);
+
+  // outerwear (signature silhouette)
+  const oc=L.outerC, oM=matD(oc), trim=matD(shade(oc,-0.35));
+  P.cloth=new THREE.Group(); P.cloth.position.y=1.47; rig.add(P.cloth);
+  let backR=0.27, chestZ=0.24, chestY=1.22;
+  if(L.outer==='poncho'){
+    addM(P.cloth,cyl(0.17,0.58,0.78,6,true),oM,0,-0.39,0,0,Math.PI/6,0);
+    for(const [y,r,c] of [[-0.69,0.565,0xf2e6cf],[-0.63,0.525,shade(oc,-0.4)],[-0.57,0.485,0xf2e6cf]]) addM(P.cloth,cyl(r,r+0.02,0.04,6,true),matD(c),0,y,0,0,Math.PI/6,0);
+    addM(rig,cyl(0.13,0.16,0.09,6),trim,0,1.48,0);
+    backR=0.36; chestZ=0.31; chestY=1.26;
+  } else if(L.outer==='cape' || L.outer==='hood'){
+    addM(P.cloth,cyl(0.2,0.47,0.5,7,true),oM,0,-0.2,0);
+    addM(P.cloth,cyl(0.47,0.48,0.035,7,true),trim,0,-0.45,0);
+    addM(rig,cyl(0.15,0.2,0.1,7),oM,0,1.48,0);
+    if(L.outer==='hood' && L.hat!=='hoodup'){ const hd=addM(rig,halfS(0.22),oM,0,1.6,-0.2,-2.2,0,0); hd.scale.set(1.15,1.05,0.8); }
+    if(L.outer==='hood'){ addM(rig,box(0.09,0.09,0.06),trim,0,1.4,0.2); addM(rig,box(0.05,0.16,0.03),trim,0.03,1.3,0.21,0,0,0.25); }
+    backR=0.3; chestZ=0.27; chestY=1.3;
   }
 
-  // body + top
-  if(L.top==='rain'){ addM(rig,cyl(0.24,0.36,0.66,14),topM,0,0.71,0); addM(rig,box(0.02,0.5,0.02),mat(0xf3e7cf),0,0.74,0.31); }
-  else addM(rig,PILG_GEO.body, L.top==='vest'?cream:topM, 0,0.74,0);
-  if(L.top==='vest'){ addM(rig,cyl(0.252,0.316,0.46,14),topM,0,0.76,0); for(const y of [0.62,0.76,0.9]) addM(rig,tor(0.29,0.012),mat(shade(L.topC,-0.25)),0,y,0,Math.PI/2); addM(rig,box(0.1,0.08,0.02),mat(shade(L.topC,-0.15)),0.12,0.66,0.3); addM(rig,box(0.1,0.08,0.02),mat(shade(L.topC,-0.15)),-0.12,0.66,0.3); }
-  if(L.top==='puffer'){ for(const [y,r] of [[0.58,0.3],[0.74,0.285],[0.9,0.27]]) addM(rig,tor(r,0.055),topM,0,y,0,Math.PI/2); addM(rig,box(0.02,0.5,0.02),mat(shade(L.topC,-0.3)),0,0.74,0.33); }
-  if(L.top==='wind'){ addM(rig,box(0.02,0.52,0.02),dark,0,0.74,0.285); addM(rig,tor(0.27,0.02),mat(shade(L.topC,0.35)),0,0.68,0,Math.PI/2); }
-  if(L.top==='shirt'){ addM(rig,box(0.09,0.07,0.02),mat(shade(L.topC,-0.12)),0.11,0.86,0.255); addM(rig,box(0.09,0.07,0.02),mat(shade(L.topC,-0.12)),-0.11,0.86,0.255); addM(rig,box(0.08,0.05,0.04),mat(shade(L.topC,0.15)),0.07,1.01,0.17,0,0,-0.5); addM(rig,box(0.08,0.05,0.04),mat(shade(L.topC,0.15)),-0.07,1.01,0.17,0,0,0.5); }
-  if(L.top==='tee') addM(rig,tor(0.155,0.024),mat(shade(L.topC,0.25)),0,1.01,0,Math.PI/2);
-  if(['wind','rain','puffer'].includes(L.top)){ const hood=addM(rig,tor(0.2,0.075),topM,0,1.06,-0.13,Math.PI/2.6); hood.scale.set(1,1,0.8); }
-
-  // arms
+  // arms (shoulder → hand)
   for(const s of [1,-1]){
-    const pv=new THREE.Group(); pv.position.set(0.29*s,0.97,0); pv.rotation.z=0.18*s;
-    if(L.top==='tee'){ addM(pv,cyl(0.085,0.08,0.17),topM,0,-0.085,0); addM(pv,cyl(0.064,0.06,0.25),skin,0,-0.29,0); }
-    else if(L.top==='vest'){ addM(pv,PILG_GEO.arm,cream); }
-    else if(L.top==='puffer'){ addM(pv,cyl(0.095,0.088,0.4),topM,0,-0.2,0); addM(pv,tor(0.09,0.02),mat(shade(L.topC,-0.2)),0,-0.2,0,Math.PI/2); }
-    else addM(pv,PILG_GEO.arm,topM);
-    addM(pv,PILG_GEO.hand,skin,0,-0.42,0);
+    const pv=new THREE.Group(); pv.position.set(0.31*s,1.34,0); pv.rotation.z=0.18*s;
+    if(L.top==='tee'){ addM(pv,cyl(0.08,0.074,0.18),topM,0,-0.09,0); addM(pv,cyl(0.06,0.055,0.32),skin,0,-0.34,0); }
+    else if(L.top==='vest'){ addM(pv,cyl(0.066,0.058,0.5),cream,0,-0.25,0); }
+    else if(L.top==='puffer'){ addM(pv,cyl(0.092,0.084,0.5),topM,0,-0.25,0); addM(pv,tor(0.085,0.02),mat(shade(L.topC,-0.2)),0,-0.25,0,Math.PI/2); }
+    else addM(pv,cyl(0.068,0.06,0.5),topM,0,-0.25,0);
+    addM(pv,dod(0.068),skin,0,-0.55,0);
+    if(L.outer==='poncho'){ addM(pv,cyl(0.1,0.12,0.2,6),oM,0,-0.06,0); }
     rig.add(pv); if(s>0) P.armL=pv; else P.armR=pv;
   }
 
-  // head, hair, face
-  const head=new THREE.Group(); head.position.y=1.4; rig.add(head); P.head=head;
-  const hm=addM(head,PILG_GEO.head,skin); hm.scale.set(1,0.94,0.96);
+  // head
+  const head=new THREE.Group(); head.position.y=1.74; rig.add(head); P.head=head;
+  addM(head,cyl(0.075,0.085,0.14,6),skin,0,-0.2,0);
+  const hm=addM(head,ico(0.23),skin); hm.scale.set(0.95,1.08,1);
   const hairM=mat(L.hairC);
-  const cap=addM(head,PILG_GEO.hair,hairM,0,0.02,-0.02,-0.35); if(L.hair==='buzz'){ cap.scale.setScalar(0.975); cap.rotation.x=-0.5; }
-  if(L.hair==='long'){ const b=addM(head,sph(0.4,16,12),hairM,0,-0.16,-0.12); b.scale.set(1.04,1.1,0.72); }
-  if(L.hair==='pony'){ addM(head,sph(0.12),hairM,0,0.02,-0.43); addM(head,cyl(0.055,0.03,0.26),hairM,0,-0.14,-0.46,0.2); }
-  if(L.hair==='curly'){ for(let k=0;k<11;k++){ const a=k/11*TAU, r=0.31; addM(head,sph(0.105),hairM,Math.cos(a)*r,0.2+Math.sin(k*1.7)*0.03,Math.sin(a)*r-0.05); } addM(head,sph(0.16),hairM,0,0.33,-0.02); }
+  if(L.hair!=='bald'){
+    const cap=addM(head,dod(0.235),hairM,0,0.085,-0.05); cap.scale.set(1.02,L.hair==='buzz'?0.6:0.76,1);
+    if(L.hair==='long'){ const b=addM(head,dod(0.21),hairM,0,-0.12,-0.1); b.scale.set(1.06,1.5,0.7); }
+    if(L.hair==='pony'){ addM(head,dod(0.08),hairM,0,0.06,-0.25); addM(head,cyl(0.05,0.025,0.3,5),hairM,0,-0.12,-0.29,0.25); }
+    if(L.hair==='braid'){ for(let k=0;k<4;k++) addM(head,dod(0.055-k*0.006),hairM,0,-0.05-k*0.09,-0.22-k*0.02); }
+    if(L.hair==='curly'){ for(let k=0;k<9;k++){ const a=k/9*TAU; addM(head,dod(0.075),hairM,Math.cos(a)*0.2,0.13+Math.sin(k*1.7)*0.03,Math.sin(a)*0.2-0.06); } addM(head,dod(0.12),hairM,0,0.24,-0.03); }
+  } else { addM(head,dod(0.13),mat(shade(skinC,-0.08)),0,0.14,0).scale.set(1.4,0.5,1.4); }
   for(const s of [1,-1]){
-    addM(head,PILG_GEO.eye,M.black,0.13*s,0.0,0.34);
-    if(L.face==='blush'){ const c=addM(head,PILG_GEO.cheek,mat(0xf3a3a0),0.22*s,-0.09,0.3); c.scale.set(1,0.6,0.4); }
-    if(L.face==='freckles') for(const [dx,dy] of [[0.17,-0.07],[0.21,-0.1],[0.24,-0.06]]) addM(head,sph(0.012,6,4),mat(0x9a6040),dx*s,dy,0.33);
-    if(L.face==='glasses'){ addM(head,tor(0.062,0.011),dark,0.13*s,0.0,0.37); }
+    addM(head,box(0.04,0.052,0.02),dark,0.08*s,0.0,0.216);
+    addM(head,box(0.055,0.012,0.02),mat(shade(L.hairC,0.05)),0.08*s,0.085,0.21,0,0,-0.12*s);
+    if(L.face==='blush') addM(head,box(0.06,0.03,0.015),mat(0xeea0a0),0.135*s,-0.06,0.2);
+    if(L.face==='freckles') for(const [dx,dy] of [[0.11,-0.05],[0.14,-0.07],[0.16,-0.04]]) addM(head,box(0.012,0.012,0.01),mat(0x9a6040),dx*s,dy,0.215);
+    if(L.face==='glasses') addM(head,tor(0.05,0.009),dark,0.085*s,0.01,0.235);
   }
-  if(L.face==='glasses') addM(head,box(0.08,0.012,0.012),dark,0,0.01,0.375);
+  addM(head,box(0.06,0.012,0.015),mat(shade(skinC,-0.35)),0,-0.09,0.22);
+  if(L.face==='glasses') addM(head,box(0.07,0.01,0.01),dark,0,0.015,0.24);
+  if(L.face==='beard'){ const bd=addM(head,dod(0.17),hairM,0,-0.11,0.07); bd.scale.set(1.05,0.8,0.85); addM(head,box(0.07,0.012,0.02),mat(shade(skinC,-0.35)),0,-0.09,0.235); }
+  if(L.face==='moustache') addM(head,box(0.12,0.03,0.03),hairM,0,-0.06,0.225);
 
   // hats
   const hatM=mat(L.hatC);
-  if(L.hat==='straw'){ addM(head,PILG_GEO.brim,hatM,0,0.27,0); addM(head,PILG_GEO.crown,hatM,0,0.39,0); addM(head,PILG_GEO.band,mat(0x7a3a2a),0,0.31,0); }
-  if(L.hat==='cap'){ const d=addM(head,halfS(0.405),hatM,0,0.06,0); d.scale.set(1,0.82,1); addM(head,box(0.34,0.03,0.24),hatM,0,0.11,0.4,-0.12); addM(head,sph(0.035,8,6),mat(0xffffff),0,0.39,0); }
-  if(L.hat==='hiking'){ addM(head,cyl(0.6,0.6,0.03,22),hatM,0,0.25,0); addM(head,cyl(0.3,0.34,0.27,18),hatM,0,0.38,0); addM(head,cyl(0.345,0.345,0.05,18),mat(shade(L.hatC,-0.4)),0,0.29,0); }
-  if(L.hat==='bucket'){ addM(head,cyl(0.33,0.4,0.28,18),hatM,0,0.31,0); addM(head,cyl(0.4,0.53,0.08,20),mat(shade(L.hatC,-0.06)),0,0.17,0); }
-  if(L.hat==='beanie'){ const d=addM(head,halfS(0.415),hatM,0,0.03,0); d.scale.set(1,1.08,1); addM(head,cyl(0.425,0.425,0.13,20),mat(shade(L.hatC,-0.15)),0,0.08,0); addM(head,sph(0.1),mat(shade(L.hatC,0.25)),0,0.5,0); }
-  if(L.hat==='bandana'){ const d=addM(head,halfS(0.41),hatM,0,0.04,0); d.scale.set(1,0.9,1); addM(head,sph(0.065),hatM,0,0.06,-0.41); addM(head,box(0.05,0.14,0.02),hatM,0.04,-0.05,-0.43,0,0,0.3); addM(head,box(0.05,0.12,0.02),hatM,-0.04,-0.04,-0.43,0,0,-0.3); }
+  if(L.hat==='hoodup'){ const hd=addM(head,dod(0.27),matD(oc),0,0.07,-0.09); hd.scale.set(1.0,1.02,1.0); addM(head,tor(0.21,0.04),matD(shade(oc,-0.3)),0,0.03,0.09).scale.set(1,1.15,1); }
+  if(L.hat==='cap'){ const d=addM(head,halfS(0.245),hatM,0,0.1,-0.01); d.scale.set(1,0.8,1); addM(head,box(0.24,0.025,0.17),hatM,0,0.13,0.24,-0.12); }
+  if(L.hat==='hiking'){ addM(head,cyl(0.38,0.38,0.025,8),hatM,0,0.15,0); addM(head,cyl(0.19,0.22,0.18,8),hatM,0,0.24,0); addM(head,cyl(0.225,0.225,0.035,8),mat(shade(L.hatC,-0.4)),0,0.17,0); }
+  if(L.hat==='bucket'){ addM(head,cyl(0.21,0.25,0.18,8),hatM,0,0.2,0); addM(head,cyl(0.25,0.34,0.06,8),mat(shade(L.hatC,-0.06)),0,0.11,0); }
+  if(L.hat==='beanie'){ const d=addM(head,halfS(0.255),hatM,0,0.06,-0.01); d.scale.set(1,1.1,1); addM(head,cyl(0.262,0.262,0.08,8),mat(shade(L.hatC,-0.15)),0,0.08,-0.01); addM(head,dod(0.06),mat(shade(L.hatC,0.25)),0,0.35,0); }
+  if(L.hat==='bandana'){ const d=addM(head,halfS(0.25),hatM,0,0.07,-0.01); d.scale.set(1,0.85,1); addM(head,box(0.05,0.12,0.02),hatM,0.03,0.0,-0.26,0,0,0.3); }
 
-  // backpack
-  const PK={small:[0.36,0.4,0.2,0.88],pilgrim:[0.46,0.52,0.26,0.8],large:[0.5,0.72,0.3,0.86]}[L.pack];
-  const [pw,ph,pd,py]=PK, pz=-(0.24+pd/2), packM=mat(L.packC);
-  addM(rig,box(pw,ph,pd),packM,0,py,pz);
-  addM(rig,box(pw*0.8,0.1,pd*0.5),mat(shade(L.packC,-0.2)),0,py+ph/2-0.08,pz-pd/2-0.01);
-  if(L.pack!=='small') addM(rig,PILG_GEO.roll,mat(0xcdb48a),0,py+ph/2+0.09,pz);
-  if(L.pack==='large'){ addM(rig,box(0.09,0.3,0.18),mat(shade(L.packC,-0.12)),pw/2+0.04,py-0.12,pz); addM(rig,box(0.09,0.3,0.18),mat(shade(L.packC,-0.12)),-pw/2-0.04,py-0.12,pz); }
-  const backZ=pz-pd/2-0.006;
-  const fl=new THREE.Mesh(PILG_GEO.flag,new THREE.MeshLambertMaterial({map:flagTex(country)})); fl.position.set(0,py+0.02,backZ-0.012); fl.rotation.y=Math.PI; rig.add(fl); fl.visible=showFlag; P.flagBack=fl;
+  // backpack (rides over the cloak)
+  const PK={small:[0.34,0.38,0.18,1.12],pilgrim:[0.42,0.5,0.23,1.1],large:[0.46,0.68,0.27,1.12]}[L.pack];
+  const [pw,ph,pd,py]=PK, pz=-(backR+pd/2), packM=mat(L.packC);
+  const pk=new THREE.Group(); pk.position.set(0,py,pz); pk.rotation.x=L.outer==='poncho'?-0.12:0; rig.add(pk);
+  addM(pk,box(pw,ph,pd),packM);
+  addM(pk,box(pw*0.82,0.1,pd*0.55),mat(shade(L.packC,-0.2)),0,ph/2-0.07,-pd/2-0.01);
+  if(L.outer!=='poncho') for(const s of [1,-1]) addM(rig,box(0.05,0.42,0.03),mat(shade(L.packC,-0.3)),0.14*s,1.22,chestZ-0.02);
+  if(L.pack!=='small') addM(pk,cyl(0.085,0.085,pw+0.06,6),mat(0xcdb48a),0,ph/2+0.08,0,0,0,Math.PI/2);
+  if(L.pack==='large'){ addM(pk,box(0.08,0.28,0.16),mat(shade(L.packC,-0.12)),pw/2+0.04,-0.12,0); addM(pk,box(0.08,0.28,0.16),mat(shade(L.packC,-0.12)),-pw/2-0.04,-0.12,0); }
+  const fl=new THREE.Mesh(geo('flagBig',()=>new THREE.PlaneGeometry(0.3,0.2)),new THREE.MeshLambertMaterial({map:flagTex(country)}));
+  fl.position.set(0,-0.04,-pd/2-0.012); fl.rotation.y=Math.PI; pk.add(fl); fl.visible=showFlag; P.flagBack=fl;
 
-  // stick
+  // staff / poles
   P.pennant=new THREE.Object3D();
-  if(L.stick!=='none'){
+  if(L.stick==='poles'){
+    for(const a of [P.armR,P.armL]) addM(a,cyl(0.014,0.014,1.25,5),mat(0x8a8f96),0,-0.5,0.12,0.15);
+  } else if(L.stick!=='none'){
     const sm=mat(L.stickC), long=L.stick==='staff';
-    const st=addM(P.armR, long?cyl(0.026,0.032,1.8,6):PILG_GEO.stick, sm, 0, long?-0.1:-0.15, 0.08);
-    if(long){ const g1=addM(st,sph(0.075),mat(0xc98a3e),0.05,0.48,0.04); g1.scale.set(1,1.25,1); addM(st,sph(0.045),mat(0xc98a3e),0.05,0.6,0.04); addM(st,tor(0.03,0.008),dark,0.03,0.62,0.04); }
-    const pen=new THREE.Mesh(PILG_GEO.pennant,new THREE.MeshLambertMaterial({map:flagTex(country), side:THREE.DoubleSide}));
-    pen.position.set(0,long?0.78:0.62,-0.13); pen.rotation.y=Math.PI/2; st.add(pen); pen.visible=showFlag; P.pennant=pen;
+    const st=addM(P.armR, long?cyl(0.026,0.032,2.0,5):cyl(0.022,0.026,1.6,5), sm, 0, long?-0.15:-0.25, 0.09);
+    if(long){ const g1=addM(st,dod(0.075),mat(0xc98a3e),0.05,0.55,0.04); g1.scale.set(1,1.3,1); addM(st,dod(0.045),mat(0xc98a3e),0.05,0.68,0.04); }
+    const pen=new THREE.Mesh(geo('pennant',()=>new THREE.PlaneGeometry(0.26,0.17)),new THREE.MeshLambertMaterial({map:flagTex(country), side:THREE.DoubleSide}));
+    pen.position.set(0,long?0.86:0.68,-0.14); pen.rotation.y=Math.PI/2; st.add(pen); pen.visible=showFlag; P.pennant=pen;
   }
 
   // accessories
   const A=new Set(L.acc), accM=mat(L.accC);
-  if(A.has('shell')){ addM(rig,PILG_GEO.shellG,M.white,pw*0.3,py-ph*0.28,backZ-0.01); }
-  if(A.has('sunglasses')){ for(const s of [1,-1]) addM(head,box(0.13,0.075,0.02),mat(0x1d1d22),0.13*s,0.01,0.375); addM(head,box(0.08,0.015,0.015),mat(0xc9a24a),0,0.03,0.38); }
-  if(A.has('scarf')){ addM(rig,tor(0.19,0.06),accM,0,1.07,0,Math.PI/2); addM(rig,box(0.08,0.22,0.04),accM,0.08,0.92,0.22,0.2,0,0.1); }
-  if(A.has('arrow')){ const a=new THREE.Mesh(geo('arrowPin',()=>new THREE.PlaneGeometry(0.11,0.055)),new THREE.MeshLambertMaterial({map:arrowTex,transparent:true})); a.position.set(-0.12,0.88,0.262); a.rotation.x=-0.12; rig.add(a); }
-  if(A.has('flagpin')){ const f=new THREE.Mesh(geo('flagPin',()=>new THREE.PlaneGeometry(0.1,0.066)),new THREE.MeshLambertMaterial({map:flagTex(country)})); f.position.set(0.12,0.88,0.262); f.rotation.x=-0.12; rig.add(f); }
-  if(A.has('doll')){ const g=new THREE.Group(); addM(g,sph(0.07),mat(0xf7f4ec)); addM(g,box(0.05,0.05,0.05),dark,0,0.01,0.065); addM(g,cyl(0.006,0.006,0.1,4),dark,0,0.09,0); g.position.set(-pw/2-0.05,py-0.05,pz-0.02); rig.add(g); }
-  if(A.has('bottle')){ addM(rig,cyl(0.045,0.045,0.17),mat(0x5f8fa3),pw/2+0.06+(L.pack==='large'?0.06:0),py-0.12,pz+0.03); addM(rig,cyl(0.03,0.03,0.04),mat(0x3b3b3b),pw/2+0.06+(L.pack==='large'?0.06:0),py-0.015,pz+0.03); }
-  const camY = A.has('binoculars') ? 0.66 : 0.72;
-  if(A.has('camera')){ addM(rig,box(0.14,0.1,0.07),mat(0x7fc8b0),0,camY,0.31); addM(rig,cyl(0.035,0.035,0.05),dark,0,camY,0.36,Math.PI/2); addM(rig,tor(0.21,0.008),mat(0x8a5a3a),0,camY+0.2,0.12,1.1); }
-  if(A.has('binoculars')){ const by=A.has('camera')?0.87:0.78; for(const s of [1,-1]) addM(rig,cyl(0.035,0.035,0.11),mat(0xe8a5b5),0.045*s,by,0.31,Math.PI/2); addM(rig,box(0.03,0.04,0.06),mat(0x6fb39e),0,by,0.31); }
+  if(A.has('shell')) addShell(rig,0.1,0,chestY,chestZ+0.01);
+  if(A.has('sunglasses')){ for(const s of [1,-1]) addM(head,box(0.09,0.055,0.02),mat(0x1d1d22),0.085*s,0.015,0.235); addM(head,box(0.06,0.012,0.012),mat(0xc9a24a),0,0.03,0.24); }
+  if(A.has('scarf')){ addM(rig,tor(0.17,0.055),accM,0,1.5,0,Math.PI/2); addM(rig,box(0.08,0.24,0.04),accM,0.07,1.36,chestZ-0.02,0.15,0,0.1); }
+  if(A.has('arrow')){ const a=new THREE.Mesh(geo('arrowPin',()=>new THREE.PlaneGeometry(0.11,0.055)),new THREE.MeshLambertMaterial({map:arrowTex,transparent:true})); a.position.set(-0.13,chestY-0.12,chestZ+0.005); rig.add(a); }
+  if(A.has('flagpin')){ const f=new THREE.Mesh(geo('flagPin',()=>new THREE.PlaneGeometry(0.1,0.066)),new THREE.MeshLambertMaterial({map:flagTex(country)})); f.position.set(0.13,chestY-0.12,chestZ+0.005); rig.add(f); }
+  if(A.has('doll')){ const g=new THREE.Group(); addM(g,dod(0.07),mat(0xf7f4ec)); addM(g,box(0.05,0.05,0.05),dark,0,0.01,0.065); g.position.set(-pw/2-0.06,0.02,0.02); pk.add(g); }
+  if(A.has('bottle')){ const bx=pw/2+0.06+(L.pack==='large'?0.06:0); addM(pk,cyl(0.045,0.045,0.18),mat(0x5f8fa3),bx,-0.1,0.04); addM(pk,cyl(0.03,0.03,0.04),mat(0x3b3b3b),bx,0.01,0.04); }
+  const camY = chestY-0.28;
+  if(A.has('camera')){ addM(rig,box(0.14,0.1,0.07),mat(0x7fc8b0),0,camY,chestZ+0.04); addM(rig,cyl(0.035,0.035,0.05),dark,0,camY,chestZ+0.09,Math.PI/2); }
+  if(A.has('binoculars')){ const by=A.has('camera')?camY+0.13:camY; for(const s of [1,-1]) addM(rig,cyl(0.035,0.035,0.11),mat(0xe8a5b5),0.045*s,by,chestZ+0.04,Math.PI/2); }
 
-  // rain poncho (auto) + headlamp
-  const poncho=new THREE.Mesh(PONCHO_GEO, new THREE.MeshLambertMaterial({color:o.poncho||0x2f7fbf, side:THREE.DoubleSide, transparent:true, opacity:0.95}));
-  poncho.position.set(0,0.86,-0.1); poncho.visible=false; rig.add(poncho); P.poncho=poncho; P.noPoncho = (L.top==='rain');
-  const lamp=new THREE.Group(); addM(lamp,box(0.12,0.08,0.06),M.black);
-  addM(lamp,sph(0.04,8,6),new THREE.MeshBasicMaterial({color:0xfff6cf}),0,0,0.035);
+  // rain poncho (auto in rain) + headlamp
+  const poncho=new THREE.Mesh(PONCHO_GEO, new THREE.MeshLambertMaterial({color:o.poncho||0x2f7fbf, side:THREE.DoubleSide, transparent:true, opacity:0.93}));
+  poncho.position.set(0,1.0,-0.06); poncho.scale.set(1,1,1.2); poncho.visible=false; rig.add(poncho); P.poncho=poncho; P.noPoncho = (L.top==='rain' || L.outer==='poncho');
+  const lamp=new THREE.Group(); addM(lamp,box(0.1,0.07,0.05),M.black);
+  addM(lamp,sph(0.035,8,6),new THREE.MeshBasicMaterial({color:0xfff6cf}),0,0,0.03);
   const halo=new THREE.Sprite(GLOW_MAT); halo.scale.set(0.7,0.7,1); halo.position.z=0.08; lamp.add(halo);
-  lamp.position.set(0,0.2,0.37); lamp.visible=false; head.add(lamp); P.lamp=lamp;
+  lamp.position.set(0,0.12,0.24); lamp.visible=false; head.add(lamp); P.lamp=lamp;
   rig.traverse(m=>{ if(m.isMesh) m.castShadow=true; });
   if(!noScene) scene.add(outer);
   return P;
 }
 
 function animatePilgrim(P, dt, t, amt){
+  const hk=P.hipK||0;
   if(P.sit>0.01){
-    const k=P.sit;
-    P.legL.rotation.x = P.legR.rotation.x = -1.4*k;
-    P.armL.rotation.x = P.armR.rotation.x = -0.5*k;
-    P.rig.position.y = P.sitY*k + Math.sin(t*1.6)*0.006;
+    const k=P.sit, bench = P.sitY>-0.2;
+    P.legL.rotation.x = P.legR.rotation.x = -1.45*k;
+    if(P.kneeL){ P.kneeL.rotation.x = P.kneeR.rotation.x = (bench?1.45:0.35)*k; }
+    P.armL.rotation.x = P.armR.rotation.x = -0.45*k;
+    P.rig.rotation.x = 0;
+    P.rig.position.y = (P.sitY-hk)*k + Math.sin(t*1.6)*0.006;
+    if(P.cloth) P.cloth.rotation.x = 0;
   } else {
     P.phase += dt*amt*9.5;
-    const s=Math.sin(P.phase);
-    P.legL.rotation.x = s*0.7*amt; P.legR.rotation.x = -s*0.7*amt;
-    P.armL.rotation.x = -s*0.55*amt; P.armR.rotation.x = s*0.4*amt;
-    P.rig.position.y = Math.abs(Math.cos(P.phase))*0.06*amt + Math.sin(t*2.2)*0.008*(1-amt);
+    const s=Math.sin(P.phase), c=Math.cos(P.phase), run=Math.max(0,amt-1)*4;
+    P.legL.rotation.x = s*0.6*amt; P.legR.rotation.x = -s*0.6*amt;
+    if(P.kneeL){ P.kneeL.rotation.x = amt*(0.08+(0.55+run*0.4)*Math.max(0,c)); P.kneeR.rotation.x = amt*(0.08+(0.55+run*0.4)*Math.max(0,-c)); }
+    P.armL.rotation.x = -s*(0.5+run*0.4)*amt; P.armR.rotation.x = s*(0.35+run*0.3)*amt;
+    P.rig.rotation.x = 0.13*run;
+    P.rig.position.y = Math.abs(c)*(0.05+run*0.04)*amt + Math.sin(t*2.2)*0.008*(1-Math.min(1,amt));
+    if(P.cloth) P.cloth.rotation.x = -0.06*amt - 0.06*run + Math.sin(P.phase*2)*0.025*amt;
   }
   if(P.wave>0){
     P.wave -= dt;
@@ -1171,17 +1213,17 @@ rebuildPlayer();
 
 /* ================= NPCs ================= */
 const NPC_LOOK = {
-  'Lucía':  {hair:'long',hairC:0x2b1a10,hat:'none',top:'tee',topC:0xd96c4f,bottom:'shorts',bottomC:0x5a5f3a,shoes:'trek',shoesC:0x2f5a4a,pack:'pilgrim',packC:0x2f5d8a,stick:'wood',acc:['shell','sunglasses']},
-  'Pierre': {hair:'short',hairC:0x7a4a2a,hat:'hiking',hatC:0x8a6a48,top:'shirt',topC:0x5b7fa6,bottom:'hike',shoes:'boots',pack:'large',packC:0x7a5a3a,stick:'staff',acc:['shell','scarf'],accC:0xd9534f},
-  'Yuki':   {hair:'pony',hairC:0x15100c,hat:'bucket',hatC:0xd9c19a,top:'wind',topC:0xe8a5b5,bottom:'leggings',bottomC:0x2b2b2b,shoes:'sneakers',shoesC:0xf2f2f2,pack:'small',packC:0x5f8a3e,stick:'none',acc:['camera','doll']},
-  'Hans':   {hair:'buzz',hairC:0xd9b36a,hat:'straw',top:'shirt',topC:0x6e8a5a,bottom:'cargo',bottomC:0x6b5a48,shoes:'boots',pack:'large',packC:0xc29b3a,stick:'wood',acc:['shell','binoculars']},
-  'Ana':    {hair:'curly',hairC:0x2b1a10,hat:'bandana',hatC:0xe0662f,top:'tee',topC:0xf4c34d,bottom:'shorts',bottomC:0x56657a,shoes:'sandals',shoesC:0xc98b4a,pack:'pilgrim',packC:0x2f5d8a,stick:'wood',acc:['arrow','bottle']},
-  'Emma':   {hair:'long',hairC:0xb7793d,hat:'cap',hatC:0x5aa9e6,top:'vest',topC:0xe07a2f,bottom:'leggings',bottomC:0x3e6a4a,shoes:'trek',shoesC:0x2f5a4a,pack:'small',packC:0x444b55,stick:'none',acc:['sunglasses','flagpin']},
-  'Marco':  {hair:'short',hairC:0x2b1a10,hat:'straw',top:'shirt',topC:0xe8e3d5,bottom:'cargo',bottomC:0x5a5f3a,shoes:'boots',pack:'pilgrim',packC:0xa33a2e,stick:'staff',acc:['shell']},
-  'Minh':   {hair:'short',hairC:0x15100c,hat:'cap',hatC:0x4f9a8e,top:'tee',topC:0x4f9a8e,bottom:'shorts',bottomC:0xc9b48a,shoes:'sneakers',shoesC:0xf2f2f2,pack:'small',packC:0xd8a13a,stick:'wood',acc:['bottle']},
-  'Siobhán':{hair:'long',hairC:0xa8452a,hat:'beanie',hatC:0x5f8a3e,top:'wind',topC:0x6a9a4e,bottom:'hike',shoes:'boots',pack:'large',packC:0x8a3a5a,stick:'wood',acc:['scarf'],accC:0xf2c230},
-  'Grace':  {hair:'pony',hairC:0x1a120c,hat:'none',top:'tee',topC:0xf09a7a,bottom:'shorts',shoes:'sandals',pack:'pilgrim',packC:0x2f6f8a,stick:'wood',acc:['shell','sunglasses']},
-  'Jean':   {hair:'buzz',hairC:0x9a9a9a,hat:'hiking',hatC:0x6b5a48,top:'vest',topC:0x3e6a4a,bottom:'hike',shoes:'boots',pack:'small',packC:0x6b4630,stick:'none',acc:['scarf'],accC:0x2f5d8a,face:'glasses'}
+  'Lucía':  {outer:'cape',outerC:0x8a3a2e,hair:'long',hairC:0x2b1a10,top:'tee',topC:0xe9dcc3,bottom:'skirt',bottomC:0x3e5a7a,shoes:'trek',shoesC:0x2f5a4a,pack:'pilgrim',packC:0x5a6a7a,stick:'wood',acc:['shell','sunglasses'],face:'blush',faceC:0xe0ac85,body:'small'},
+  'Pierre': {outer:'none',hair:'short',hairC:0x9a9a9a,hat:'hiking',hatC:0x6b5a48,top:'shirt',topC:0x5b7fa6,bottom:'hike',shoes:'boots',pack:'large',packC:0x7a5a3a,stick:'staff',acc:['shell','scarf'],accC:0xc0453a,face:'beard',faceC:0xf2d3b8,body:'tall'},
+  'Yuki':   {outer:'hood',outerC:0xe8a5b5,hat:'none',hair:'pony',hairC:0x15100c,top:'wind',topC:0x6a7a9a,bottom:'leggings',bottomC:0x2b2b2b,shoes:'sneakers',shoesC:0xf2f2f2,pack:'small',packC:0x5f8a3e,stick:'none',acc:['camera','doll'],faceC:0xf2d3b8,body:'small'},
+  'Hans':   {outer:'poncho',outerC:0x3a3a3a,hair:'bald',hairC:0xd9b36a,top:'shirt',topC:0x6e8a5a,bottom:'cargo',bottomC:0x6b5a48,shoes:'boots',pack:'large',packC:0xc29b3a,stick:'poles',acc:['binoculars'],face:'moustache',faceC:0xf2d3b8,body:'sturdy'},
+  'Ana':    {outer:'poncho',outerC:0x3e8a52,hair:'curly',hairC:0x2b1a10,hat:'bandana',hatC:0xf2c230,top:'tee',topC:0xf4c34d,bottom:'shorts',bottomC:0x56657a,shoes:'sandals',shoesC:0xc98b4a,pack:'pilgrim',packC:0x2f5d8a,stick:'wood',acc:['arrow','bottle'],faceC:0x7a4a2e},
+  'Emma':   {outer:'none',hair:'long',hairC:0xb7793d,hat:'cap',hatC:0x5aa9e6,top:'vest',topC:0xe07a2f,bottom:'leggings',bottomC:0x3e6a4a,shoes:'trek',shoesC:0x2f5a4a,pack:'small',packC:0x444b55,stick:'poles',acc:['sunglasses','flagpin'],face:'freckles',faceC:0xf2d3b8,body:'tall'},
+  'Marco':  {outer:'cape',outerC:0x34466b,hair:'short',hairC:0x2b1a10,top:'shirt',topC:0xe8e3d5,bottom:'cargo',bottomC:0x5a5f3a,shoes:'boots',pack:'pilgrim',packC:0xa36a3e,stick:'staff',acc:['shell'],face:'beard',faceC:0xc98b62,body:'sturdy'},
+  'Minh':   {outer:'poncho',outerC:0xc0453a,hair:'short',hairC:0x15100c,hat:'cap',hatC:0x4f9a8e,top:'tee',topC:0x4f9a8e,bottom:'shorts',bottomC:0xc9b48a,shoes:'sneakers',shoesC:0xf2f2f2,pack:'small',packC:0xd8a13a,stick:'wood',acc:['bottle'],faceC:0xe0ac85},
+  'Siobhán':{outer:'hood',outerC:0x3e6a4a,hat:'hoodup',hair:'braid',hairC:0xa8452a,top:'wind',topC:0x6a9a4e,bottom:'hike',shoes:'boots',pack:'large',packC:0x8a3a5a,stick:'wood',acc:['scarf'],accC:0xf2c230,face:'freckles',faceC:0xf2d3b8},
+  'Grace':  {outer:'poncho',outerC:0xe0a03a,hair:'pony',hairC:0x1a120c,top:'tee',topC:0xf09a7a,bottom:'shorts',shoes:'sandals',pack:'pilgrim',packC:0x2f6f8a,stick:'wood',acc:['shell','sunglasses'],faceC:0xa8714a},
+  'Jean':   {outer:'none',hair:'buzz',hairC:0xe8e4dc,hat:'hiking',hatC:0x6b5a48,top:'vest',topC:0x3e6a4a,bottom:'hike',shoes:'boots',pack:'small',packC:0x6b4630,stick:'none',acc:['scarf'],accC:0x2f5d8a,face:'glasses',faceC:0xe9c2a0,body:'small'}
 };
 const NPC_DEF = [
   {name:'Lucía',  c:'ES', say:'¡Buen Camino!',               ko:'좋은 순례길 되세요!', en:'Have a good Camino!',            u:0.05, sp:1.45, shirt:0xd96c4f, pack:0x3d6e8f, hair:0x2b1a10, skin:1},
@@ -1207,14 +1249,14 @@ function labelSprite(name, code, live){
   if(live){ x.fillStyle='#3fa46a'; x.beginPath(); x.arc((300-W)/2+W-14,37,6,0,TAU); x.fill(); }
   x.fillStyle='#3b2a1e'; x.textBaseline='middle'; x.fillText(name,(300-W)/2+78,38);
   const s=new THREE.Sprite(new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false}));
-  s.scale.set(2.1,0.53,1); s.position.y=2.25; return s;
+  s.scale.set(2.1,0.53,1); s.position.y=2.55; return s;
 }
 const npcs = NPC_DEF.map((d,i)=>{
   const P = makePilgrim({look:NPC_LOOK[d.name], poncho:[0x2f7fbf,0x3e8a5a,0xc0582f,0x7a4a7a,0x2f5d8a][i%5], country:d.c, skin:SKIN[d.skin||0]});
   const n = {def:d, P, u:d.u, lane:((i*0.37)%1.4)-0.7, pause:0, label:labelSprite(d.name,d.c), bubbleT:0};
   P.outer.add(n.label);
   n.thirsty = ['Hans','Emma','Siobhán'].includes(d.name) && !S.gave.includes(d.name);
-  n.drop = new THREE.Sprite(DROP_MAT); n.drop.scale.set(0.42,0.52,1); n.drop.position.y=2.85; n.drop.visible=false; P.outer.add(n.drop);
+  n.drop = new THREE.Sprite(DROP_MAT); n.drop.scale.set(0.42,0.52,1); n.drop.position.y=3.15; n.drop.visible=false; P.outer.add(n.drop);
   if(d.sit){
     let x,z,ry;
     if(d.sit==='bench'){ const p=curve.getPointAt(d.u), t=curve.getTangentAt(d.u); x=p.x+(-t.z)*3.4; z=p.z+t.x*3.4; ry=Math.atan2(p.x-x, p.z-z); const b=addBench(x,z,ry); b.position.set(x-Math.sin(ry)*0.05, groundAt(x,z), z-Math.cos(ry)*0.05); }
@@ -1848,7 +1890,7 @@ function renderPassport(){
 /* ================= Start screen ================= */
 const PACKS=[0xc0582f,0x2f5d8a,0x5f8a3e,0xd9a514,0x7a4a7a,0x3b3b3b];
 function flagBtn(c){ return `<button data-c="${c}" aria-pressed="${c===S.country}"><img src="${flagDataURL(c)}" alt="" loading="lazy">${cname(c)}</button>`; }
-// 나라 추가 요청 → 구글 폼 → 구글 시트 '카미노 온 나라 추가 요청'
+// 나라 추가 요청 → 구글 폼 → 구글 시트 '카미노 온 나라 추가 요청'(시트 이름은 그대로)
 const REQ_FORM='https://docs.google.com/forms/d/e/1FAIpQLSfA_IkeNsk2iXu9XDdDkOhtgkfmrPKXscAUMnCO0uyrbAY1nQ/formResponse';
 const REQ_ENTRY='entry.1745594292';
 function renderFlagGrid(){ const base=COUNTRIES.map(q=>q[0]); const list=base.includes(S.country)?base:[S.country].concat(base.slice(0,base.length-2), base.slice(-1)); $('#flagGrid').innerHTML = list.map(flagBtn).join(''); }
@@ -2294,10 +2336,11 @@ function renderAccount(){
 
 /* ================= Wardrobe ================= */
 const THUMB_VIEW = {
-  hair:()=>({y:1.45,d:1.55,a:0.6,h:0.1}), hat:()=>({y:1.62,d:1.6,a:0.45,h:0.3}), face:()=>({y:1.4,d:1.05,a:0.25,h:0}),
-  top:()=>({y:0.85,d:1.95,a:0.5,h:0.1}), bottom:()=>({y:0.33,d:1.6,a:0.45,h:0.1}), shoes:()=>({y:0.04,d:1.05,a:0.7,h:0.3}),
-  pack:()=>({y:0.92,d:2.1,a:Math.PI-0.55,h:0.2}), stick:()=>({y:0.8,d:3.2,a:-0.75,h:0.1}),
-  acc:id=> ['shell','doll','bottle'].includes(id) ? {y:0.85,d:1.8,a:Math.PI-0.6,h:0.1} : ['scarf','sunglasses'].includes(id) ? {y:1.25,d:1.45,a:0.3,h:0.05} : {y:0.82,d:1.5,a:0.3,h:0.05}
+  outer:()=>({y:1.2,d:3.0,a:0.6,h:0.15}), body:()=>({y:1.0,d:4.2,a:0.5,h:0.2}),
+  hair:()=>({y:1.78,d:1.25,a:0.7,h:0.08}), hat:()=>({y:1.9,d:1.35,a:0.5,h:0.2}), face:()=>({y:1.74,d:0.95,a:0.25,h:0}),
+  top:()=>({y:1.1,d:2.0,a:0.5,h:0.1}), bottom:()=>({y:0.5,d:1.9,a:0.45,h:0.1}), shoes:()=>({y:0.06,d:1.1,a:0.7,h:0.3}),
+  pack:()=>({y:1.15,d:2.2,a:Math.PI-0.55,h:0.2}), stick:()=>({y:1.1,d:3.6,a:-0.75,h:0.1}),
+  acc:id=> ['doll','bottle'].includes(id) ? {y:1.1,d:1.9,a:Math.PI-0.6,h:0.1} : ['scarf','sunglasses'].includes(id) ? {y:1.6,d:1.4,a:0.3,h:0.05} : {y:1.15,d:1.5,a:0.3,h:0.05}
 };
 let TR=null; const thumbCache={};
 function thumbFor(cat, it){
@@ -2341,7 +2384,7 @@ function renderWardrobe(){
   });
   const cw=$('#wColors'); cw.innerHTML='';
   const current = C.multi ? null : S.look[wardCat];
-  if(C.colors && current!=='none' && (!C.multi || S.look.acc.includes('scarf'))){
+  if(C.colors && (current!=='none' || wardCat==='face') && (!C.multi || S.look.acc.includes('scarf'))){
     const lab=document.createElement('span'); lab.className='lab'; lab.textContent=tx('wColor'); cw.append(lab);
     const ck = wardCat==='acc' ? 'accC' : wardCat+'C';
     C.colors.forEach(c=>{ const b=document.createElement('button'); b.className='sw'; b.style.background='#'+c.toString(16).padStart(6,'0'); b.setAttribute('aria-pressed',S.look[ck]===c); b.setAttribute('aria-label',tx('wColor')); b.onclick=()=>{ S.look[ck]=c; rebuildPlayer(); renderWardrobe(); }; cw.append(b); });
@@ -2441,9 +2484,9 @@ function frame(){
   if(wardOn){
     animatePilgrim(player,dt,t,0);
     const a=player.outer.rotation.y+camYaw, wide=innerWidth>760, d=wide?3.5:5.6;
-    _v.set(pp.x+Math.sin(a)*d, pp.y+(wide?1.25:1.0), pp.z+Math.cos(a)*d);
+    _v.set(pp.x+Math.sin(a)*d, pp.y+(wide?1.4:1.25), pp.z+Math.cos(a)*d);
     if(wardSnap){ camera.position.copy(_v); wardSnap=false; } else camera.position.lerp(_v, 1-Math.exp(-dt*6));
-    lookAt.set(pp.x, pp.y+(wide?0.85:-0.72), pp.z);
+    lookAt.set(pp.x, pp.y+(wide?1.0:-0.42), pp.z);
     if(wide){ lookAt.x+=Math.cos(a)*1.05; lookAt.z-=Math.sin(a)*1.05; }
     camera.lookAt(lookAt); prompt.hidden=true;
   } else if(started && mode==='sleep'){
@@ -2559,7 +2602,7 @@ function frame(){
   for(const n of npcs){ if(n.bubbleT>0){ n.bubbleT-=dt; shown=n; } }
   NET.remotes.forEach(r=>{ if(r.bubbleT>0){ r.bubbleT-=dt; if(r.P.outer.visible) shown=r; } });
   if(shown){
-    proj.copy(shown.P.outer.position); proj.y+=2.6; proj.project(camera);
+    proj.copy(shown.P.outer.position); proj.y+=2.9; proj.project(camera);
     if(proj.z<1){ bubble.hidden=false; bubble.style.left=((proj.x+1)/2*innerWidth)+'px'; bubble.style.top=((1-proj.y)/2*innerHeight)+'px'; bubble.querySelector('b').textContent=shown.btext||shown.def.say; const btr=shown.bko?L(shown.bko):L(shown.def); const bs=bubble.querySelector('small'); bs.textContent=btr; bs.hidden=!btr; }
     else bubble.hidden=true;
   } else bubble.hidden=true;
