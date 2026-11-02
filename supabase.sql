@@ -122,3 +122,26 @@ select jsonb_build_object(
 $$;
 revoke all on function public.camino_stats(int) from public;
 grant execute on function public.camino_stats(int) to anon, authenticated;
+
+-- ===== Stages (구간별 좌표 분리) =====
+alter table public.camino_cairns add column if not exists stage smallint not null default 1 check (stage between 1 and 60);
+alter table public.camino_tents  add column if not exists stage smallint not null default 1 check (stage between 1 and 60);
+create index if not exists camino_cairns_stage on public.camino_cairns(stage, created_at desc);
+
+-- ===== 다음 구간 투표 =====
+create table if not exists public.camino_votes (
+  stage smallint not null check (stage between 1 and 60),
+  voter text not null check (char_length(voter) between 4 and 64),
+  lang text check (char_length(lang) <= 8),
+  c text check (char_length(c) <= 8),
+  at timestamptz not null default now(),
+  primary key (stage, voter)
+);
+alter table public.camino_votes enable row level security;
+drop policy if exists "camino votes add" on public.camino_votes;
+create policy "camino votes add" on public.camino_votes for insert to anon, authenticated with check (true);
+create or replace function public.camino_vote_count(p_stage int)
+returns int language sql stable security definer set search_path = public as $$
+  select count(*)::int from public.camino_votes where stage = p_stage;
+$$;
+grant execute on function public.camino_vote_count(int) to anon, authenticated;
