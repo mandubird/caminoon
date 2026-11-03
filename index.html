@@ -93,6 +93,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 #prompt{left:50%;transform:translateX(-50%);bottom:calc(var(--bot) + 84px);border:0;background:var(--tile);color:#fff;font-size:15px;padding:10px 18px;border-radius:999px;box-shadow:0 6px 18px rgba(47,93,138,.35);display:flex;gap:8px;align-items:center}
 #prompt kbd{background:rgba(255,255,255,.22);border-radius:6px;padding:1px 7px;font-family:var(--body);font-size:13px}
 
+@media (pointer:coarse) and (max-width:640px){ #prompt{bottom:calc(var(--bot) + 212px);max-width:calc(100vw - 32px)} #hint{bottom:calc(var(--bot) + 262px)!important;white-space:normal!important;text-align:center;max-width:calc(100vw - 32px)} }
 #hint{left:50%;transform:translateX(-50%);bottom:calc(var(--bot) + 136px);background:rgba(59,42,30,.78);color:#fff7ea;font-size:13px;padding:8px 14px;border-radius:999px;transition:opacity .8s;white-space:nowrap}
 #toast{left:50%;top:38%;transform:translate(-50%,-50%);background:var(--paper-a);padding:12px 18px;border-radius:14px;font-size:15px;box-shadow:0 8px 28px rgba(59,42,30,.2);transition:opacity .5s;text-align:center;max-width:calc(100vw - 40px)}
 
@@ -1090,7 +1091,7 @@ const BIRDS=[];
     g.position.set(c.x,groundAt(c.x,c.z),c.z); scene.add(g);
   }
   // Roncesvalles: Real Colegiata + 샤를마뉴의 사일로
-  { const x=END.x-11, z=END.z-7, b=groundAt(x,z)-1, g=new THREE.Group(), stone=lam(0xd6cdbb);
+  { const x=END.x-26, z=END.z-12, b=groundAt(x,z)-1, g=new THREE.Group(), stone=lam(0xd6cdbb);
     const nave=new THREE.Mesh(new THREE.BoxGeometry(8,8,15),stone); nave.position.set(0,4,0); g.add(nave);
     const rg=new THREE.CylinderGeometry(5.2,5.2,15.6,3,1); rg.rotateX(-Math.PI/2); rg.scale(1,0.95,1); const rf=new THREE.Mesh(rg,SLATE); rf.position.y=8+2.4; g.add(rf);
     const tw=new THREE.Mesh(new THREE.BoxGeometry(4,15,4),stone); tw.position.set(0,7.5,9); g.add(tw);
@@ -1112,7 +1113,7 @@ const BIRDS=[];
   if(STG!==3) return;
   // 마을: 부르게테(아우리츠), 에스피날, 수비리 — 흰 벽, 빨간·초록 덧창
   let hi=0;
-  const village=(u0,u1,step,off,shut)=>{ for(let u=u0;u<=u1;u+=step){ for(const sd of [-1,1]){ const q=sidePt(u+(sd>0?0:step*0.4), off*sd); if(colliders.some(c=>Math.hypot(c.x-q.x,c.z-q.z)<c.r+3)) continue; const face=Math.atan2(q.p.x-q.x,q.p.z-q.z); addHouse(q.x,q.z,face,hi++,shut); } } };
+  const village=(u0,u1,step,off,shut)=>{ for(let u=u0;u<=u1;u+=step){ for(const sd of [-1,1]){ const q=sidePt(u+(sd>0?0:step*0.4), off*sd); if(colliders.some(c=>Math.hypot(c.x-q.x,c.z-q.z)<c.r+3) || Math.hypot(q.x-END.x,q.z-END.z)<17) continue; const face=Math.atan2(q.p.x-q.x,q.p.z-q.z); addHouse(q.x,q.z,face,hi++,shut); } } };
   village(0.115,0.185,0.018,9.5,M.shutR);
   village(0.235,0.265,0.016,9.5,M.shutG);
   village(0.915,0.985,0.02,10,M.shutR);
@@ -3383,9 +3384,14 @@ function frame(){
     saveT+=dt; if(saveT>3){ saveT=0; persist(); }
 
     // camera
-    camTarget.set(pp.x+Math.sin(camYaw)*Math.cos(camPitch)*camDist, pp.y+1.2+Math.sin(camPitch)*camDist, pp.z+Math.cos(camYaw)*Math.cos(camPitch)*camDist);
+    let cd=camDist;
+    for(let k=0;k<8;k++){ const cx=pp.x+Math.sin(camYaw)*Math.cos(camPitch)*cd, cz=pp.z+Math.cos(camYaw)*Math.cos(camPitch)*cd;
+      if(!colliders.some(c=>c.r>2 && Math.hypot(c.x-cx,c.z-cz)<c.r+0.6)) break; cd=Math.max(2.4,cd*0.78); }
+    camTarget.set(pp.x+Math.sin(camYaw)*Math.cos(camPitch)*cd, pp.y+1.2+Math.sin(camPitch)*cd, pp.z+Math.cos(camYaw)*Math.cos(camPitch)*cd);
+    camTarget.y=Math.max(camTarget.y, groundAt(camTarget.x,camTarget.z)+1.0);
     const gy=groundAt(camTarget.x,camTarget.z)+0.8; if(camTarget.y<gy) camTarget.y=gy;
     camera.position.lerp(camTarget, 1-Math.exp(-dt*7));
+    camera.position.y=Math.max(camera.position.y, groundAt(camera.position.x,camera.position.z)+0.8);
     lookAt.set(pp.x,pp.y+1.25,pp.z);
     camera.lookAt(lookAt);
   } else {
