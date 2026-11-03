@@ -181,6 +181,9 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
 .drops{display:flex;gap:4px}
 .drops i{display:block;width:8px;height:11px;border-radius:50% 50% 50% 50%/62% 62% 38% 38%;background:#2f7fbf}
 .drops i.e{background:rgba(47,127,191,.2)}
+.nextbtn{border:0;border-radius:10px;padding:8px 10px;background:var(--arrow,#f2c230);color:#3b2a1e;font:inherit;font-weight:700;font-size:13px;cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.12)}
+.nextbtn:hover{filter:brightness(1.05)}
+#mNext .ghost{display:block;width:100%;margin-top:8px;border:0;background:none;color:var(--ink-soft);font:inherit;padding:8px;cursor:pointer}
 .votebar{height:12px;border-radius:6px;background:rgba(47,93,138,.15);overflow:hidden;margin:6px 0 2px}
 .votebar i{display:block;height:100%;width:0;background:var(--arrow,#f2c230);transition:width .6s}
 .votecount{text-align:center;font-weight:700;margin:4px 0 10px}
@@ -199,6 +202,7 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
 #dinner .dh img{width:30px;height:20px;border-radius:2px;box-shadow:0 0 0 1px var(--line)}
 #dinner .dh b{font-family:var(--display);font-weight:400;font-size:18px}
 #dinner .dh small{color:var(--ink-soft);font-size:12px}
+#dinner .dskip{margin-left:auto;border:1px solid var(--line);background:rgba(255,255,255,.6);border-radius:999px;padding:4px 10px;font:inherit;font-size:12px;color:var(--ink-soft);cursor:pointer}
 #dLine{margin:0;font-size:18px;line-height:1.5;min-height:1.5em}
 #dinner.me #dLine{color:#2f5d8a}
 #dKo{transition:opacity .25s}
@@ -288,10 +292,11 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
     <div class="st2"><span><span data-i18n="alt">해발</span> <b id="pAlt">170</b>m</span><span><span data-i18n="left">남은</span> <b id="pLeft">7.8</b>km</span></div>
     <button class="st3 wbtn" id="bDrink"><span class="wl"><span data-i18n="water">물병</span> <small id="pThirstTxt"></small></span><span class="drops" id="pWater"></span><span class="thirst" aria-hidden="true"><i id="pThirst"></i></span></button>
     <button class="clock" id="clock"><span id="clockTxt"></span></button>
+    <button class="nextbtn" id="bNext" hidden></button>
   </div>
 
   <div class="hud pill" id="dinner" hidden>
-    <div class="dh"><img id="dFlag" alt=""><b id="dName"></b><small id="dCountry"></small></div>
+    <div class="dh"><img id="dFlag" alt=""><b id="dName"></b><small id="dCountry"></small><button class="dskip" id="dSkip" data-i18n="dSkip">건너뛰기 ⏭</button></div>
     <p id="dLine"></p>
     <p id="dKo"></p>
     <div class="dacts" id="dActs"></div>
@@ -430,6 +435,15 @@ textarea{font-family:var(--body);font-size:16px;line-height:1.5;padding:12px;bor
   </div>
 
   <!-- Arrival -->
+  <div class="modal" id="mNext" hidden>
+    <div class="card" role="dialog" aria-labelledby="nextT">
+      <button class="x" data-close data-i18n-aria="close" aria-label="닫기">×</button>
+      <h2 id="nextT"></h2>
+      <p id="nextP"></p>
+      <button class="go" id="nextGo"></button>
+      <button class="ghost" id="nextStay" data-close data-i18n="nextStay">조금 더 둘러볼게요</button>
+    </div>
+  </div>
   <div class="modal" id="mVote" hidden>
     <div class="card" role="dialog" aria-labelledby="voteT">
       <button class="x" data-close data-i18n-aria="close" aria-label="닫기">×</button>
@@ -522,7 +536,7 @@ ko:{
   waterFirst:'물을 나눴어요. 길 위의 작은 친절이 누군가의 하루를 버티게 해요. ‘물 한 모금’ 도장을 받았어요.', waterAgain:'{n}에게 물을 나눴어요.',
   meetFirst:'{c}에서 온 {n}와 첫 인사를 나눴어요. ‘첫 인사’ 도장을 받았어요.', meetAgain:'{c}에서 온 {n}와 인사했어요.',
   dinnerCap:'그날 저녁, 오리손 알베르게', dinnerSub:'창밖으로 피레네에 해가 넘어가요', ansPh:'직접 말하기', say:'말하기', sleep:'잠자리에 들기', next:'다음',
-  supperStamp:'‘순례자의 저녁’ 도장을 받았어요. 오늘 나눈 이야기는 여권에 남겨 둘게요.', journalQ:'왜 이 길에 왔나요?', stage3:'프랑스 길 · 3구간 · 나바라 숲길', journalQ3:'지금까지 가장 좋았던 순간은?', arrT3:'수비리에 도착했어요', arrP3:'론세스바예스에서 시작해 나바라의 마을과 숲을 지나 광견병 다리를 건넜어요.<br>벌써 47km, 사흘을 걸었어요.', arrB3:'오늘도 한 걸음씩 잘 왔어요.',
+  supperStamp:'‘순례자의 저녁’ 도장을 받았어요. 오늘 나눈 이야기는 여권에 남겨 둘게요.', journalQ:'왜 이 길에 왔나요?', dSkip:'건너뛰기 ⏭', nextStay:'조금 더 둘러볼게요', nextBtn:'다음 구간 · {p} →', nextT:'{p}로 출발할까요?', nextP:'여기서부터는 다음 구간이에요. 출발하면 {p}까지 이어지는 새 길에서 다시 시작해요. 거리와 도장, 꾸민 옷은 그대로 이어져요.', nextGo:'{p}로 출발하기', stage3:'프랑스 길 · 3구간 · 나바라 숲길', journalQ3:'지금까지 가장 좋았던 순간은?', arrT3:'수비리에 도착했어요', arrP3:'론세스바예스에서 시작해 나바라의 마을과 숲을 지나 광견병 다리를 건넜어요.<br>벌써 47km, 사흘을 걸었어요.', arrB3:'오늘도 한 걸음씩 잘 왔어요.',
   ep3_start:'론세스바예스를 떠나요. 길가 표지판에 "산티아고 데 콤포스텔라 790km"라고 적혀 있어요.', ep3_cross:'하얀 순례자 십자가 옆을 지나요. 옛날엔 이 숲을 "마녀의 숲"이라고 불렀대요.', ep3_burguete:'하얀 벽에 빨간 덧창, 부르게테(아우리츠) 마을이에요. 마을 샘터에서 물을 채울 수 있어요.', ep3_espinal:'에스피날(아우리스베리) 마을이에요. 나바라 마을은 이름이 두 개예요. 바스크어 하나, 스페인어 하나.', ep3_fog:'아침 안개가 숲에 내려앉았어요.', ep3_mezkiritz:'메스키리츠 고개(922m). 성모 비석 앞에서 순례자들이 잠시 멈춰 가요.', ep3_stream:'개울을 징검다리로 건너요. 물소리가 시원해요.', ep3_rain:'비가 내려요. 숲길이 진흙탕이 되니 발 밑을 조심해요.', ep3_after:'비가 그치고 낙엽 냄새가 올라와요.', ep3_erro:'에로 고개(801m). 고개 위 푸드트럭에서 오렌지 주스를 팔아요.', ep3_descent:'수비리까지 가파르고 미끄러운 바위 내리막이에요. 천천히, 지팡이를 짚고.', ep3_rabia:'중세 다리, 광견병 다리가 보여요. 다리를 건너면 수비리예요.', journalQ2:'산 위에 무엇을 두고 왔나요?', ep2_start:'오리손에서 다시 출발해요. 오늘은 피레네에서 가장 높은 레푀데르 고개(1,450m)를 넘어 론세스바예스까지 걸어요.', ep2_vierge:'바위 위에 오리손 성모상이 서 있어요. 양치기들을 지켜 준다는 성모예요. 잠깐 멈춰서 걸어온 길을 돌아봐요.', ep2_cloud:'구름이 능선을 넘어오고 있어요. 바람이 세지니 단단히 여미고 걸어요.', ep2_truck:'능선 위에 푸드트럭이 서 있어요. 순례자들이 바나나와 커피로 숨을 돌리는 곳이에요.', ep2_vulture:'머리 위로 커다란 새들이 원을 그려요. 피레네의 그리폰독수리예요.', ep2_roland:'롤랑의 샘이에요. 고개를 넘기 전 마지막 물터예요. 물병을 가득 채워 가세요.', ep2_border:'가축 울타리를 건너면 스페인 나바라예요. 국경이라고 해도 돌 하나가 전부예요.', ep2_snow:'고개가 가까워지자 눈발이 날려요. 11월의 피레네예요.', ep2_pass:'레푀데르 고개, 해발 1,450m. 오늘 가장 높은 곳이에요. 저 아래로 론세스바예스의 회색 지붕이 보여요.', ep2_forest:'너도밤나무 숲으로 들어서요. 내리막이 가팔라서 무릎이 시큰해요. 천천히, 천천히.', ep2_bells:'숲 사이로 종소리가 들려요. 론세스바예스가 거의 다 왔어요.',
   promptNext:'{p}로 출발하기', nextCap1:'오리손을 떠나요', nextSub1:'피레네를 넘어 론세스바예스로', nextCap2:'론세스바예스를 떠나요', nextSub2:'나바라의 숲길을 지나 수비리로', backCap:'생장피에드포르로 돌아가요', dawn3:'준비되면 노란 화살표를 따라 표지판으로 가요. 거기서 {p}(으)로 출발해요.',
   arrT2:'론세스바예스에 도착했어요', arrP2:'피레네를 넘었어요. 레푀데르 고개를 지나 너도밤나무 숲을 내려와 여기까지 왔어요.<br>프랑스에서 출발해서 지금 서 있는 곳은 스페인이에요.', arrB2:'오늘 산 하나를 넘었어요.', dinnerGo2:'순례자 저녁 식탁에 앉기',
@@ -565,7 +579,7 @@ en:{
   waterFirst:'You shared your water. Small kindnesses on the road keep someone going. You got the “Shared Water” stamp.', waterAgain:'You shared water with {n}.',
   meetFirst:'You said your first hello to {n} from {c}. You got the “First Hello” stamp.', meetAgain:'You said hello to {n} from {c}.',
   dinnerCap:'That evening, at the Orisson albergue', dinnerSub:'The sun sets over the Pyrenees outside the window', ansPh:'Say it in your own words', say:'Say', sleep:'Go to bed', next:'Next',
-  supperStamp:'You got the “Pilgrim’s Supper” stamp. What you shared tonight is kept in your passport.', journalQ:'Why are you on the Camino?', stage3:'Camino Francés · Stage 3 · Woods of Navarre', journalQ3:'What has been your best moment so far?', arrT3:'You’ve reached Zubiri', arrP3:'From Roncesvalles through the villages and woods of Navarre, and over the Rabies Bridge.<br>47 km and three days on the road.', arrB3:'One step at a time, you made it again.',
+  supperStamp:'You got the “Pilgrim’s Supper” stamp. What you shared tonight is kept in your passport.', journalQ:'Why are you on the Camino?', dSkip:'Skip ⏭', nextStay:'Let me look around a bit more', nextBtn:'Next stage · {p} →', nextT:'Set off for {p}?', nextP:'The next stage starts here. You’ll continue on a new path to {p}. Your distance, stamps and outfit carry over.', nextGo:'Set off for {p}', stage3:'Camino Francés · Stage 3 · Woods of Navarre', journalQ3:'What has been your best moment so far?', arrT3:'You’ve reached Zubiri', arrP3:'From Roncesvalles through the villages and woods of Navarre, and over the Rabies Bridge.<br>47 km and three days on the road.', arrB3:'One step at a time, you made it again.',
   ep3_start:'Leaving Roncesvalles. A roadside sign reads “Santiago de Compostela 790 km”.', ep3_cross:'You pass the white pilgrims’ cross. This wood was once called “the witches’ wood”.', ep3_burguete:'White walls, red shutters – the village of Burguete (Auritz). You can fill your bottle at the village fountain.', ep3_espinal:'The village of Espinal (Aurizberri). Navarre villages have two names: one Basque, one Spanish.', ep3_fog:'Morning mist settles over the woods.', ep3_mezkiritz:'Alto de Mezkiritz (922 m). Pilgrims pause by the Virgin’s stone.', ep3_stream:'You cross a stream on stepping stones. The water sounds cool.', ep3_rain:'Rain. The forest path turns to mud – watch your step.', ep3_after:'The rain stops and the smell of fallen leaves rises.', ep3_erro:'Alto de Erro (801 m). A food truck on the pass sells orange juice.', ep3_descent:'A steep, slippery rocky descent to Zubiri. Slowly, lean on your stick.', ep3_rabia:'The medieval Rabies Bridge appears. Cross it and you’re in Zubiri.', journalQ2:'What did you leave on the mountain?', ep2_start:'Setting off again from Orisson. Today you cross the highest pass of the Pyrenees, Col de Lepoeder (1,450 m), down to Roncesvalles.', ep2_vierge:'The Virgin of Orisson stands on the rocks, protector of the shepherds. Pause and look back at how far you’ve come.', ep2_cloud:'Clouds are spilling over the ridge. The wind is picking up — zip up and keep going.', ep2_truck:'A food truck sits on the ridge. Pilgrims catch their breath here with bananas and coffee.', ep2_vulture:'Huge birds are circling overhead — griffon vultures of the Pyrenees.', ep2_roland:'Roland’s Fountain — the last water before the pass. Fill your bottle.', ep2_border:'Cross the cattle grid and you’re in Navarre, Spain. The whole border is just one stone.', ep2_snow:'Snowflakes as you near the pass. November in the Pyrenees.', ep2_pass:'Col de Lepoeder, 1,450 m — the highest point today. Far below, the grey roofs of Roncesvalles.', ep2_forest:'Into the beech forest. The descent is steep and your knees feel it. Slowly, slowly.', ep2_bells:'Bells ring through the trees. Roncesvalles is almost here.',
   promptNext:'Set off for {p}', nextCap1:'Leaving Orisson', nextSub1:'Over the Pyrenees to Roncesvalles', nextCap2:'Leaving Roncesvalles', nextSub2:'Through the woods of Navarre to Zubiri', backCap:'Back to Saint-Jean-Pied-de-Port', dawn3:'When you’re ready, follow the yellow arrows to the signpost and set off for {p}.',
   arrT2:'You’ve reached Roncesvalles', arrP2:'You crossed the Pyrenees — over Col de Lepoeder and down through the beech forest.<br>You started in France; you’re standing in Spain now.', arrB2:'You crossed a mountain today.', dinnerGo2:'Join the pilgrims’ supper',
@@ -1165,6 +1179,7 @@ const TEASER={x:0,z:0};
   const im=new THREE.InstancedMesh(CHEVRON_GEO,m,n);
   for(let i=0;i<n;i++){ const u=(i+1)/(n+1), p=ext.getPointAt(u), tg=ext.getTangentAt(u); dummy.position.set(p.x,groundAt(p.x,p.z)+0.1,p.z); dummy.rotation.set(0,Math.atan2(tg.x,tg.z),0); dummy.scale.set(0.9,1,0.9); dummy.updateMatrix(); im.setMatrixAt(i,dummy.matrix); }
   im.renderOrder=2; scene.add(im);
+  TEASER.mat=m; const te=ext.getPointAt(1); TEASER.ex=te.x; TEASER.ez=te.z;
   const at=ext.getPointAt(0.3), sideP=new THREE.Vector3(at.x+S0.x*2.4,0,at.z+S0.z*2.4), y=groundAt(sideP.x,sideP.z);
   const tex=texFromCanvas(512,260,(c,w,h)=>{ c.fillStyle='#6b4630'; roundRect(c,0,0,w,h,20); c.fill(); c.strokeStyle='#f2c230'; c.lineWidth=6; roundRect(c,10,10,w-20,h-20,14); c.stroke();
     c.fillStyle='#f2c230'; c.beginPath(); c.moveTo(40,96); c.lineTo(96,96); c.lineTo(96,72); c.lineTo(140,110); c.lineTo(96,148); c.lineTo(96,124); c.lineTo(40,124); c.fill();
@@ -1750,7 +1765,7 @@ function updateWeather(dt,t){
   const wet = wxCur.rain>0.35 || wxCur.snow>0.35;
   player.poncho.visible=wet && !player.noPoncho; npcs.forEach(n=>{ if(!n.fixed) n.P.poncho.visible=wet && !n.P.noPoncho; });
   if(mode==='dinner') dinnerLights.forEach((l,i)=>l.intensity=1.3+Math.sin(t*9+i*2)*0.12+Math.sin(t*23+i)*0.06);
-  if(rainGain) rainGain.gain.value=0.5*wxCur.rain;
+  if(rainGain) rainGain.gain.value=0.07*wxCur.rain;
 }
 
 /* ================= Time of day ================= */
@@ -2128,7 +2143,7 @@ function blip(n){
 }
 function showStep(){
   const st=dSteps[dIdx], sp=speakerInfo(st.n);
-  talkSpeaker=st.n;
+  talkSpeaker=st.n; $('#dSkip').hidden=!!st.end;
   if(st.n!=='__me'){ const n=npcByName(st.n); if(n) n.P.wave=st.ask?0.9:1.3; } else player.wave=1.3;
   $('#dFlag').src=flagDataURL(sp.c); $('#dName').textContent=sp.name; $('#dCountry').textContent=cname(sp.c)||'';
   const full = st.n==='__me' ? st.t : fillTalkT(st, st.x);
@@ -2222,6 +2237,25 @@ async function castVote(){
   if(!S.votes) S.votes={}; S.votes[VOTE_STAGE]=1; persist(); track('vote',{stage:VOTE_STAGE});
   await renderVote(); const n=await voteCount(); toast(tx('voteToast',{n:n===null?'?':n, s:VOTE_STAGE}),4200);
 }
+/* ---- 다음 구간 안내 & 저녁 건너뛰기 ---- */
+let NEXT_ASKED=false, NEXT_SHOWN=null;
+function openNext(){ if(STG>=LAST_STAGE){ openVote(); return; } const p=L(STAGE.next); $('#nextT').textContent=tx('nextT',{p}); $('#nextP').textContent=tx('nextP',{p}); $('#nextGo').textContent=tx('nextGo',{p}); openModal('#mNext'); }
+$('#nextGo').onclick=()=>{ $('#mNext').hidden=true; goNextStage(); };
+$('#bNext').onclick=openNext;
+function updateNextUI(pp){
+  const show = started && arrived && (mode==='walk'||mode==='dawn') && !wardOn;
+  const label = show ? (STG<LAST_STAGE ? tx('nextBtn',{p:L(STAGE.next)}) : tx('promptVote',{s:VOTE_STAGE})) : null;
+  if(label!==NEXT_SHOWN){ NEXT_SHOWN=label; $('#bNext').hidden=!show; if(show) $('#bNext').textContent=label; }
+  if(arrived && TEASER.mat && STG<LAST_STAGE && TEASER.mat.color.getHex()!==0xf2c230){ TEASER.mat.color.setHex(0xf2c230); TEASER.mat.opacity=0.5; }
+  if(show && STG<LAST_STAGE && !NEXT_ASKED && Math.hypot(TEASER.ex-pp.x,TEASER.ez-pp.z)<6){ NEXT_ASKED=true; openNext(); }
+}
+function skipSupper(){
+  clearInterval(typeT); typeT=null;
+  if(!S.stamps.supper){ stamp('supper'); setTimeout(()=>toast(tx('supperStamp'),3600),300); }
+  const close = STG===3?SUPPER_CLOSE3:STG===2?SUPPER_CLOSE2:SUPPER_CLOSE;
+  dSteps=[hostify(close[close.length-1])]; dIdx=0; persist(); track('talk',{q:'skip'}); showStep();
+}
+$('#dSkip').onclick=e=>{ e.stopPropagation(); skipSupper(); };
 function startDawn(){
   fadeTo(()=>{
     mode='dawn'; talkSpeaker=null; clearInterval(typeT); npcs.forEach(n=>{ n.P.head.rotation.y=0; }); setTime('dawn'); overrideUntil=performance.now()+150000;
@@ -2553,7 +2587,7 @@ function initAudio(){
     AC.noiseBuf=buf;
     const wn=AC.createBuffer(1,AC.sampleRate*2,AC.sampleRate), wd=wn.getChannelData(0); for(let i=0;i<wd.length;i++) wd[i]=Math.random()*2-1;
     const rs=AC.createBufferSource(); rs.buffer=wn; rs.loop=true; const hp=AC.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=900;
-    const lp2=AC.createBiquadFilter(); lp2.type='lowpass'; lp2.frequency.value=6000;
+    const lp2=AC.createBiquadFilter(); lp2.type='lowpass'; lp2.frequency.value=3200;
     rainGain=AC.createGain(); rainGain.gain.value=0; rs.connect(hp); hp.connect(lp2); lp2.connect(rainGain); rainGain.connect(master); rs.start();
     setTimeout(bird, 3000);
   }catch(e){ AC=null; }
@@ -3321,6 +3355,7 @@ function frame(){
     $('#pAlt').textContent=Math.round(STG===1 ? 170+clamp(pp.y/endY,0,1.08)*620 : STAGE.alt0+Math.max(0,pp.y)*22);
     $('#pMet').textContent=S.met.length+(S.metReal?S.metReal.length:0); $('#pLeft').textContent=Math.max(0,KM_END-km).toFixed(1);
 
+    updateNextUI(pp);
     if(mode==='walk' && !arrived && Math.hypot(pp.x-END.x,pp.z-END.z)<3 ){
       arrived=true; S.progress=1; stamp(STAGE.endStamp); persist();
       $('#arrStamp').innerHTML=stampSVG(STAMPS.find(x=>x.id===STAGE.endStamp), S.stamps[STAGE.endStamp]);
